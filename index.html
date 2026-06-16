@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>51talk | Teacher's First Aid Kit</title>
+    <script>
+    // 1. Initialize Firebase
+    firebase.initializeApp({
+        databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
+    });
+    const db = firebase.database();
+    
+    // 2. Secret Key Setup
+    const ADMIN_SECRET = "MsShouq51talk"; 
+
+    // 3. Live Listener
+    db.ref('/').on('value', (snapshot) => {
+        if (snapshot.val()) {
+            database = snapshot.val();
+            updatePillarBadgeCounters();
+            if (currentPillarKey) renderScenariosSidebarList();
+        }
+    });
+
+    // ... rest of your code ...
+</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
