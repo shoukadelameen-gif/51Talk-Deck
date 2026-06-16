@@ -15,107 +15,393 @@
         .animate-fade { animation: fadeIn 0.3s ease-out forwards; }
         .animate-float { animation: float 3s ease-in-out infinite; }
         .illustration-pulse { animation: pulseSoft 4s ease-in-out infinite; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 backdrop-blur-md bg-white/90">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-black text-slate-900">Ms. Shouq | Teacher Readiness Deck</h1>
-            <button onclick="location.reload()" class="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl">Refresh Data</button>
+    <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40 backdrop-blur-md bg-white/90">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3.5 group">
+                <div class="bg-[#FFCC00] text-slate-900 font-black text-lg px-3 py-1.5 rounded-xl shadow-md shadow-amber-400/20 tracking-tighter flex items-center justify-center gap-1 border border-amber-300">
+                    <span class="text-xl">51</span><span class="text-sm bg-slate-900 text-[#FFCC00] px-1 rounded">Talk</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight text-slate-900">Ms. Shouq | Teacher Readiness Deck</h1>
+                    <p class="text-xs text-slate-500 font-semibold tracking-wide">Interactive Troubleshooting Creator Suite</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="generateSyncUrl()" id="sync-share-btn" class="flex px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 transition-all items-center gap-1.5 cursor-pointer shadow-sm">
+                    <i class="fa-solid fa-link"></i> 🔗 Copy Team Sync Link
+                </button>
+                <button onclick="showHome()" id="back-home-btn" class="hidden px-4 py-2 bg-slate-100 hover:bg-[#0066CC] hover:text-white text-slate-700 text-xs font-bold rounded-xl border border-slate-200/60 transition-all duration-200 items-center gap-2 shadow-sm cursor-pointer transform active:scale-95">
+                    <i class="fa-solid fa-house-chimney"></i> Back to Pillars
+                </button>
+            </div>
         </div>
     </header>
 
-    <main class="flex-1 max-w-6xl w-full mx-auto px-6 py-10">
-        <section id="view-home" class="space-y-10">
-            <div class="text-center space-y-4">
-                <h2 class="text-3xl font-black text-slate-900">Select an Operational Pillar</h2>
-            </div>
-            <div id="pillars-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <main class="flex-1 max-w-6xl w-full mx-auto px-6 py-10 flex flex-col justify-center">
+        
+        <section id="view-home" class="space-y-10 animate-fade">
+            <div class="text-center max-w-2xl mx-auto space-y-4">
+                <div class="inline-flex items-center gap-2.5 px-4 py-2 bg-amber-50 border border-amber-200 rounded-full text-slate-800 text-xs font-bold tracking-wide shadow-sm mb-2">
+                    <div class="bg-[#FFCC00] text-slate-900 font-black px-2 py-0.5 rounded text-[11px] tracking-tighter">LIVE</div>
+                    <span>Team Synchronized Portal</span>
                 </div>
+                <h2 class="text-3xl font-black text-slate-900 tracking-tight sm:text-4xl">Select an Operational Pillar</h2>
+                <p class="text-sm sm:text-base text-slate-500 leading-relaxed">Choose a category below to interact with current cases, edit paths, or build custom scenarios directly in the browser window.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto pt-4">
+                <div onclick="selectPillar('pillar-1')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-red-50/20 border border-slate-200/80 hover:border-red-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner"><i class="fa-solid fa-display text-xl"></i></div>
+                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 1</h3>
+                        <p class="text-xs text-red-600 font-bold uppercase tracking-wider mb-2">Technical Issues</p>
+                        <p class="text-xs text-slate-400 font-medium leading-relaxed">App exceptions, hardware failures, lagging systems, and critical refresh protocols.</p>
+                    </div>
+                    <div id="count-pillar-1" class="text-[11px] font-bold text-slate-400 group-hover:text-red-600 transition-colors flex items-center gap-1 mt-4">Scenarios <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <div onclick="selectPillar('pillar-2')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-amber-50/20 border border-slate-200/80 hover:border-amber-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner"><i class="fa-solid fa-business-time text-xl"></i></div>
+                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 2</h3>
+                        <p class="text-xs text-amber-600 font-bold uppercase tracking-wider mb-2">Attendance Traps</p>
+                        <p class="text-xs text-slate-400 font-medium leading-relaxed">Time-zone matrices, scheduling limits, missing markers, and short-notice rules.</p>
+                    </div>
+                    <div id="count-pillar-2" class="text-[11px] font-bold text-slate-400 group-hover:text-amber-600 transition-colors flex items-center gap-1 mt-4">Scenarios <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <div onclick="selectPillar('pillar-3')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-blue-50/20 border border-slate-200/80 hover:border-blue-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner"><i class="fa-solid fa-file-signature text-xl"></i></div>
+                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 3</h3>
+                        <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">Communication</p>
+                        <p class="text-xs text-slate-400 font-medium leading-relaxed">Lesson metrics, parent evaluations, formal legal evidence, and escalation tickets.</p>
+                    </div>
+                    <div id="count-pillar-3" class="text-[11px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors flex items-center gap-1 mt-4">Scenarios <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <div onclick="selectPillar('pillar-4')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-purple-50/20 border border-slate-200/80 hover:border-purple-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner"><i class="fa-solid fa-face-smile-beam text-xl"></i></div>
+                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 4</h3>
+                        <p class="text-xs text-purple-600 font-bold uppercase tracking-wider mb-2">Teacher Rapport</p>
+                        <p class="text-xs text-slate-400 font-medium leading-relaxed">Student leveling mismatches, tracking time-outs, pacing gaps, and behavior tasks.</p>
+                    </div>
+                    <div id="count-pillar-4" class="text-[11px] font-bold text-slate-400 group-hover:text-purple-600 transition-colors flex items-center gap-1 mt-4">Scenarios <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+            </div>
         </section>
 
-        <section id="view-scenarios" class="hidden space-y-8">
-            <button onclick="location.reload()" class="text-xs font-bold text-slate-500 hover:text-slate-900"><i class="fa-solid fa-arrow-left"></i> Back to Pillars</button>
-            <div class="grid grid-cols-12 gap-8">
-                <div id="scenarios-list-container" class="lg:col-span-4 space-y-3"></div>
-                <div id="solution-content-block" class="lg:col-span-8 bg-white p-8 rounded-3xl border border-slate-200">
-                    Select a scenario to view protocol.
+        <section id="view-scenarios" class="hidden space-y-8 animate-slideup">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+                <div class="flex items-center gap-4">
+                    <div id="category-icon-container" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-sm"></div>
+                    <div>
+                        <span id="category-subtitle" class="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Ms. Shouq's Workspace</span>
+                        <h2 id="category-title" class="text-2xl font-black text-slate-900 tracking-tight">Pillar Title</h2>
+                    </div>
+                </div>
+                <button onclick="openFormModal(null)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer transform active:scale-95">
+                    <i class="fa-solid fa-circle-plus"></i> Add New Scenario
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="space-y-4 lg:col-span-4">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 px-1"><i class="fa-solid fa-folder-open text-slate-300"></i> High-Frequency Case List</span>
+                    <div id="scenarios-list-container" class="space-y-3 max-h-[580px] overflow-y-auto pr-2"></div>
+                </div>
+                <div class="lg:col-span-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm p-6 sm:p-8 min-h-[520px] flex flex-col justify-center relative overflow-hidden bg-gradient-to-br from-white to-slate-50/50">
+                    <div id="solution-content-block" class="w-full flex flex-col justify-center items-center">
+                        <div class="text-center space-y-6 max-w-sm py-12 my-auto animate-fade">
+                            <div class="relative w-40 h-40 mx-auto flex items-center justify-center">
+                                <div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div>
+                                <div class="absolute inset-4 bg-blue-50 rounded-full illustration-pulse"></div>
+                                <i class="fa-solid fa-hand-pointer text-5xl text-[#0066CC] relative z-10 animate-bounce"></i>
+                            </div>
+                            <h4 class="font-extrabold text-slate-800 text-base tracking-tight">Awaiting Case Selection</h4>
+                            <p class="text-xs text-slate-400 font-medium px-2">Click any problem case scenario from the left panel to immediately look up vector steps and instructions.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <div id="form-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm items-center justify-center p-4 animate-fade">
+        <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-slideup">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 id="modal-heading" class="text-sm font-black text-slate-900 uppercase tracking-wider">Configure Scenario Blueprint</h3>
+                <button onclick="closeFormModal()" class="text-slate-400 hover:text-slate-600 text-sm cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="scenario-form" onsubmit="saveScenarioData(event)" class="p-6 overflow-y-auto space-y-5 flex-1">
+                <input type="hidden" id="form-edit-index">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Scenario Display Title</label>
+                    <input type="text" id="form-title" required class="w-full border border-slate-200 p-3 rounded-xl text-xs focus:outline-none focus:border-indigo-500 bg-slate-50/50 font-medium">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Problem Definition Summary</label>
+                    <textarea id="form-problem" required rows="3" class="w-full border border-slate-200 p-3 rounded-xl text-xs focus:outline-none focus:border-indigo-500 bg-slate-50/50 font-medium leading-relaxed"></textarea>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Protocol Action Resolution Steps</label>
+                        <button type="button" onclick="appendStepInputField('')" class="text-[11px] font-black text-indigo-600 hover:text-indigo-800 flex items-center gap-0.5 cursor-pointer"><i class="fa-solid fa-plus-circle"></i> Add Step</button>
+                    </div>
+                    <div id="steps-inputs-container" class="space-y-2.5"></div>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="closeFormModal()" class="px-4 py-2 bg-slate-100 text-slate-600 text-xs font-bold rounded-xl cursor-pointer">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl cursor-pointer">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200/80 py-6 text-center text-xs font-semibold text-slate-400 tracking-wide">
+        Ms. Shouq's Onboarding Training Suite &copy; 2026. Actionable Platform Readiness Operations.
+    </footer>
+
     <script>
-        const database = {
+        const defaultDatabase = {
             "pillar-1": {
                 title: "Pillar 1: Technical Glitches",
                 iconClass: "fa-solid fa-display",
                 styleClasses: "bg-red-50 text-red-600 border-red-200",
+                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-red-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-red-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 relative z-10"></i></div>`,
                 scenarios: [
-                    { title: "App Crash / Screen Lag", problem: "You experience unexpected software crashes or classroom timer lag.", steps: ["Switch to your backup mobile hotspot.", "Force close and restart the AirClass software.", "Take a full-screen screenshot showing your desktop clock as evidence.", "Record the issue in your post-class memo."] },
-                    { title: "Microphone Malfunction", problem: "The student cannot hear you or your audio level bar is flat.", steps: ["Re-select your headset in Audio/Video settings.", "Unplug and firmly re-seat your headset cable.", "Switch audio channels (Line A to Line B) in settings."] }
+                    { title: "App Crash / Screen Lag Loops", problem: "You experience unexpected client software crashes, severe interface freezing, or the classroom timer displays performance synchronization lag mid-class.", steps: ["<strong>Control Environment:</strong> Switch instantly to your designated <strong>backup mobile hotspot</strong> data line. Shut down all non-essential background windows draining bandwidth allocation.","<strong>Force Software Reset:</strong> Exit the platform frame immediately, execute a <strong>complete logout of AirClass (AC)</strong>, or trigger a swift system restart if hardware freezing persists.","<strong>The Leave-and-Re-enter Loophole:</strong> Pay no attention to <strong>automated system penalty warning banners</strong> during active troubleshooting runs; protection applies for verified technical loops.","<strong>Preserve Evidence:</strong> Capture immediate <strong>full-screen screenshots</strong> verifying runtime errors clearly showing your device's desktop clock.","<strong>File Incident Verification:</strong> Record the precise breakdown parameters and timing logs inside your <strong>post-class memo notes</strong> to secure your contract verification appeals."] },
+                    { title: "Microphone Malfunction / Audio Cutting Out", problem: "The student reports they cannot hear you, your hardware microphone input level bar isn't moving, or your sound turns off completely mid-class.", steps: ["<strong>Check App Permissions:</strong> Verify the class app's access to hardware devices. Re-select your external headset manually under <strong>Audio/Video Settings</strong>.","<strong>Hardware Re-plug Option:</strong> Physically unplug the USB or 3.5mm cable. Wait 3 seconds and firmly re-seat it to trigger system device recognition.","<strong>Change Audio Lines:</strong> Switch the live channel driver internally inside the software from <strong>Line A to Line B</strong> to manually sync data packets.","<strong>Hardware Bypass:</strong> If a dedicated headset remains completely unresponsive, quickly connect alternative <strong>wired earbuds</strong> to maintain instruction momentum."] }
                 ]
             },
             "pillar-2": {
                 title: "Pillar 2: Attendance Traps",
                 iconClass: "fa-solid fa-business-time",
                 styleClasses: "bg-amber-50 text-amber-600 border-amber-200",
+                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-amber-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-amber-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-business-time text-4xl text-amber-500 relative z-10"></i></div>`,
                 scenarios: [
-                    { title: "Time Zone Mismatch", problem: "Accidental late-entry penalties due to Egypt/Beijing time shifts.", steps: ["Cross-check the local AC calendar vs MyPage portal.", "Perform mental zone translations before the slot start time.", "Avoid arriving within the 4-minute late window."] }
+                    { title: "Local Time Zone Mismatch Errors", problem: "Incurring accidental late-entry penalty indicators due to timezone confusion between local Egypt time and Beijing headquarters timelines.", steps: ["<strong>Crosscheck Interface Schedules:</strong> Systematically monitor parameters across both your <strong>local Egypt AC calendar application</strong> and the master Beijing scheduling metrics on the <strong>MyPage portal</strong>.","<strong>Calculate the Time Shift:</strong> Perform deliberate zone translations mentally before slots freeze to prevent accidental missing session entries.","<strong>The 4-Minute Absence Window:</strong> Remember that arriving exactly <strong>4 minutes late changes metrics</strong> to an unreviewable, system-enforced <strong>Teacher Absence mark</strong>."] }
                 ]
             },
             "pillar-3": {
                 title: "Pillar 3: Communication Rules",
                 iconClass: "fa-solid fa-file-signature",
                 styleClasses: "bg-blue-50 text-blue-600 border-blue-200",
+                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-blue-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-file-invoice text-4xl text-blue-500 relative z-10"></i></div>`,
                 scenarios: [
-                    { title: "Memo Compliance", problem: "Low ratings due to generic feedback.", steps: ["Use the two-sentence audit format.", "Sentence 1: State the mastered target skill.", "Sentence 2: Insert specific, measurable evidence from the lesson."] }
+                    { title: "Memo Compliance & VIP Parents", problem: "Receiving low client ratings from generic feedback notes, or losing dispute cases due to a lack of sufficient structural audit records.", steps: ["<strong>Memos as Binding Legal Evidence:</strong> Log technical failures inside class notes to establish a clear <strong>audit trail for dispute pipelines</strong>.","<strong>Apply Goal + Evidence Framework:</strong> Replace repetitive boilerplate remarks with a <strong>two-sentence standard format</strong>:","<em>Sentence A (Target Objective):</em> State the precise target skill targeted (e.g., <strong>'Student successfully mastered conditional verb tenses.'</strong>).","<em>Sentence B (Live Evidence):</em> Insert measurable evidence of progress (e.g., <strong>'They correctly transformed three complex sentences during final drills.'</strong>)."] }
                 ]
             },
             "pillar-4": {
                 title: "Pillar 4: Teacher Rapport",
                 iconClass: "fa-solid fa-face-smile-beam",
                 styleClasses: "bg-purple-50 text-purple-600 border-purple-200",
+                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-purple-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-purple-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-face-smile-beam text-4xl text-purple-500 relative z-10"></i></div>`,
                 scenarios: [
-                    { title: "Advanced Learner Gaps", problem: "Lesson finished in 15 mins instead of 25.", steps: ["Utilize classroom dropdowns to switch course materials.", "Introduce phonetic sound pairings (e.g., bin/pin).", "Drill multisyllabic blending for articulation."] }
+                    { title: "Advanced Learners / Early Finish Gaps", problem: "An advanced student breezes through a 25-minute lesson blueprint inside of 15 minutes, leaving a 10-minute dead-air gap.", steps: ["<strong>Switch Course Selections:</strong> Alter active material pathways using <strong>classroom interface dropdown tools</strong> if accessible.","<strong>Phonics Distinction Drills:</strong> Introduce minimal phonetic sound pairings to highlight vocabulary nuance (e.g., bin/pin, bark/park).","<strong>Syllable Blending Challenges:</strong> Drill complex multisyllabic terms to analyze articulation boundaries (e.g., paper, pepper, publish)."] }
                 ]
             }
         };
 
-        function init() {
-            const container = document.getElementById('pillars-container');
+        let database = JSON.parse(localStorage.getItem('readiness_deck_db')) || defaultDatabase;
+        let currentPillarKey = null;
+        let selectedBtnElement = null;
+
+        window.onload = function() {
+            checkUrlParamsForUpdates();
+            updatePillarBadgeCounters();
+        };
+
+        function checkUrlParamsForUpdates() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const incomingData = urlParams.get('sync');
+            if (incomingData) {
+                try {
+                    const decodedData = JSON.parse(decodeURIComponent(atob(incomingData)));
+                    database = decodedData;
+                    localStorage.setItem('readiness_deck_db', JSON.stringify(database));
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    alert("✨ Team sync successful! New scenarios loaded and saved perfectly.");
+                } catch (e) {
+                    console.error("Sync link parse failed", e);
+                }
+            }
+        }
+
+        function syncDatabaseToLocalStorage() {
+            localStorage.setItem('readiness_deck_db', JSON.stringify(database));
+            updatePillarBadgeCounters();
+        }
+
+        function generateSyncUrl() {
+            const cleanDataString = btoa(encodeURIComponent(JSON.stringify(database)));
+            const syncUrl = `${window.location.origin}${window.location.pathname}?sync=${cleanDataString}`;
+            
+            navigator.clipboard.writeText(syncUrl).then(() => {
+                const btn = document.getElementById('sync-share-btn');
+                btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Link Copied!`;
+                btn.className = "flex px-3 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl transition-all items-center gap-1.5 cursor-pointer shadow-md";
+                setTimeout(() => {
+                    btn.innerHTML = `<i class="fa-solid fa-link"></i> Copy Team Sync Link`;
+                    btn.className = "flex px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 transition-all items-center gap-1.5 cursor-pointer shadow-sm";
+                }, 3000);
+            });
+        }
+
+        function updatePillarBadgeCounters() {
             Object.keys(database).forEach(key => {
-                const p = database[key];
-                container.innerHTML += `
-                    <div onclick="selectPillar('${key}')" class="bg-white border border-slate-200 p-6 rounded-2xl cursor-pointer hover:shadow-md transition-all">
-                        <div class="w-12 h-12 ${p.styleClasses} rounded-xl flex items-center justify-center mb-4"><i class="${p.iconClass}"></i></div>
-                        <h3 class="font-black">${p.title}</h3>
+                const countBadge = document.getElementById(`count-${key}`);
+                if (countBadge) {
+                    const total = database[key].scenarios.length;
+                    countBadge.innerHTML = `${total} Active Blueprints <i class="fa-solid fa-angle-right ml-1"></i>`;
+                }
+            });
+        }
+
+        function selectPillar(pillarKey) {
+            currentPillarKey = pillarKey;
+            renderScenariosSidebarList();
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('back-home-btn').classList.replace('hidden', 'flex');
+            document.getElementById('view-scenarios').classList.remove('hidden');
+            resetDisplayPanelToStandby();
+        }
+
+        function renderScenariosSidebarList() {
+            const data = database[currentPillarKey];
+            document.getElementById('category-title').innerText = data.title;
+            const iconContainer = document.getElementById('category-icon-container');
+            iconContainer.className = `w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-inner ${data.styleClasses}`;
+            iconContainer.innerHTML = `<i class="${data.iconClass}"></i>`;
+            const listContainer = document.getElementById('scenarios-list-container');
+            listContainer.innerHTML = '';
+            
+            data.scenarios.forEach((scen, idx) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "w-full text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-xs text-slate-800 transition-all shadow-sm flex items-center justify-between group cursor-pointer animate-slideup select-none";
+                itemDiv.onclick = (e) => { if (!e.target.closest('.utility-trigger')) selectScenario(idx, itemDiv); };
+                itemDiv.innerHTML = `
+                    <span class="leading-snug pr-3 group-hover:text-indigo-600 transition-colors">${scen.title}</span>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="openFormModal(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-amber-100 text-slate-400 hover:text-amber-700 flex items-center justify-center text-[11px]" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteScenarioEntry(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-red-100 text-slate-400 hover:text-red-600 flex items-center justify-center text-[11px]" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
+                listContainer.appendChild(itemDiv);
             });
         }
 
-        function selectPillar(key) {
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('view-scenarios').classList.remove('hidden');
-            const list = document.getElementById('scenarios-list-container');
-            list.innerHTML = '';
-            database[key].scenarios.forEach((s, i) => {
-                list.innerHTML += `<div onclick="showSolution('${key}', ${i})" class="p-4 bg-white border border-slate-200 rounded-xl cursor-pointer font-bold text-xs">${s.title}</div>`;
-            });
-        }
+        function selectScenario(index, element) {
+            if (selectedBtnElement) selectedBtnElement.classList.replace('border-indigo-600', 'border-slate-200');
+            element.classList.replace('border-slate-200', 'border-indigo-600');
+            selectedBtnElement = element;
+            
+            const data = database[currentPillarKey];
+            const scenario = data.scenarios[index];
+            let bulletsHtml = scenario.steps.map(step => `
+                <li class="flex items-start gap-4 text-xs sm:text-sm text-slate-600 leading-relaxed bg-white border border-slate-100 p-4 rounded-2xl shadow-sm w-full">
+                    <span class="text-emerald-600 mt-0.5 bg-emerald-50 w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0 border border-emerald-100"><i class="fa-solid fa-check"></i></span>
+                    <span class="text-slate-600 font-medium">${step}</span>
+                </li>
+            `).join('');
 
-        function showSolution(pillarKey, index) {
-            const s = database[pillarKey].scenarios[index];
-            document.getElementById('solution-content-block').innerHTML = `
-                <h3 class="text-xl font-black mb-2">${s.title}</h3>
-                <p class="text-sm text-slate-500 mb-6">${s.problem}</p>
-                <ul class="space-y-3">${s.steps.map(st => `<li class="flex gap-3 text-sm font-medium"><i class="fa-solid fa-check text-emerald-500"></i> ${st}</li>`).join('')}</ul>
+            const displayBlock = document.getElementById('solution-content-block');
+            displayBlock.className = "w-full space-y-6 animate-slideup text-left";
+            displayBlock.innerHTML = `
+                <div class="flex flex-col sm:flex-row items-center gap-6 bg-white border border-slate-200/60 p-6 rounded-3xl shadow-sm w-full">
+                    <div class="shrink-0">${data.illustration}</div>
+                    <div class="space-y-2 text-center sm:text-left w-full">
+                        <h3 class="text-lg font-black text-slate-900 tracking-tight leading-snug">${scenario.title}</h3>
+                        <p class="text-xs text-slate-500 font-semibold leading-relaxed">${scenario.problem}</p>
+                    </div>
+                </div>
+                <div class="space-y-4 w-full">
+                    <ul class="space-y-3.5 w-full">${bulletsHtml}</ul>
+                </div>
             `;
         }
 
-        init();
+        function openFormModal(index = null) {
+            const container = document.getElementById('steps-inputs-container');
+            container.innerHTML = '';
+            if (index === null) {
+                document.getElementById('modal-heading').innerText = "Create Custom Case Profile";
+                document.getElementById('form-edit-index').value = "";
+                document.getElementById('form-title').value = "";
+                document.getElementById('form-problem').value = "";
+                appendStepInputField('');
+            } else {
+                document.getElementById('modal-heading').innerText = "Modify Operational Schema Parameters";
+                const targetData = database[currentPillarKey].scenarios[index];
+                document.getElementById('form-edit-index').value = index;
+                document.getElementById('form-title').value = targetData.title;
+                document.getElementById('form-problem').value = targetData.problem;
+                targetData.steps.forEach(stepText => appendStepInputField(stepText));
+            }
+            document.getElementById('form-modal').classList.replace('hidden', 'flex');
+        }
+
+        function closeFormModal() { document.getElementById('form-modal').classList.replace('flex', 'hidden'); }
+        function appendStepInputField(val = '') {
+            const container = document.getElementById('steps-inputs-container');
+            const wrap = document.createElement('div');
+            wrap.className = "flex items-center gap-2 animate-fade";
+            wrap.innerHTML = `
+                <input type="text" required value="${val.replace(/"/g, '&quot;')}" class="step-text-payload w-full border border-slate-200 p-2.5 rounded-xl text-xs bg-slate-50/30 font-medium">
+                <button type="button" onclick="this.parentElement.remove()" class="text-slate-300 hover:text-red-500 text-xs p-2 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+            `;
+            container.appendChild(wrap);
+        }
+
+        function saveScenarioData(e) {
+            e.preventDefault();
+            const idxVal = document.getElementById('form-edit-index').value;
+            const payloadSteps = [];
+            document.querySelectorAll('.step-text-payload').forEach(inp => { if(inp.value.trim() !== '') payloadSteps.push(inp.value.trim()); });
+
+            const targetSchemaObject = {
+                title: document.getElementById('form-title').value.trim(),
+                problem: document.getElementById('form-problem').value.trim(),
+                steps: payloadSteps
+            };
+
+            if(idxVal === "") database[currentPillarKey].scenarios.push(targetSchemaObject);
+            else database[currentPillarKey].scenarios[parseInt(idxVal)] = targetSchemaObject;
+
+            syncDatabaseToLocalStorage();
+            closeFormModal();
+            renderScenariosSidebarList();
+            resetDisplayPanelToStandby();
+        }
+
+        function deleteScenarioEntry(index) {
+            if(confirm("Delete this case record?")) {
+                database[currentPillarKey].scenarios.splice(index, 1);
+                syncDatabaseToLocalStorage();
+                renderScenariosSidebarList();
+                resetDisplayPanelToStandby();
+            }
+        }
+
+        function resetDisplayPanelToStandby() {
+            document.getElementById('solution-content-block').className = "w-full flex flex-col justify-center items-center";
+            document.getElementById('solution-content-block').innerHTML = `<div class="text-center space-y-6 max-w-sm py-12 animate-fade"><div class="relative w-40 h-40 mx-auto flex items-center justify-center"><div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div><i class="fa-solid fa-hand-pointer text-5xl text-[#0066CC] relative z-10 animate-bounce"></i></div><h4 class="font-extrabold text-slate-800 text-base tracking-tight">Awaiting Case Selection</h4></div>`;
+        }
+
+        function showHome() {
+            document.getElementById('view-scenarios').classList.add('hidden');
+            document.getElementById('back-home-btn').classList.replace('flex', 'hidden');
+            document.getElementById('view-home').classList.remove('hidden');
+        }
     </script>
 </body>
 </html>
