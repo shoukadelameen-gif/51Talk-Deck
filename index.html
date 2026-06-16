@@ -3,66 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ms. Shouq 51talk | Operational Support Suite</title>
+    <title>51Talk & AirClass Onboarding Suite</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        /* CSS Animations and Kinetic Micro-interactions */
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Custom 3D Card Flip Styles */
+        .perspective-1000 {
+            perspective: 1000px;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .preserve-3d {
+            transform-style: preserve-3d;
         }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-            100% { transform: translateY(0px); }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
-
-        @keyframes pulseSoft {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.03); opacity: 0.9; }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
         }
-
-        .animate-slideup {
-            animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        
+        /* Smooth Custom Transitions */
+        .card-flip-transition {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .animate-fade {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .illustration-pulse {
-            animation: pulseSoft 4s ease-in-out infinite;
-        }
-
-        /* Custom Scrollbar configuration for slick nested navigation elements */
+        
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #f8fafc;
+            background: #f1f5f9;
         }
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
-            border-radius: 9999px;
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
@@ -71,675 +46,750 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
 
-    <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40 backdrop-blur-md bg-white/90">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3.5 group">
-                <div class="bg-[#FFCC00] text-slate-900 font-black text-lg px-3 py-1.5 rounded-xl shadow-md shadow-amber-400/20 tracking-tighter transition-transform group-hover:scale-105 flex items-center justify-center gap-1 border border-amber-300">
-                    <span class="text-xl">51</span><span class="text-sm bg-slate-900 text-[#FFCC00] px-1 rounded">Talk</span>
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-[#0066CC] text-white p-2.5 rounded-xl shadow-md shadow-blue-200">
+                    <i class="fa-solid fa-graduation-cap text-xl w-6 h-6 flex items-center justify-center"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tight text-slate-900">Ms. Shouq | Teacher Readiness Deck</h1>
-                    <p class="text-xs text-slate-500 font-semibold tracking-wide">Interactive Troubleshooting Creator Suite</p>
+                    <h1 class="text-xl font-bold tracking-tight text-slate-900">Teacher Readiness Hub</h1>
+                    <p class="text-xs text-slate-500 font-medium">51Talk & AirClass Policy Mastery</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="resetToFactoryDefault()" class="px-3 py-2 text-slate-400 hover:text-red-600 text-xs font-bold rounded-xl transition-all flex items-center gap-1 cursor-pointer">
-                    <i class="fa-solid fa-arrow-rotate-left"></i> Reset System
+            
+            <nav class="bg-slate-100 p-1 rounded-xl flex shadow-inner border border-slate-200/60">
+                <button onclick="switchMode('edit')" id="btn-mode-edit" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-list-check text-xs"></i> Policy Repository
                 </button>
-                <button onclick="showHome()" id="back-home-btn" class="hidden px-4 py-2 bg-slate-100 hover:bg-[#0066CC] hover:text-white text-slate-700 text-xs font-bold rounded-xl border border-slate-200/60 transition-all duration-200 items-center gap-2 shadow-sm cursor-pointer transform active:scale-95">
-                    <i class="fa-solid fa-house-chimney"></i> Back to Pillars
+                <button onclick="switchMode('play')" id="btn-mode-play" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-bolt text-xs"></i> Active Review
                 </button>
-            </div>
+                <button onclick="switchMode('quiz')" id="btn-mode-quiz" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-trophy text-xs"></i> Compliance Quiz
+                </button>
+            </nav>
         </div>
     </header>
 
-    <main class="flex-1 max-w-6xl w-full mx-auto px-6 py-10 flex flex-col justify-center">
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-8">
         
-        <section id="view-home" class="space-y-10 animate-fade">
-            <div class="text-center max-w-2xl mx-auto space-y-4">
-                <div class="inline-flex items-center gap-2.5 px-4 py-2 bg-amber-50 border border-amber-200 rounded-full text-slate-800 text-xs font-bold tracking-wide shadow-sm mb-2">
-                    <div class="bg-[#FFCC00] text-slate-900 font-black px-2 py-0.5 rounded text-[11px] tracking-tighter">CMS</div>
-                    <span>Fully Editable Architecture Mode</span>
+        <section id="view-edit" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">FAQ & Policy Database</h2>
+                    <p class="text-sm text-slate-500">Review, add, or update critical policy cards and standard operating procedures.</p>
                 </div>
-                <h2 class="text-3xl font-black text-slate-900 tracking-tight sm:text-4xl">Select an Operational Pillar</h2>
-                <p class="text-sm sm:text-base text-slate-500 leading-relaxed">Choose a functional category below to customize case blueprints, update workflows, or insert personalized teaching rules.</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto pt-4">
-                
-                <div onclick="selectPillar('pillar-1')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-red-50/20 border border-slate-200/80 hover:border-red-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
-                    <div>
-                        <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                            <i class="fa-solid fa-display text-xl"></i>
-                        </div>
-                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 1</h3>
-                        <p class="text-xs text-red-600 font-bold uppercase tracking-wider mb-2">Technical Issues</p>
-                        <p class="text-xs text-slate-400 font-medium leading-relaxed">App exceptions, hardware failures, lagging systems, and critical refresh protocols.</p>
-                    </div>
-                    <div id="count-pillar-1" class="text-[11px] font-bold text-slate-400 group-hover:text-red-600 transition-colors flex items-center gap-1 mt-4">
-                        Manage Scenarios <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                    </div>
-                </div>
-
-                <div onclick="selectPillar('pillar-2')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-amber-50/20 border border-slate-200/80 hover:border-amber-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
-                    <div>
-                        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                            <i class="fa-solid fa-business-time text-xl"></i>
-                        </div>
-                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 2</h3>
-                        <p class="text-xs text-amber-600 font-bold uppercase tracking-wider mb-2">Attendance Traps</p>
-                        <p class="text-xs text-slate-400 font-medium leading-relaxed">Time-zone matrices, scheduling limits, missing markers, and short-notice rules.</p>
-                    </div>
-                    <div id="count-pillar-2" class="text-[11px] font-bold text-slate-400 group-hover:text-amber-600 transition-colors flex items-center gap-1 mt-4">
-                        Manage Scenarios <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                    </div>
-                </div>
-
-                <div onclick="selectPillar('pillar-3')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-blue-50/20 border border-slate-200/80 hover:border-blue-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
-                    <div>
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                            <i class="fa-solid fa-file-signature text-xl"></i>
-                        </div>
-                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 3</h3>
-                        <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">Communication</p>
-                        <p class="text-xs text-slate-400 font-medium leading-relaxed">Lesson metrics, parent evaluations, formal legal evidence, and escalation tickets.</p>
-                    </div>
-                    <div id="count-pillar-3" class="text-[11px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors flex items-center gap-1 mt-4">
-                        Manage Scenarios <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                    </div>
-                </div>
-
-                <div onclick="selectPillar('pillar-4')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-purple-50/20 border border-slate-200/80 hover:border-purple-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
-                    <div>
-                        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                            <i class="fa-solid fa-face-smile-beam text-xl"></i>
-                        </div>
-                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 4</h3>
-                        <p class="text-xs text-purple-600 font-bold uppercase tracking-wider mb-2">Teacher Rapport</p>
-                        <p class="text-xs text-slate-400 font-medium leading-relaxed">Student leveling mismatches, tracking time-outs, pacing gaps, and behavior tasks.</p>
-                    </div>
-                    <div id="count-pillar-4" class="text-[11px] font-bold text-slate-400 group-hover:text-purple-600 transition-colors flex items-center gap-1 mt-4">
-                        Manage Scenarios <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section id="view-scenarios" class="hidden space-y-8 animate-slideup">
-            
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
-                <div class="flex items-center gap-4">
-                    <div id="category-icon-container" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-sm"></div>
-                    <div>
-                        <span id="category-subtitle" class="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Ms. Shouq's Workspace</span>
-                        <h2 id="category-title" class="text-2xl font-black text-slate-900 tracking-tight">Pillar Title</h2>
-                    </div>
-                </div>
-                <button onclick="openFormModal(null)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-600/10 transition-all flex items-center gap-1.5 self-start sm:self-center cursor-pointer transform active:scale-95">
-                    <i class="fa-solid fa-circle-plus"></i> Add New Scenario
+                <button onclick="openCardModal()" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-sm cursor-pointer transform active:scale-95">
+                    <i class="fa-solid fa-plus"></i> Add New FAQ/Policy
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                
-                <div class="space-y-4 lg:col-span-4">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 px-1">
-                        <i class="fa-solid fa-folder-open text-slate-300"></i> High-Frequency Case List
-                    </span>
-                    <div id="scenarios-list-container" class="space-y-3 max-h-[580px] overflow-y-auto pr-2">
-                    </div>
+            <div id="edit-empty-state" class="hidden bg-white border border-dashed border-slate-300 rounded-3xl p-12 text-center max-w-md mx-auto my-12">
+                <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-400">
+                    <i class="fa-solid fa-folder-open text-2xl"></i>
                 </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-1">No FAQs Available</h3>
+                <p class="text-sm text-slate-500 mb-6">Create reference cards to help new teachers navigate problems.</p>
+                <button onclick="openCardModal()" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all">
+                    Add First Card
+                </button>
+            </div>
 
-                <div class="lg:col-span-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm p-6 sm:p-8 min-h-[520px] flex flex-col justify-center relative overflow-hidden bg-gradient-to-br from-white to-slate-50/50">
-                    <div id="solution-content-block" class="w-full flex flex-col justify-center items-center">
-                        <div class="text-center space-y-6 max-w-sm py-12 my-auto animate-fade">
-                            <div class="relative w-40 h-40 mx-auto flex items-center justify-center">
-                                <div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div>
-                                <div class="absolute inset-4 bg-blue-50 rounded-full illustration-pulse"></div>
-                                <i class="fa-solid fa-hand-pointer text-5xl text-[#0066CC] relative z-10 animate-bounce"></i>
-                            </div>
-                            <div class="space-y-1">
-                                <h4 class="font-extrabold text-slate-800 text-base tracking-tight">Awaiting Case Selection</h4>
-                                <p class="text-xs text-slate-400 font-medium px-2">Click any problem case scenario from the left panel to immediately generate vector steps and instructions.</p>
-                            </div>
+            <div id="card-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+        </section>
+
+        <section id="view-play" class="hidden space-y-6 max-w-2xl mx-auto">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">FAQ & Scenario Flashcards</h2>
+                    <p class="text-sm text-slate-500">Click a card to reveal critical steps, MyPage protocol actions, or solutions.</p>
+                </div>
+                <button onclick="shufflePlayDeck()" class="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm px-4 py-2 rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer">
+                    <i class="fa-solid fa-shuffle text-slate-400"></i> Shuffle Scenarios
+                </button>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 space-y-2">
+                <div class="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400">
+                    <span>Card Progress</span>
+                    <span id="play-progress-text">0 / 0 Decks</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                    <div id="play-progress-bar" class="bg-[#0066CC] h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="play-arena" class="relative h-96 w-full perspective-1000 cursor-pointer group">
+                <div id="play-card" class="w-full h-full preserve-3d card-flip-transition relative" onclick="toggleCardFlip()">
+                    <div class="absolute inset-0 bg-white border border-slate-200 rounded-3xl p-8 flex flex-col justify-between shadow-md backface-hidden">
+                        <div class="flex justify-between items-start w-full">
+                            <span class="px-3 py-1 bg-blue-50 text-[#0066CC] text-xs font-bold rounded-full tracking-wide uppercase">Problem Scenario / FAQ</span>
+                            <button id="play-hint-btn" onclick="togglePlayHint(event)" class="text-slate-400 hover:text-[#0066CC] p-1.5 rounded-lg hover:bg-slate-50 transition-colors hidden" title="Reveal Official Policy Hint">
+                                <i class="fa-solid fa-lightbulb text-lg"></i>
+                            </button>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center items-center text-center px-4 my-4 max-h-[60%] overflow-y-auto">
+                            <h3 id="play-question-text" class="text-lg sm:text-xl font-bold text-slate-800 leading-snug">Loading scenario...</h3>
+                            <p id="play-hint-text" class="text-xs font-medium text-amber-600 bg-amber-50 border border-amber-100 px-3 py-1.5 rounded-lg mt-3 hidden animate-fadeIn"><i class="fa-solid fa-circle-info mr-1"></i> Policy Note: <span id="hint-content"></span></p>
+                        </div>
+                        <div id="play-front-image-container" class="hidden w-full max-h-32 mb-2 justify-center items-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50" onclick="stopPropagation(event)">
+                            <img id="play-front-img" src="" alt="System Graphic" class="max-h-32 object-contain w-full cursor-zoom-in" onclick="openImagePreview(this.src)">
+                        </div>
+                        <div class="text-center text-xs font-semibold tracking-wide text-slate-400 uppercase mt-auto">
+                            <i class="fa-solid fa-rotate mr-1"></i> Click anywhere to flip & read solution
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 bg-white border border-slate-200 rounded-3xl p-8 flex flex-col justify-between shadow-md backface-hidden rotate-y-180">
+                        <div class="flex justify-between items-start w-full">
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full tracking-wide uppercase">Correct Protocol / Solution</span>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center items-center text-center px-4 my-4 max-h-[70%] overflow-y-auto">
+                            <p id="play-answer-text" class="text-xs sm:text-sm font-medium text-slate-700 leading-relaxed whitespace-pre-line text-left">Loading protocol details...</p>
+                        </div>
+                        <div class="text-center text-xs font-semibold tracking-wide text-slate-400 uppercase mt-auto">
+                            <i class="fa-solid fa-rotate mr-1"></i> Click anywhere to view question again
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                <button onclick="navigatePlay(-1)" id="btn-play-prev" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold p-3 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <div class="text-xs font-semibold text-slate-500">
+                    Navigate using buttons or click the card to flip
+                </div>
+                <button onclick="navigatePlay(1)" id="btn-play-next" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold p-3 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
             </div>
         </section>
-        
-    </main>
 
-    <div id="form-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm items-center justify-center p-4 animate-fade">
-        <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-slideup">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-indigo-600 animate-ping"></span>
-                    <h3 id="modal-heading" class="text-sm font-black text-slate-900 uppercase tracking-wider">Configure Scenario Blueprint</h3>
+        <section id="view-quiz" class="hidden space-y-6 max-w-2xl mx-auto">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Platform Compliance Evaluation</h2>
+                    <p class="text-sm text-slate-500">Test your crisis management, system navigation, and MYPAGE logging accuracy.</p>
                 </div>
-                <button onclick="closeFormModal()" class="text-slate-400 hover:text-slate-600 text-sm cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="resetQuiz()" class="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm px-4 py-2 rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer">
+                    <i class="fa-solid fa-arrow-rotate-left text-slate-400"></i> Restart Quiz
+                </button>
             </div>
-            
-            <form id="scenario-form" onsubmit="saveScenarioData(event)" class="p-6 overflow-y-auto space-y-5 flex-1">
-                <input type="hidden" id="form-edit-index">
-                
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Scenario Display Title</label>
-                    <input type="text" id="form-title" required placeholder="e.g., App Audio Dropout / Latency Bugs" class="w-full border border-slate-200 p-3 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-indigo-500 bg-slate-50/50 font-medium">
+
+            <div id="quiz-summary-panel" class="hidden bg-white border border-slate-200 p-8 rounded-3xl text-center space-y-6 shadow-sm">
+                <div class="w-20 h-20 bg-blue-50 text-[#0066CC] rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-800">Review Finished!</h3>
+                    <p class="text-slate-500 mt-1">Check your current understanding score metrics for platform policies</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <div class="text-center p-2">
+                        <span class="block text-2xl font-black text-slate-800" id="summary-score-ratio">0/0</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Correct Actions</span>
+                    </div>
+                    <div class="text-center p-2">
+                        <span class="block text-2xl font-black text-[#0066CC]" id="summary-score-pct">0%</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Final Accuracy</span>
+                    </div>
+                </div>
+                <div class="flex justify-center gap-4">
+                    <button onclick="resetQuiz()" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-blue-100 cursor-pointer">
+                        Retake Assessment
+                    </button>
+                </div>
+            </div>
+
+            <div id="quiz-active-panel" class="space-y-6">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 space-y-2">
+                    <div class="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400">
+                        <span>Assessment Progress</span>
+                        <span id="quiz-progress-text">0 / 0 Scenarios</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                        <div id="quiz-progress-bar" class="bg-[#0066CC] h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
                 </div>
 
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Problem Definition Summary</label>
-                    <textarea id="form-problem" required rows="3" placeholder="Describe the active trigger parameters causing classroom failure errors..." class="w-full border border-slate-200 p-3 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-indigo-500 bg-slate-50/50 font-medium leading-relaxed"></textarea>
-                </div>
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md flex flex-col space-y-6">
+                    <div class="flex justify-between items-start">
+                        <span class="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-full uppercase tracking-wider">Scenario Test</span>
+                        <span id="quiz-live-score" class="text-sm font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-lg"><i class="fa-solid fa-square-check mr-1"></i> Score: 0</span>
+                    </div>
 
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between">
-                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Protocol Action Resolution Steps</label>
-                        <button type="button" onclick="appendStepInputField('')" class="text-[11px] font-black text-indigo-600 hover:text-indigo-800 flex items-center gap-0.5 cursor-pointer">
-                            <i class="fa-solid fa-plus-circle"></i> Add Step
+                    <div class="space-y-4">
+                        <h3 id="quiz-question-text" class="text-base sm:text-lg font-bold text-slate-800 leading-snug">Quiz Question Loading...</h3>
+                        <div id="quiz-image-container" class="hidden w-full max-h-40 justify-start items-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
+                            <img id="quiz-img" src="" alt="Quiz Auxiliary Asset" class="max-h-40 object-contain cursor-zoom-in" onclick="openImagePreview(this.src)">
+                        </div>
+                    </div>
+
+                    <div id="quiz-options-container" class="grid grid-cols-1 gap-3.5 pt-2">
+                        </div>
+
+                    <div class="flex justify-end pt-2 border-t border-slate-100">
+                        <button id="btn-quiz-next" onclick="advanceQuiz()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                            Next Problem <i class="fa-solid fa-arrow-right text-xs"></i>
                         </button>
                     </div>
-                    <div id="steps-inputs-container" class="space-y-2.5">
-                        </div>
                 </div>
+            </div>
+        </section>
+    </main>
 
-                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
-                    <button type="button" onclick="closeFormModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-xl transition-all cursor-pointer">Cancel</button>
-                    <button type="submit" class="px-5 py-2 bg-slate-900 hover:bg-indigo-900 text-white text-xs font-bold rounded-xl shadow-md transition-all cursor-pointer">Save Configurations</button>
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs font-medium text-slate-400 tracking-wide">
+        Teacher Readiness Hub &copy; 2026. Custom Internal Platform.
+    </footer>
+
+    <div id="modal-card" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="closeCardModal()"></div>
+        
+        <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl border border-slate-100 relative z-10 overflow-hidden transform transition-all duration-300 scale-95 opacity-0" id="modal-card-box">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                <h3 id="modal-title" class="text-base font-bold text-slate-800">Add Training Scenario</h3>
+                <button onclick="closeCardModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-200/50 transition-all cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <form id="card-form" onsubmit="saveCardForm(event)" class="p-6 space-y-4">
+                <input type="hidden" id="form-card-id">
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Teacher Problem / FAQ Prompt <span class="text-red-500">*</span></label>
+                    <textarea id="form-question" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all resize-none" placeholder="What is the problem or question? (e.g., Student has not showed up for 15 minutes...)"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Official Platform Solution Protocol <span class="text-red-500">*</span></label>
+                    <textarea id="form-answer" required rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all resize-none" placeholder="What is the explicit step-by-step resolution or system rule?"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Platform Reference Clue / Hint</label>
+                    <input type="text" id="form-hint" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all" placeholder="e.g., Check MYPAGE criteria or AirClass toolbar guidelines...">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">System Reference Screenshot URL (Optional)</label>
+                    <div class="flex gap-2">
+                        <input type="url" id="form-image-url" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all" placeholder="https://example.com/airclass-ui-help...">
+                        <button type="button" onclick="testFormImage()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs px-3 rounded-xl transition-all border border-slate-200 cursor-pointer">Verify</button>
+                    </div>
+                    <div id="form-image-preview-container" class="hidden mt-3 p-2 bg-slate-50 border border-slate-100 rounded-xl max-h-24 justify-center items-center overflow-hidden">
+                        <img id="form-image-preview" src="" alt="Thumbnail Asset View" class="max-h-20 object-contain">
+                    </div>
+                </div>
+                
+                <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="closeCardModal()" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-sm px-4 py-2 rounded-xl transition-all cursor-pointer">Cancel</button>
+                    <button type="submit" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-5 py-2 rounded-xl transition-all shadow-sm cursor-pointer">Save Item</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <footer class="bg-white border-t border-slate-200/80 py-6 text-center text-xs font-semibold text-slate-400 tracking-wide">
-        Ms. Shouq's Onboarding Training Suite &copy; 2026. Actionable Platform Readiness Operations.
-    </footer>
+    <div id="modal-image" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" onclick="closeImagePreview()"></div>
+        <div class="relative z-10 max-w-4xl max-h-[85vh] overflow-hidden transform transition-all duration-300 scale-95 opacity-0" id="modal-image-box">
+            <button onclick="closeImagePreview()" class="absolute top-3 right-3 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full transition-all cursor-pointer z-20">
+                <i class="fa-solid fa-xmark text-lg w-5 h-5 flex items-center justify-center"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="Expanded View" class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl">
+        </div>
+    </div>
 
     <script>
-        // Full Complete 5-by-4 Configuration Matrix Dataset
-        const defaultDatabase = {
-            "pillar-1": {
-                title: "Pillar 1: Technical Glitches",
-                iconClass: "fa-solid fa-display",
-                styleClasses: "bg-red-50 text-red-600 border-red-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-red-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-red-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 relative z-10"></i></div>`,
-                scenarios: [
-                    {
-                        title: "App Crash / Screen Lag Loops",
-                        problem: "You experience unexpected client software crashes, severe interface freezing, or the classroom timer displays performance synchronization lag mid-class.",
-                        steps: [
-                            "<strong>Control Environment:</strong> Switch instantly to your designated <strong>backup mobile hotspot</strong> data line. Shut down all non-essential background windows draining bandwidth allocation.",
-                            "<strong>Force Software Reset:</strong> Exit the platform frame immediately, execute a <strong>complete logout of AirClass (AC)</strong>, or trigger a swift system restart if hardware freezing persists.",
-                            "<strong>The Leave-and-Re-enter Loophole:</strong> Pay no attention to <strong>automated system penalty warning banners</strong> during active troubleshooting runs; protection applies for verified technical loops.",
-                            "<strong>Preserve Evidence:</strong> Capture immediate <strong>full-screen screenshots</strong> verifying runtime errors clearly showing your device's desktop clock.",
-                            "<strong>File Incident Verification:</strong> Record the precise breakdown parameters and timing logs inside your <strong>post-class memo notes</strong> to secure your contract verification appeals."
-                        ]
-                    },
-                    {
-                        title: "Microphone Malfunction / Audio Cutting Out",
-                        problem: "The student reports they cannot hear you, your hardware microphone input level bar isn't moving, or your sound turns off completely mid-class.",
-                        steps: [
-                            "<strong>Check App Permissions:</strong> Verify the class app's access to hardware devices. Re-select your external headset manually under <strong>Audio/Video Settings</strong>.",
-                            "<strong>Hardware Re-plug Option:</strong> Physically unplug the USB or 3.5mm cable. Wait 3 seconds and firmly re-seat it to trigger system device recognition.",
-                            "<strong>Change Audio Lines:</strong> Switch the live channel driver internally inside the software from <strong>Line A to Line B</strong> to manually sync data packets.",
-                            "<strong>Hardware Bypass:</strong> If a dedicated headset remains completely unresponsive, quickly connect alternative <strong>wired earbuds</strong> to maintain instruction momentum."
-                        ]
-                    },
-                    {
-                        title: "Student Side Audio/Video Failure",
-                        problem: "You can see the student but cannot hear them, or their webcam feed renders as a static black box while your local metrics are green.",
-                        steps: [
-                            "<strong>Use Elicitation Prompts:</strong> Type immediate interactive commands into the text chatbox (e.g., 'Please check your microphone setting' or 'Click the Refresh button').",
-                            "<strong>Trigger Interface Reset:</strong> Use the teacher panel tools to click <strong>Refresh Lesson</strong> or toggle the student's personal media feed switches off and on.",
-                            "<strong>Guide Device Selection:</strong> Direct the student (or their watching parent) to tap the native gear icon to verify their selected system input source.",
-                            "<strong>Escalate to Tech Support:</strong> If the local freeze context is unresolved after 60 seconds, flag the room node immediately to platform support engineers."
-                        ]
-                    },
-                    {
-                        title: "Sudden Power Dropouts / Local Blackouts",
-                        problem: "Local electrical grid power fails completely mid-session, shutting down your main monitor, desktop workstation, and home router router feeds.",
-                        steps: [
-                            "<strong>Deploy Standby Hardware:</strong> Immediately power on your pre-charged backup laptop or portable tablet device running the standalone mobile AC app.",
-                            "<strong>Engage Local Hotspot:</strong> Wirelessly sync your mobile device data hotspot line within 45 seconds to re-establish a live platform connection.",
-                            "<strong>Re-enter active classroom:</strong> Log back into the ongoing class module to minimize down-time metrics.",
-                            "<strong>Document Force Majeure:</strong> Photograph the blackout area environment alongside a timestamped mobile device to build an official contract exception ticket."
-                        ]
-                    },
-                    {
-                        title: "Interactive Lesson Tools Freezing",
-                        problem: "The interactive digital markers, digital drawing pens, rewards stamps, or slide selector components lock up completely, making student feedback impossible.",
-                        steps: [
-                            "<strong>Execute Slide Jumps:</strong> Input an explicit page step change into the index nav bar, then jump straight back to force an element redraw.",
-                            "<strong>Clear Application Cache:</strong> Access the top menu settings tray and trigger a swift clear of temporary asset storage blocks.",
-                            "<strong>Pivot to Oral Exercises:</strong> Avoid dead-air drops by shifting instantly to physical TPR movements, verbal drills, and structural conversation pacing.",
-                            "<strong>Flag Slide Bugs:</strong> Drop a swift note into the operational system log identifying the exact page index numbers that triggered the tool crash."
-                        ]
-                    }
-                ]
+        // --- PRE-POPULATED REALISTIC 51TALK / AIRCLASS PROBLEMS & FAQS ---
+        let flashcards = [
+            {
+                id: "faq-1",
+                question: "What is the correct procedure if a student does not show up at all during the first 15 minutes of an AC classroom session?",
+                answer: "1. Wait a full 15 minutes inside the AirClass classroom.\n2. Take a timestamped screenshot showing the total wait time.\n3. Open your MYPAGE profile and mark the student absent.\n4. Log the explicit reason: 'Student was not available and did not join for 15 minutes whatsoever'.\n5. Exit the class and dismiss the system's late leave warning.",
+                hint: "Ensure your screenshot clearly includes your computer desktop clock for timestamp validation.",
+                image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80"
             },
-            "pillar-2": {
-                title: "Pillar 2: Attendance Traps",
-                iconClass: "fa-solid fa-business-time",
-                styleClasses: "bg-amber-50 text-amber-600 border-amber-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-amber-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-amber-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-business-time text-4xl text-amber-500 relative z-10"></i></div>`,
-                scenarios: [
-                    {
-                        title: "Local Time Zone Mismatch Errors",
-                        problem: "Incurring accidental late-entry penalty indicators due to timezone confusion between local Egypt time and Beijing headquarters timelines.",
-                        steps: [
-                            "<strong>Crosscheck Interface Schedules:</strong> Systematically monitor parameters across both your <strong>local Egypt AC calendar application</strong> and the master Beijing scheduling metrics on the <strong>MyPage portal</strong>.",
-                            "<strong>Calculate the Time Shift:</strong> Perform deliberate zone translations mentally before slots freeze to prevent accidental missing session entries.",
-                            "<strong>The 4-Minute Absence Window:</strong> Remember that arriving exactly <strong>4 minutes late changes metrics</strong> to an unreviewable, system-enforced <strong>Teacher Absence mark</strong>."
-                        ]
-                    },
-                    {
-                        title: "Student No-Show (Waiting Protocol)",
-                        problem: "The classroom remains entirely empty when the session timer starts, with no indication of whether the student will log in late.",
-                        steps: [
-                            "<strong>Maintain Camera Presence:</strong> Keep your camera toggled on, stay clearly in frame, and wear your professional headset for the entire duration.",
-                            "<strong>Execute the 15-Min Check:</strong> For standard 25-minute slots, you must remain active in the room until the 15:00 mark clicks by before exiting.",
-                            "<strong>Capture Milestone Proof:</strong> Take crisp full-screen verification screenshots at 01:00, 08:00, and 15:00 showing the empty student slot and clock.",
-                            "<strong>Verify No-Show Tagging:</strong> Double check that the automated system records the session status as 'Student No-Show' to guarantee your base payout rate."
-                        ]
-                    },
-                    {
-                        title: "Short-Notice Booking Cancellations",
-                        problem: "An emergency trial or regular slot is booked or canceled right before the start time, leading to missed room entries.",
-                        steps: [
-                            "<strong>Lock Notification Sound Filters:</strong> Ensure your system portal alerts are turned up max so you hear booking sounds instantly.",
-                            "<strong>Enforce the 1-Hour Refresh Rule:</strong> Manually reload your daily timeline schedule page 60 minutes before your first morning block starts.",
-                            "<strong>Review Booking Lock Cutoffs:</strong> Treat any open slot inside a active window as a live class until the system cutoff timer explicitly releases it.",
-                            "<strong>Claim System Cancellation Fees:</strong> Verify that late cancellations within the penalty buffer zone are properly credited to your account ledger."
-                        ]
-                    },
-                    {
-                        title: "Accidental 'Late Entry' Flags",
-                        problem: "Entering the room exactly at 00:01 or experiencing a 10-second internet lag during entry that triggers an automated platform 'Late' penalty mark.",
-                        steps: [
-                            "<strong>Target the 3-Minute Buffer:</strong> Make it a strict habit to enter every single assigned classroom space exactly 3 minutes before the official start time.",
-                            "<strong>Run Pre-Class Audio Checks:</strong> Use the lobby test module to verify your hardware configuration is clear before hitting the enter room trigger.",
-                            "<strong>Log Entry Lag Context:</strong> If network routing delays your connection, save a screenshot of the loading progress wheel immediately.",
-                            "<strong>Submit Appeals with Speed:</strong> Send your log files to support channels within 24 hours to overturn automated late flags."
-                        ]
-                    },
-                    {
-                        title: "Emergency Cancellation Protocol",
-                        problem: "A sudden illness or urgent personal issue arises, requiring you to drop scheduled slots without triggering severe penalties.",
-                        steps: [
-                            "<strong>Submit the 2-Hour Notice:</strong> File your formal cancellation request through the admin dashboard at least 2 full hours before class starts.",
-                            "<strong>Gather Medical/Utility Proof:</strong> Collect clear documentation, such as medical notes or local utility outage statements, as support evidence.",
-                            "<strong>File an Official Ticket:</strong> Upload your gathered evidence files into the administrative portal under the 'Involuntary Absence' category.",
-                            "<strong>Monitor Payout Adjustments:</strong> Review your monthly billing dashboard to ensure the penalty points are waived once your documentation is approved."
-                        ]
-                    }
-                ]
+            {
+                id: "faq-2",
+                question: "How do I dismiss or clear the system's 'late leave warning' on AirClass when exiting an empty room?",
+                answer: "As long as you have logged a verified student absence on your MYPAGE portal and have passed the required 15-minute wait milestone with screenshot proof, you can manually dismiss the room warning when you hit the exit button without risking salary point penalties.",
+                hint: "Do not leave before minute 15, or the system log triggers a Teacher Absence instead.",
+                image: ""
             },
-            "pillar-3": {
-                title: "Pillar 3: Communication Rules",
-                iconClass: "fa-solid fa-file-signature",
-                styleClasses: "bg-blue-50 text-blue-600 border-blue-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-blue-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-file-invoice text-4xl text-blue-500 relative z-10"></i></div>`,
-                scenarios: [
-                    {
-                        title: "Memo Compliance & VIP Parents",
-                        problem: "Receiving low client ratings from generic feedback notes, or losing dispute cases due to a lack of sufficient structural audit records.",
-                        steps: [
-                            "<strong>Memos as Binding Legal Evidence:</strong> Log technical failures inside class notes to establish a clear <strong>audit trail for dispute pipelines</strong>.",
-                            "<strong>Apply Goal + Evidence Framework:</strong> Replace repetitive boilerplate remarks with a <strong>two-sentence standard format</strong>:",
-                            "<em>Sentence A (Target Objective):</em> State the precise target skill targeted (e.g., <strong>'Student successfully mastered conditional verb tenses.'</strong>).",
-                            "<em>Sentence B (Live Evidence):</em> Insert measurable evidence of progress (e.g., <strong>'They correctly transformed three complex sentences during final drills.'</strong>)."
-                        ]
-                    },
-                    {
-                        title: "Handling Negative Parent Reviews",
-                        problem: "A parent leaves an unexpected low rating or a complaint about class pacing, which threatens to lower your overall teacher performance metrics.",
-                        steps: [
-                            "<strong>Analyze Class Logs:</strong> Review the specific lesson recording to crosscheck the pacing metrics and student responses against the parent's feedback.",
-                            "<strong>Draft a Professional Dispute:</strong> Write a calm, fact-based response outlining the exact activities and slide index targets met during the lesson.",
-                            "<strong>Highlight Student Progress:</strong> Share specific examples of words the student read or rewards they earned to prove they were successfully engaged.",
-                            "<strong>Submit Review Requests:</strong> Send your evidence to the evaluation team within 72 hours to request a removal of unfair ratings."
-                        ]
-                    },
-                    {
-                        title: "Trial Lesson Conversion Optimization",
-                        problem: "New students in trial classes seem nervous or quiet, making it difficult to convert them into regular long-term bookings.",
-                        steps: [
-                            "<strong>Lead with Big Energy:</strong> Start the session with high-energy waves, a warm smile, and clear Total Physical Response (TPR) actions.",
-                            "<strong>Simplify Prompt Patterns:</strong> Drop complex phrases for simple, actionable commands (e.g., replace 'Would you like to read?' with 'Look here, let's read!').",
-                            "<strong>Give Constant Rewards:</strong> Hand out digital stars or use physical props every time the student tries to copy a sound or word.",
-                            "<strong>Write Targeted Growth Path Notes:</strong> Use the lesson summary to tell parents exactly which advanced modules will help their child grow next."
-                        ]
-                    },
-                    {
-                        title: "Reporting Classroom Behavioral Safety",
-                        problem: "A student shows completely inappropriate behavior or shares unsafe media during a live class stream, requiring immediate intervention.",
-                        steps: [
-                            "<strong>Turn Off Video and Audio:</strong> Instantly toggle off the student's media feeds using your teacher dashboard control buttons.",
-                            "<strong>State Rules in Chat:</strong> Type a firm, professional reminder of classroom rules into the chat box for the student and parent to see.",
-                            "<strong>Call Tech Support Live:</strong> Use the emergency room button to get an active admin moderator into the room right away.",
-                            "<strong>Save Timestamped Proof:</strong> Take full screenshots of the incident and log a detailed safety report within the admin panel."
-                        ]
-                    },
-                    {
-                        title: "Official Support Ticket Escalation",
-                        problem: "A pay error, student dispute, or tech issue is handled incorrectly by automated systems, requiring a manual human review.",
-                        steps: [
-                            "<strong>State Your Core Goal:</strong> Start your help ticket with a clear, direct subject line (e.g., 'Request to Overturn Absence Flag - Room #4920').",
-                            "<strong>List Facts in Order:</strong> Write out what happened step-by-step using precise times, dates, and classroom ID numbers.",
-                            "<strong>Attach Clean Evidence Files:</strong> Upload your matching screenshots, network logs, or video clip markers directly to the ticket.",
-                            "<strong>Follow Up Regularly:</strong> Check the status of your ticket every 48 hours to add any new details requested by the review team."
-                        ]
-                    }
-                ]
+            {
+                id: "faq-3",
+                question: "What should a new teacher do if an AirClass lesson encounters an unexpected audio/video lag mid-class?",
+                answer: "1. Immediately click the 'Line Switch' optimization option on the top control ribbon.\n2. Switch between available servers (Line 1, Line 2, or Line 3).\n3. If it persists, use the internal Chat tool to verify if the student can hear you, and report a platform ticket if it is a local AC node failure.",
+                hint: "Line switching refreshes your WebRTC connection stream without force-rebooting the client.",
+                image: "https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&w=600&q=80"
             },
-            "pillar-4": {
-                title: "Pillar 4: Teacher Rapport",
-                iconClass: "fa-solid fa-face-smile-beam",
-                styleClasses: "bg-purple-50 text-purple-600 border-purple-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-purple-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-purple-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-face-smile-beam text-4xl text-purple-500 relative z-10"></i></div>`,
-                scenarios: [
-                    {
-                        title: "Advanced Learners / Early Finish Gaps",
-                        problem: "An advanced student breezes through a 25-minute lesson blueprint inside of 15 minutes, leaving a 10-minute dead-air gap.",
-                        steps: [
-                            "<strong>Switch Course Selections:</strong> Alter active material pathways using <strong>classroom interface dropdown tools</strong> if accessible.",
-                            "<strong>Phonics Distinction Drills:</strong> Introduce minimal phonetic sound pairings to highlight vocabulary nuance (e.g., bin/pin, bark/park).",
-                            "<strong>Syllable Blending Challenges:</strong> Drill complex multisyllabic terms to analyze articulation boundaries (e.g., paper, pepper, publish)."
-                        ]
-                    },
-                    {
-                        title: "Managing Quiet or Distracted Young Learners",
-                        problem: "A very young student (Level 1-2) refuses to look at the screen, cries, or is distracted by toys during the lesson.",
-                        steps: [
-                            "<strong>Use Eye-Catching Props:</strong> Hold colorful physical puppets or flashcards right up to your camera lens to grab their attention.",
-                            "<strong>Use Dramatic Voices:</strong> Change your voice using high and low tones (acoustic variation) to make reading repetitive words fun.",
-                            "<strong>Try Copycat Actions:</strong> Use big, playful arm movements (TPR) and ask the student to mirror your actions like a game.",
-                            "<strong>Involve the Watching Parent:</strong> Politely ask the parent in the room to help guide the child's focus back to the current slide activity."
-                        ]
-                    },
-                    {
-                        title: "Dealing with Level Mismatches",
-                        problem: "A student is placed in a class that is far too difficult for them, causing them to shut down because they cannot understand.",
-                        steps: [
-                            "<strong>Simplify Slide Content:</strong> Break down long sentences into single words or simple two-word phrases.",
-                            "<strong>Provide Heavy Scaffolding:</strong> Read the words clearly first, then have the student repeat after you several times.",
-                            "<strong>Use Visual Clues:</strong> Draw circles around picture elements on the slide to show the meaning of words without using complex rules.",
-                            "<strong>Recommend a Level Change:</strong> Use the post-class feedback dashboard to officially suggest moving the student to a more comfortable level."
-                        ]
-                    },
-                    {
-                        title: "Pacing Slow Learners Effectively",
-                        problem: "A student struggles with basic pronunciation, falling far behind the lesson pace and risking missing the last 10 slides.",
-                        steps: [
-                            "<strong>Pick Core Target Slides:</strong> Focus your energy on the main vocabulary and grammar pages, skipping repetitive review slides.",
-                            "<strong>Set a 2-Minute Timer:</strong> Limit your time on any single tricky word to 120 seconds before moving forward to keep the lesson moving.",
-                            "<strong>Use Shared Reading:</strong> Read the long parts yourself and have the student jump in just for the target vocabulary words.",
-                            "<strong>Add Practice Reminders:</strong> Use the lesson notes to highlight the words they struggled with so they can practice them at home."
-                        ]
-                    },
-                    {
-                        title: "Building Rapport with Quiet Adults",
-                        problem: "An adult conversation student gives short, one-word answers, causing discussions to stall out quickly.",
-                        steps: [
-                            "<strong>Ask Open-Ended Questions:</strong> Avoid simple 'yes/no' questions; instead, use prompts like 'Tell me about your favorite...' or 'What do you think about...'.",
-                            "<strong>Share a Short Example:</strong> Share a quick, 15-second story from your own life first to break the ice and encourage them to share too.",
-                            "<strong>Use Helpful Prompt Phrases:</strong> Keep conversations going by asking follow-up questions like 'Why do you feel that way?' or 'Can you tell me more?'.",
-                            "<strong>Praise Their Input:</strong> Boost their speaking confidence by praising their vocabulary choices before correcting minor grammar errors."
-                        ]
-                    }
-                ]
+            {
+                id: "faq-4",
+                question: "What is the critical rule for completing MYPAGE class evaluation summaries after a finished 51Talk lesson?",
+                answer: "Evaluation forms must be filed via your MYPAGE dashboard within a maximum of 2 hours post-lesson. Failing to log structural performance notes on time changes the status code and impacts your overall month-end platform performance score.",
+                hint: "Keep structural notes templates handy to fill out level achievements quickly.",
+                image: ""
+            },
+            {
+                id: "faq-5",
+                question: "What should I do if a student is bored and the core lesson material is visibly too easy for them during an FT session?",
+                answer: "1. Switch materials yourself if the platform allows it.\n2. If locked, introduce 'Phonics Distinction Expansion': Explain how a single letter sound completely alters a word's meaning. Use contrasting minimal pairs: bin vs. pin, bark vs. park, bond vs. pond, back vs. pack.\n3. If material is fully covered, transition to Syllable Blending: Blend sounds with advanced target words (paper, pepper, publish, public, five, fever, favorite).\n4. Build Contextual Sentences: Practice conversational flows like 'Have fun!', 'Five fish', 'I have a fever', 'I go to the park', or 'A big panda'.\n5. Final Tier Extension: If time remains, teach vocal variations like advanced vowels or complex digraph patterns (/th/, /sh/, /ch/).",
+                hint: "Extension prevents class dead-air while ensuring high pacing marks on user evaluation reviews.",
+                image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80"
             }
-        };
+        ];
 
-        // Initialize Reactive Database Core using localStorage Layer Allocation
-        let database = JSON.parse(localStorage.getItem('readiness_deck_db')) || defaultDatabase;
+        // --- GLOBAL SESSION NAVIGATION VALUES ---
+        let currentMode = 'edit';
+        let playIndex = 0;
+        let isCardFlipped = false;
+        let activePlayDeck = [];
+        
+        let quizIndex = 0;
+        let quizScore = 0;
+        let quizDeck = [];
+        let quizSelectedAnswer = null;
+        let isQuizAnswerEvaluated = false;
 
-        let currentPillarKey = null;
-        let selectedBtnElement = null;
+        // --- APP INITIALIZER HOOK ---
+        document.addEventListener("DOMContentLoaded", () => {
+            loadPersistedData();
+            switchMode('edit');
+        });
 
-        window.onload = function() {
-            updatePillarBadgeCounters();
-        };
-
-        function syncDatabaseToLocalStorage() {
-            localStorage.setItem('readiness_deck_db', JSON.stringify(database));
-            updatePillarBadgeCounters();
+        function loadPersistedData() {
+            const data = localStorage.getItem("teacher_hub_decks");
+            if (data) {
+                try {
+                    flashcards = JSON.parse(data);
+                } catch(e) {
+                    showToast("Failed to parse local training data stores.", "error");
+                }
+            }
         }
 
-        function updatePillarBadgeCounters() {
-            Object.keys(database).forEach(key => {
-                const countBadge = document.getElementById(`count-${key}`);
-                if (countBadge) {
-                    const total = database[key].scenarios.length;
-                    countBadge.innerHTML = `Manage ${total} Scenario${total === 1 ? '' : 's'} <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>`;
+        function persistData() {
+            localStorage.setItem("teacher_hub_decks", JSON.stringify(flashcards));
+        }
+
+        // --- SYSTEM VIEW CORE ROUTER ---
+        function switchMode(targetMode) {
+            currentMode = targetMode;
+            
+            ['edit', 'play', 'quiz'].forEach(mode => {
+                const btn = document.getElementById(`btn-mode-${mode}`);
+                const view = document.getElementById(`view-${mode}`);
+                
+                if (mode === targetMode) {
+                    btn.className = "px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 flex items-center gap-2 bg-white text-[#0066CC] shadow-sm border border-slate-200/50";
+                    view.classList.remove('hidden');
+                } else {
+                    btn.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/40";
+                    view.classList.add('hidden');
                 }
             });
+
+            if (targetMode === 'edit') renderEditWorkspace();
+            if (targetMode === 'play') initPlaySession();
+            if (targetMode === 'quiz') initQuizSession();
         }
 
-        function resetToFactoryDefault() {
-            if(confirm("Are you sure you want to restore the platform default schemas? All customized updates will be lost.")) {
-                database = JSON.parse(stringifyCircularSafe(defaultDatabase));
-                localStorage.removeItem('readiness_deck_db');
-                location.reload();
+        // --- TOAST NOTIFICATIONS DISPATCH ---
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let colorClasses = "bg-white border-l-4 border-[#0066CC] text-slate-800";
+            let icon = '<i class="fa-solid fa-circle-info text-[#0066CC]"></i>';
+            
+            if (type === 'success') {
+                colorClasses = "bg-white border-l-4 border-emerald-500 text-slate-800";
+                icon = '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
+            } else if (type === 'error') {
+                colorClasses = "bg-white border-l-4 border-rose-500 text-slate-800";
+                icon = '<i class="fa-solid fa-circle-exclamation text-rose-500"></i>';
             }
+            
+            toast.className = `${colorClasses} p-4 rounded-xl shadow-xl flex items-center gap-3 border border-slate-200/80 min-w-[280px] max-w-sm pointer-events-auto transform transition-all duration-300 translate-x-20 opacity-0`;
+            toast.innerHTML = `
+                <div class="text-base">${icon}</div>
+                <div class="text-xs font-semibold flex-1 leading-normal">${message}</div>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-x-20', 'opacity-0');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-10');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
         }
 
-        // --- CORE NAVIGATION PLATFORM ENGINE ---
-        function selectPillar(pillarKey) {
-            currentPillarKey = pillarKey;
-            renderScenariosSidebarList();
+        // --- REPOSITORY LIST LOGIC ---
+        function renderEditWorkspace() {
+            const grid = document.getElementById('card-grid');
+            const emptyState = document.getElementById('edit-empty-state');
             
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('back-home-btn').classList.remove('hidden');
-            document.getElementById('back-home-btn').classList.add('flex');
-            document.getElementById('view-scenarios').classList.remove('hidden');
+            grid.innerHTML = '';
             
-            resetDisplayPanelToStandby();
-        }
-
-        function renderScenariosSidebarList() {
-            const data = database[currentPillarKey];
-            document.getElementById('category-title').innerText = data.title;
-            
-            const iconContainer = document.getElementById('category-icon-container');
-            iconContainer.className = `w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-inner ${data.styleClasses}`;
-            iconContainer.innerHTML = `<i class="${data.iconClass}"></i>`;
-            
-            const listContainer = document.getElementById('scenarios-list-container');
-            listContainer.innerHTML = '';
-            selectedBtnElement = null;
-            
-            if(data.scenarios.length === 0) {
-                listContainer.innerHTML = `<p class="text-xs font-semibold text-slate-400 p-4 text-center border border-dashed border-slate-200 rounded-2xl">No active case blueprints found. Tap 'Add New Scenario' above to start tracking records.</p>`;
+            if (flashcards.length === 0) {
+                emptyState.classList.remove('hidden');
                 return;
             }
-
-            data.scenarios.forEach((scen, idx) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = "w-full text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-xs text-slate-800 transition-all shadow-sm hover:shadow-md flex items-center justify-between group transform active:scale-98 animate-slideup select-none cursor-pointer";
-                itemDiv.setAttribute('id', `sidebar-card-${idx}`);
-                itemDiv.onclick = (e) => {
-                    if (e.target.closest('.utility-trigger')) return;
-                    selectScenario(idx, itemDiv);
-                };
-
-                itemDiv.innerHTML = `
-                    <span class="leading-snug pr-3 group-hover:text-indigo-600 transition-colors">${scen.title}</span>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="openFormModal(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-amber-100 text-slate-400 hover:text-amber-700 flex items-center justify-center text-[11px] transition-all" title="Edit Scenario Data"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteScenarioEntry(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-red-100 text-slate-400 hover:text-red-600 flex items-center justify-center text-[11px] transition-all" title="Delete Blueprint"><i class="fa-solid fa-trash-can"></i></button>
-                        <div class="w-5 h-5 rounded-lg text-slate-300 flex items-center justify-center text-[10px] transition-all shrink-0">
-                            <i class="fa-solid fa-chevron-right"></i>
+            emptyState.classList.add('hidden');
+            
+            flashcards.forEach(card => {
+                const item = document.createElement('div');
+                item.className = "bg-white border border-slate-200 rounded-2xl shadow-sm p-5 hover:shadow-md transition-all flex flex-col justify-between group";
+                item.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-start gap-2">
+                            <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase bg-slate-100 px-2 py-0.5 rounded-md">Topic Ref: ${card.id.toString()}</span>
+                            <div class="opacity-80 sm:opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity duration-150">
+                                <button onclick="openCardModal('${card.id}')" class="p-1.5 text-slate-500 hover:text-[#0066CC] rounded-md hover:bg-slate-50 transition-colors cursor-pointer" title="Edit Content">
+                                    <i class="fa-solid fa-pen text-xs"></i>
+                                </button>
+                                <button onclick="deleteCard('${card.id}')" class="p-1.5 text-slate-500 hover:text-rose-600 rounded-md hover:bg-slate-50 transition-colors cursor-pointer" title="Remove Entry">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="text-xs font-bold uppercase tracking-wide text-amber-600"><i class="fa-solid fa-circle-question mr-1"></i>Problem Scenario / FAQ</h4>
+                            <p class="text-sm font-semibold text-slate-800 line-clamp-3">${escapeHtml(card.question)}</p>
+                        </div>
+                        <div class="space-y-1 pt-1 border-t border-slate-50">
+                            <h4 class="text-xs font-bold uppercase tracking-wide text-emerald-600"><i class="fa-solid fa-shield-halved mr-1"></i>Official Protocol Solution</h4>
+                            <p class="text-xs text-slate-600 line-clamp-4 whitespace-pre-line">${escapeHtml(card.answer)}</p>
                         </div>
                     </div>
                 `;
-                listContainer.appendChild(itemDiv);
+                grid.appendChild(item);
             });
         }
 
-        function selectScenario(index, element) {
-            const data = database[currentPillarKey];
-            const scenario = data.scenarios[index];
-            const displayBlock = document.getElementById('solution-content-block');
-            
-            if (selectedBtnElement) {
-                selectedBtnElement.classList.remove('border-indigo-600', 'bg-indigo-50/20', 'text-indigo-700');
-                selectedBtnElement.classList.add('border-slate-200', 'bg-white', 'text-slate-800');
+        function deleteCard(id) {
+            if(confirm("Confirm removing this entry? This actions updates your localized study data model.")) {
+                flashcards = flashcards.filter(c => c.id !== id);
+                persistData();
+                renderEditWorkspace();
+                showToast("Training scenario discarded cleanly.", "success");
             }
-            element.classList.remove('border-slate-200', 'bg-white', 'text-slate-800');
-            element.classList.add('border-indigo-600', 'bg-indigo-50/20', 'text-indigo-700');
-            selectedBtnElement = element;
-            
-            let bulletsHtml = scenario.steps.map(step => `
-                <li class="flex items-start gap-4 text-xs sm:text-sm text-slate-600 leading-relaxed bg-white border border-slate-100 p-4 rounded-2xl shadow-sm hover:border-slate-200 transition-colors w-full">
-                    <span class="text-emerald-600 mt-0.5 bg-emerald-50 w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0 border border-emerald-100"><i class="fa-solid fa-check"></i></span>
-                    <span class="text-slate-600 font-medium">${step}</span>
-                </li>
-            `).join('');
-
-            displayBlock.className = "w-full space-y-6 animate-slideup text-left";
-            displayBlock.innerHTML = `
-                <div class="flex flex-col sm:flex-row items-center gap-6 bg-white border border-slate-200/60 p-6 rounded-3xl shadow-sm w-full">
-                    <div class="shrink-0 mx-auto sm:mx-0">
-                        ${data.illustration}
-                    </div>
-                    <div class="space-y-2 text-center sm:text-left w-full">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <span class="text-[10px] font-black text-amber-700 bg-amber-50 border border-amber-100 px-2.5 py-0.5 rounded-md uppercase tracking-wider inline-block self-center sm:self-start">Problem Definition</span>
-                            <span class="text-[10px] text-slate-400 font-bold">Index Tracker: #${index + 1}</span>
-                        </div>
-                        <h3 class="text-lg font-black text-slate-900 tracking-tight leading-snug">${scenario.title}</h3>
-                        <p class="text-xs text-slate-500 font-semibold leading-relaxed">${scenario.problem}</p>
-                    </div>
-                </div>
-                
-                <div class="space-y-4 w-full">
-                    <div class="flex items-center gap-2 px-1">
-                        <span class="text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-md uppercase tracking-wider inline-block">Action Steps</span>
-                        <span class="text-xs text-slate-400 font-bold">Follow sequence parameters:</span>
-                    </div>
-                    <ul class="space-y-3.5 w-full">
-                        ${bulletsHtml || `<p class="text-xs font-semibold text-slate-400 p-4 border border-dashed border-slate-200 rounded-xl text-center">No structural action items associated with this case file yet. Edit to insert instructions.</p>`}
-                    </ul>
-                </div>
-            `;
         }
 
-        // --- CMS FORM FIELD INTERACTION ARCHITECTURE ---
-        function openFormModal(index = null) {
-            const container = document.getElementById('steps-inputs-container');
+        // --- FORM ACTION HANDLERS ---
+        function openCardModal(id = null) {
+            const modal = document.getElementById('modal-card');
+            const box = document.getElementById('modal-card-box');
+            document.getElementById('card-form').reset();
+            document.getElementById('form-image-preview-container').classList.add('hidden');
+            
+            if (id) {
+                const card = flashcards.find(c => c.id === id);
+                if (card) {
+                    document.getElementById('modal-title').innerText = "Edit Training Entry Parameters";
+                    document.getElementById('form-card-id').value = card.id;
+                    document.getElementById('form-question').value = card.question;
+                    document.getElementById('form-answer').value = card.answer;
+                    document.getElementById('form-hint').value = card.hint || '';
+                    document.getElementById('form-image-url').value = card.image || '';
+                    if (card.image) {
+                        const preview = document.getElementById('form-image-preview');
+                        preview.src = card.image;
+                        document.getElementById('form-image-preview-container').classList.remove('hidden');
+                    }
+                }
+            } else {
+                document.getElementById('modal-title').innerText = "Add New Support FAQ Card";
+                document.getElementById('form-card-id').value = '';
+            }
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => { box.classList.remove('scale-95', 'opacity-0'); }, 50);
+        }
+
+        function closeCardModal() {
+            const modal = document.getElementById('modal-card');
+            const box = document.getElementById('modal-card-box');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 250);
+        }
+
+        function testFormImage() {
+            const url = document.getElementById('form-image-url').value.trim();
+            const container = document.getElementById('form-image-preview-container');
+            const preview = document.getElementById('form-image-preview');
+            
+            if (!url) {
+                showToast("Please supply a functional image asset reference link.", "error");
+                return;
+            }
+            preview.src = url;
+            container.classList.remove('hidden');
+        }
+
+        function saveCardForm(event) {
+            event.preventDefault();
+            const id = document.getElementById('form-card-id').value;
+            const question = document.getElementById('form-question').value.trim();
+            const answer = document.getElementById('form-answer').value.trim();
+            const hint = document.getElementById('form-hint').value.trim();
+            const image = document.getElementById('form-image-url').value.trim();
+            
+            if (id) {
+                const idx = flashcards.findIndex(c => c.id === id);
+                if (idx !== -1) flashcards[idx] = { id, question, answer, hint, image };
+            } else {
+                flashcards.push({ id: "faq-" + Date.now(), question, answer, hint, image });
+            }
+            
+            persistData();
+            closeCardModal();
+            renderEditWorkspace();
+            showToast("System knowledge registry updated cleanly.", "success");
+        }
+
+        // --- PLAY MODE MODULE ENGINE ---
+        function initPlaySession() {
+            if (flashcards.length === 0) {
+                switchMode('edit');
+                showToast("Populate operational decks prior to executing training tasks.", "error");
+                return;
+            }
+            activePlayDeck = [...flashcards];
+            playIndex = 0;
+            resetCardFlipState();
+            syncPlayCardState();
+        }
+
+        function shufflePlayDeck() {
+            for (let i = activePlayDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [activePlayDeck[i], activePlayDeck[j]] = [activePlayDeck[j], activePlayDeck[i]];
+            }
+            playIndex = 0;
+            resetCardFlipState();
+            syncPlayCardState();
+            showToast("Review scenario array mixed.", "success");
+        }
+
+        function resetCardFlipState() {
+            isCardFlipped = false;
+            document.getElementById('play-card').classList.remove('rotate-y-180');
+        }
+
+        function toggleCardFlip() {
+            isCardFlipped = !isCardFlipped;
+            const el = document.getElementById('play-card');
+            if (isCardFlipped) el.classList.add('rotate-y-180');
+            else el.classList.remove('rotate-y-180');
+        }
+
+        function togglePlayHint(event) {
+            event.stopPropagation();
+            document.getElementById('play-hint-text').classList.toggle('hidden');
+        }
+
+        function syncPlayCardState() {
+            const total = activePlayDeck.length;
+            const currentCard = activePlayDeck[playIndex];
+            
+            document.getElementById('play-progress-text').innerText = `${playIndex + 1} / ${total} Scenarios`;
+            document.getElementById('play-progress-bar').style.width = `${((playIndex + 1) / total) * 100}%`;
+            
+            document.getElementById('play-question-text').innerText = currentCard.question;
+            document.getElementById('play-answer-text').innerText = currentCard.answer;
+            
+            const hintBtn = document.getElementById('play-hint-btn');
+            document.getElementById('play-hint-text').classList.add('hidden');
+            
+            if (currentCard.hint) {
+                hintBtn.classList.remove('hidden');
+                document.getElementById('hint-content').innerText = currentCard.hint;
+            } else {
+                hintBtn.classList.add('hidden');
+            }
+            
+            const imgContainer = document.getElementById('play-front-image-container');
+            const img = document.getElementById('play-front-img');
+            if (currentCard.image) {
+                img.src = currentCard.image;
+                imgContainer.className = "w-full max-h-32 mb-2 flex justify-center items-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50";
+            } else {
+                imgContainer.className = "hidden";
+            }
+            
+            document.getElementById('btn-play-prev').disabled = (playIndex === 0);
+            document.getElementById('btn-play-next').disabled = (playIndex === total - 1);
+        }
+
+        function navigatePlay(direction) {
+            const newIndex = playIndex + direction;
+            if (newIndex >= 0 && newIndex < activePlayDeck.length) {
+                resetCardFlipState();
+                setTimeout(() => {
+                    playIndex = newIndex;
+                    syncPlayCardState();
+                }, 150);
+            }
+        }
+
+        // --- QUIZ COMPETENCY SCORING SUBSYSTEM ---
+        function initQuizSession() {
+            if (flashcards.length === 0) {
+                switchMode('edit');
+                return;
+            }
+            
+            quizDeck = [...flashcards];
+            for (let i = quizDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [quizDeck[i], quizDeck[j]] = [quizDeck[j], quizDeck[i]];
+            }
+            
+            quizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-summary-panel').classList.add('hidden');
+            document.getElementById('quiz-active-panel').classList.remove('hidden');
+            renderQuizQuestion();
+        }
+
+        function resetQuiz() {
+            initQuizSession();
+        }
+
+        function renderQuizQuestion() {
+            isQuizAnswerEvaluated = false;
+            quizSelectedAnswer = null;
+            document.getElementById('btn-quiz-next').disabled = true;
+            
+            const total = quizDeck.length;
+            const card = quizDeck[quizIndex];
+            
+            document.getElementById('quiz-progress-text').innerText = `${quizIndex + 1} / ${total} Scenarios`;
+            document.getElementById('quiz-progress-bar').style.width = `${((quizIndex + 1) / total) * 100}%`;
+            document.getElementById('quiz-live-score').innerHTML = `<i class="fa-solid fa-square-check mr-1"></i> Correct: ${quizScore}`;
+            document.getElementById('quiz-question-text').innerText = card.question;
+            
+            const imgContainer = document.getElementById('quiz-image-container');
+            if (card.image) {
+                document.getElementById('quiz-img').src = card.image;
+                imgContainer.classList.remove('hidden');
+            } else {
+                imgContainer.classList.add('hidden');
+            }
+            
+            generateQuizOptions(card);
+        }
+
+        function generateQuizOptions(correctCard) {
+            const container = document.getElementById('quiz-options-container');
             container.innerHTML = '';
             
-            if (index === null) {
-                document.getElementById('modal-heading').innerText = "Create Custom Case Profile";
-                document.getElementById('form-edit-index').value = "";
-                document.getElementById('form-title').value = "";
-                document.getElementById('form-problem').value = "";
-                
-                appendStepInputField('');
-                appendStepInputField('');
-            } else {
-                document.getElementById('modal-heading').innerText = "Modify Operational Schema Parameters";
-                const targetData = database[currentPillarKey].scenarios[index];
-                document.getElementById('form-edit-index').value = index;
-                document.getElementById('form-title').value = targetData.title;
-                document.getElementById('form-problem').value = targetData.problem;
-                
-                targetData.steps.forEach(stepText => appendStepInputField(stepText));
+            let alternatives = flashcards.filter(c => c.id !== correctCard.id).map(c => c.answer);
+            alternatives = [...new Set(alternatives)];
+            
+            let choices = alternatives.slice(0, 2);
+            choices.push(correctCard.answer);
+            
+            if (choices.length < 3) {
+                choices.push("Immediately cancel the class segment manually inside your teacher console and notify the emergency tech hotline.");
             }
-
-            document.getElementById('form-modal').classList.remove('hidden');
-            document.getElementById('form-modal').classList.add('flex');
-        }
-
-        function closeFormModal() {
-            document.getElementById('form-modal').classList.add('hidden');
-            document.getElementById('form-modal').classList.remove('flex');
-            document.getElementById('scenario-form').reset();
-        }
-
-        function appendStepInputField(val = '') {
-            const container = document.getElementById('steps-inputs-container');
-            const wrap = document.createElement('div');
-            wrap.className = "flex items-center gap-2 item-step-input-row animate-fade";
-            wrap.innerHTML = `
-                <input type="text" required placeholder="State actionable rule instruction sequence..." value="${val.replace(/"/g, '&quot;')}" class="step-text-payload w-full border border-slate-200 p-2.5 rounded-xl text-xs focus:outline-none focus:border-indigo-500 font-medium bg-slate-50/30">
-                <button type="button" onclick="this.parentElement.remove()" class="text-slate-300 hover:text-red-500 text-xs p-2 transition-colors cursor-pointer"><i class="fa-solid fa-trash"></i></button>
-            `;
-            container.appendChild(wrap);
-        }
-
-        function saveScenarioData(e) {
-            e.preventDefault();
             
-            const idxVal = document.getElementById('form-edit-index').value;
-            const payloadTitle = document.getElementById('form-title').value.trim();
-            const payloadProblem = document.getElementById('form-problem').value.trim();
+            for (let i = choices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [choices[i], choices[j]] = [choices[j], choices[i]];
+            }
             
-            const stepInputs = document.querySelectorAll('.step-text-payload');
-            const payloadSteps = [];
-            stepInputs.forEach(inp => {
-                if(inp.value.trim() !== '') payloadSteps.push(inp.value.trim());
+            choices.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.type = "button";
+                btn.onclick = () => selectQuizOption(idx, optText);
+                btn.className = "quiz-opt-btn w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-medium text-[11px] transition-all flex items-center justify-between shadow-sm cursor-pointer";
+                btn.innerHTML = `
+                    <span class="opt-text text-slate-700 leading-relaxed">${escapeHtml(optText)}</span>
+                    <span class="opt-status-icon text-slate-300"><i class="fa-regular fa-circle"></i></span>
+                `;
+                container.appendChild(btn);
             });
+        }
 
-            const targetSchemaObject = {
-                title: payloadTitle,
-                problem: payloadProblem,
-                steps: payloadSteps
-            };
-
-            if(idxVal === "") {
-                database[currentPillarKey].scenarios.push(targetSchemaObject);
-            } else {
-                database[currentPillarKey].scenarios[parseInt(idxVal)] = targetSchemaObject;
-            }
-
-            syncDatabaseToLocalStorage();
-            closeFormModal();
-            renderScenariosSidebarList();
+        function selectQuizOption(selectedIndex, optionText) {
+            if (isQuizAnswerEvaluated) return;
+            quizSelectedAnswer = optionText;
             
-            resetDisplayPanelToStandby();
+            const buttons = document.querySelectorAll('.quiz-opt-btn');
+            evaluateQuizAnswer(buttons);
         }
 
-        function deleteScenarioEntry(index) {
-            if(confirm(`Are you sure you want to completely drop case record #${index + 1}? This execution removes tracking parameters entirely.`)) {
-                database[currentPillarKey].scenarios.splice(index, 1);
-                syncDatabaseToLocalStorage();
-                renderScenariosSidebarList();
-                resetDisplayPanelToStandby();
+        function evaluateQuizAnswer(buttons) {
+            isQuizAnswerEvaluated = true;
+            const correctSolution = quizDeck[quizIndex].answer;
+            let targetIsCorrect = (quizSelectedAnswer === correctSolution);
+            
+            if (targetIsCorrect) {
+                quizScore++;
+                showToast("Correct operational decision mapped!", "success");
+            } else {
+                showToast("Warning: Misunderstanding system policies can lead to structural score reductions.", "error");
+            }
+            
+            buttons.forEach(btn => {
+                const txt = btn.querySelector('.opt-text').innerText;
+                const iconContainer = btn.querySelector('.opt-status-icon');
+                
+                if (txt === correctSolution) {
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/60 font-bold text-[11px] flex items-center justify-between shadow-sm";
+                    iconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i>';
+                } else if (txt === quizSelectedAnswer && !targetIsCorrect) {
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50/60 font-medium text-[11px] flex items-center justify-between shadow-sm";
+                    iconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600"></i>';
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-100 bg-slate-50/40 opacity-40 text-[11px] flex items-center justify-between cursor-not-allowed";
+                }
+            });
+            
+            document.getElementById('btn-quiz-next').disabled = false;
+        }
+
+        function advanceQuiz() {
+            if (quizIndex < quizDeck.length - 1) {
+                quizIndex++;
+                renderQuizQuestion();
+            } else {
+                document.getElementById('quiz-active-panel').classList.add('hidden');
+                document.getElementById('summary-score-ratio').innerText = `${quizScore} / ${quizDeck.length}`;
+                document.getElementById('summary-score-pct').innerText = `${Math.round((quizScore / quizDeck.length) * 100)}%`;
+                document.getElementById('quiz-summary-panel').classList.remove('hidden');
             }
         }
 
-        function resetDisplayPanelToStandby() {
-            document.getElementById('solution-content-block').className = "w-full flex flex-col justify-center items-center";
-            document.getElementById('solution-content-block').innerHTML = `
-                <div class="text-center space-y-6 max-w-sm py-12 my-auto animate-fade">
-                    <div class="relative w-40 h-40 mx-auto flex items-center justify-center">
-                        <div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div>
-                        <div class="absolute inset-4 bg-blue-50 rounded-full illustration-pulse"></div>
-                        <i class="fa-solid fa-hand-pointer text-5xl text-[#0066CC] relative z-10 animate-bounce"></i>
-                    </div>
-                    <div class="space-y-1">
-                        <h4 class="font-extrabold text-slate-800 text-base tracking-tight">Awaiting Case Selection</h4>
-                        <p class="text-xs text-slate-400 font-medium px-2">Click any problem case scenario from the left panel to immediately generate vector steps and instructions.</p>
-                    </div>
-                </div>
-            `;
+        // --- EXTRA MODAL UTILS ---
+        function openImagePreview(src) {
+            const modal = document.getElementById('modal-image');
+            document.getElementById('lightbox-img').src = src;
+            modal.classList.remove('hidden');
+            setTimeout(() => { document.getElementById('modal-image-box').classList.remove('scale-95', 'opacity-0'); }, 50);
         }
 
-        function showHome() {
-            document.getElementById('view-scenarios').classList.add('hidden');
-            document.getElementById('back-home-btn').classList.remove('flex');
-            document.getElementById('back-home-btn').classList.add('hidden');
-            document.getElementById('view-home').classList.remove('hidden');
-            currentPillarKey = null;
+        function closeImagePreview() {
+            document.getElementById('modal-image-box').classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { document.getElementById('modal-image').classList.add('hidden'); }, 250);
         }
 
-        function stringifyCircularSafe(obj) {
-            return JSON.stringify(obj);
+        function stopPropagation(e) { e.stopPropagation(); }
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
         }
     </script>
 </body>
