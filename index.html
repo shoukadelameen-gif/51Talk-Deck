@@ -23,14 +23,14 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+<body class="bg-[#FFF9C4] text-slate-800 font-sans min-h-screen flex flex-col antialiased">
 
-    <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40 backdrop-blur-md bg-white/90">
+    <header class="bg-[#94C3E4] border-b border-[#7FB3D5]/30 sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col lg:flex-row justify-between items-center gap-4">
             
             <div class="flex items-center gap-3.5 group shrink-0">
-                <div class="bg-[#FFCC00] text-slate-900 font-black text-lg px-3 py-1.5 rounded-xl shadow-md shadow-amber-400/20 tracking-tighter flex items-center justify-center gap-1 border border-amber-300">
-                    <span class="text-xl">51</span><span class="text-sm bg-slate-900 text-[#FFCC00] px-1 rounded">Talk</span>
+                <div class="bg-[#FFCC00] text-[#0066CC] font-black text-lg px-3 py-1.5 rounded-full shadow-md shadow-amber-400/20 tracking-tighter flex items-center justify-center gap-1 border border-amber-300">
+                    <span class="text-xl font-black tracking-tight text-[#0066CC]">51</span><span class="text-sm text-[#0066CC] px-1 font-black tracking-tight">Talk</span>
                 </div>
                 <div>
                     <h1 class="text-xl font-black tracking-tight text-slate-900">51talk | Teacher's First Aid Kit</h1>
@@ -39,28 +39,28 @@
             </div>
 
             <div class="flex items-center gap-2 flex-wrap justify-center my-1 lg:my-0">
-                <a href="https://fast.com" target="_blank" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 text-[11px] font-bold border border-slate-200 transition-all shadow-xs cursor-pointer">
-                    <i class="fa-solid fa-gauge-high text-indigo-500"></i> Speed Test (Fast.com)
+                <a href="https://fast.com" target="_blank" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#FFCC00] text-[#4E342E] text-[11px] font-bold border border-amber-300 transition-all shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-gauge-high"></i> Speed Test (Fast.com)
                 </a>
 
-                <button onclick="testTeacherMic()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 text-[11px] font-bold border border-slate-200 transition-all shadow-xs cursor-pointer">
-                    <i class="fa-solid fa-microphone text-emerald-500"></i> Test My Mic
+                <button onclick="testTeacherMic()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#FFCC00] text-[#4E342E] text-[11px] font-bold border border-amber-300 transition-all shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-microphone"></i> Test My Mic
                 </button>
 
-                <button onclick="copyPingTemplateToClipboard()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 text-[11px] font-bold border border-slate-200 transition-all shadow-xs cursor-pointer">
-                    <i class="fa-solid fa-circle-nodes text-amber-500"></i> Copy Three Point Ping Template
+                <button onclick="copyPingTemplateToClipboard()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#FFCC00] text-[#4E342E] text-[11px] font-bold border border-amber-300 transition-all shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-circle-nodes"></i> Copy Three Point Ping Template
                 </button>
 
-                <button onclick="toggleQuickNotes()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 text-[11px] font-bold border border-slate-200 transition-all shadow-xs cursor-pointer">
-                    <i class="fa-solid fa-note-sticky text-sky-500"></i> Scratchpad
+                <button onclick="toggleQuickNotes()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#FFCC00] text-[#4E342E] text-[11px] font-bold border border-amber-300 transition-all shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-note-sticky"></i> Scratchpad
                 </button>
             </div>
 
             <div class="flex items-center gap-2 shrink-0">
-                <button onclick="generateSyncUrl()" id="sync-share-btn" class="flex px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 transition-all items-center gap-1.5 cursor-pointer shadow-sm">
+                <button onclick="generateSyncUrl()" id="sync-share-btn" class="flex px-3 py-2 bg-[#FFCC00] text-[#4E342E] text-xs font-bold rounded-xl border border-amber-300 transition-all items-center gap-1.5 cursor-pointer shadow-sm">
                     <i class="fa-solid fa-link"></i> Copy Team Sync Link
                 </button>
-                <button onclick="showHome()" id="back-home-btn" class="hidden px-4 py-2 bg-slate-100 hover:bg-[#0066CC] hover:text-white text-slate-700 text-xs font-bold rounded-xl border border-slate-200/60 transition-all duration-200 items-center gap-2 shadow-sm cursor-pointer transform active:scale-95">
+                <button onclick="showHome()" id="back-home-btn" class="hidden px-4 py-2 bg-[#FFCC00] text-[#4E342E] text-xs font-bold rounded-xl border border-amber-300 transition-all duration-200 items-center gap-2 shadow-sm cursor-pointer transform active:scale-95">
                     <i class="fa-solid fa-house-chimney"></i> Back to Pillars
                 </button>
             </div>
@@ -91,7 +91,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto pt-4">
                 <div onclick="selectPillar('pillar-1')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-red-50/20 border border-slate-200/80 hover:border-red-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
                     <div>
-                        <div class="relative w-12 h-12 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 flex items-center justify-center shrink-0 shadow-md border border-slate-700/30 group-hover:scale-110 transition-all duration-300 mb-5">
+                        <div class="relative w-12 h-12 rounded-xl bg-[#F9E79F] border border-amber-400 flex items-center justify-center shrink-0 shadow-md group-hover:scale-110 transition-all duration-300 mb-5">
                             <svg class="w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="tech-laptop" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
@@ -120,7 +120,7 @@
 
                 <div onclick="selectPillar('pillar-2')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-amber-50/20 border border-slate-200/80 hover:border-amber-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
                     <div>
-                        <div class="relative w-12 h-12 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 flex items-center justify-center shrink-0 shadow-md border border-slate-700/30 group-hover:scale-110 transition-all duration-300 mb-5">
+                        <div class="relative w-12 h-12 rounded-xl bg-[#F9E79F] border border-amber-400 flex items-center justify-center shrink-0 shadow-md group-hover:scale-110 transition-all duration-300 mb-5">
                             <svg class="w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="clock-grad" x1="6" y1="6" x2="26" y2="26" gradientUnits="userSpaceOnUse">
@@ -144,7 +144,7 @@
 
                 <div onclick="selectPillar('pillar-3')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-blue-50/20 border border-slate-200/80 hover:border-blue-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
                     <div>
-                        <div class="relative w-12 h-12 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 flex items-center justify-center shrink-0 shadow-md border border-slate-700/30 group-hover:scale-110 transition-all duration-300 mb-5">
+                        <div class="relative w-12 h-12 rounded-xl bg-[#F9E79F] border border-amber-400 flex items-center justify-center shrink-0 shadow-md group-hover:scale-110 transition-all duration-300 mb-5">
                             <svg class="w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="notebook-cover" x1="6" y1="4" x2="26" y2="28" gradientUnits="userSpaceOnUse">
@@ -172,7 +172,7 @@
 
                 <div onclick="selectPillar('pillar-4')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-purple-50/20 border border-slate-200/80 hover:border-purple-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
                     <div>
-                        <div class="relative w-12 h-12 rounded-xl bg-gradient-to-b from-slate-800 to-slate-900 flex items-center justify-center shrink-0 shadow-md border border-slate-700/30 group-hover:scale-110 transition-all duration-300 mb-5">
+                        <div class="relative w-12 h-12 rounded-xl bg-[#F9E79F] border border-amber-400 flex items-center justify-center shrink-0 shadow-md group-hover:scale-110 transition-all duration-300 mb-5">
                             <svg class="w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="chat-back" x1="4" y1="14" x2="22" y2="28" gradientUnits="userSpaceOnUse">
@@ -221,16 +221,13 @@
                 </div>
                 <div class="lg:col-span-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm p-6 sm:p-8 min-h-[520px] flex flex-col justify-center relative overflow-hidden bg-gradient-to-br from-white to-slate-50/50">
                     <div id="solution-content-block" class="w-full flex flex-col justify-center items-center">
-                        <div class="text-center space-y-6 max-w-sm py-8 my-auto animate-fade">
-                            <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md border border-slate-200/60 bg-slate-100">
-                                <div class="absolute inset-0 z-10 shadow-[inset_0_2px_6px_rgba(0,0,0,0.06)] pointer-events-none"></div>
-                                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80" alt="Modern virtual classroom workspace" class="w-full h-full object-cover">
-                                <span class="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-600/90 backdrop-blur-xs text-[9px] font-bold tracking-wider text-white uppercase">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Active Portal
-                                </span>
+                        <div class='flex flex-col items-center justify-center p-12 bg-white rounded-3xl border-2 border-dashed border-blue-300 shadow-inner overflow-hidden relative'>
+                            <div class='absolute inset-0 bg-blue-50 opacity-50 animate-ping'></div>
+                            <div class='w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-6 animate-bounce shadow-lg'>
+                                <svg class='w-10 h-10 text-[#0066CC]' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z'></path></svg>
                             </div>
-                            <h4 class="font-extrabold text-slate-800 text-base tracking-tight pt-2">Awaiting Case Selection</h4>
-                            <p class="text-xs text-slate-400 font-medium px-2">Click any problem case scenario from the left panel to immediately look up vector steps and instructions.</p>
+                            <h3 class='text-2xl font-black text-[#0066CC] animate-pulse'>Portal Active!</h3>
+                            <p class='text-slate-500 mt-2 font-medium'>Standing By For Your Input</p>
                         </div>
                     </div>
                 </div>
@@ -305,10 +302,8 @@
                 const source = audioContext.createMediaStreamSource(stream);
                 source.connect(analyzer);
                 analyzer.fftSize = 32;
-                
                 const dataArray = new Uint8Array(analyzer.frequencyBinCount);
                 alert("🎤 Access Granted! Speak into your microphone now to test data stream values...");
-                
                 setTimeout(() => {
                     analyzer.getByteFrequencyData(dataArray);
                     const averageVolume = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
@@ -321,7 +316,6 @@
                     stream.getTracks().forEach(track => track.stop());
                     audioContext.close();
                 }, 2500);
-
             } catch (err) {
                 alert("❌ Input Device Error: Microphone permission was denied or hardware line is completely disconnected.");
             }
@@ -331,7 +325,6 @@
         function copyPingTemplateToClipboard() {
             const localTimestamp = new Date().toLocaleString();
             const templateText = `[51TALK THREE POINT PING REPORT]\n-------------------------------------\nDate & Time: ${localTimestamp}\nTeacher Name: _________________\nIssue Vector: Technical Exception / Dropout\n\n[PING METRICS LOG]\n1. Local Client Device Connection: Stable\n2. AirClass Gateway Signal Status: Retrying\n3. Regional Server Response Node: Checked\n\nNotes / Resolution Attempted:\n- Performed hardware interface clear.\n- Standing by for student refresh response.`;
-            
             navigator.clipboard.writeText(templateText).then(() => {
                 alert("📋 Three Point Ping Template copied to clipboard! Teammates can fill in their name manually.");
             }).catch(() => {
@@ -364,7 +357,7 @@
                 btn.className = "flex px-3 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl transition-all items-center gap-1.5 cursor-pointer shadow-md";
                 setTimeout(() => {
                     btn.innerHTML = `<i class="fa-solid fa-link"></i> Copy Team Sync Link`;
-                    btn.className = "flex px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 transition-all items-center gap-1.5 cursor-pointer shadow-sm";
+                    btn.className = "flex px-3 py-2 bg-[#FFCC00] text-[#4E342E] text-xs font-bold rounded-xl border border-amber-300 transition-all items-center gap-1.5 cursor-pointer shadow-sm";
                 }, 3000);
             });
         }
@@ -402,6 +395,7 @@
                 data.scenarios.forEach((scen, idx) => {
                     const itemDiv = document.createElement('div');
                     itemDiv.className = "w-full text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-xs text-slate-800 transition-all shadow-sm flex items-center justify-between group cursor-pointer animate-slideup select-none";
+                    
                     itemDiv.onclick = (e) => { if (!e.target.closest('.utility-trigger')) selectScenario(idx, itemDiv); };
                     
                     itemDiv.innerHTML = `
@@ -482,6 +476,12 @@
 
         function saveScenarioData(e) {
             e.preventDefault();
+            const ADMIN_SECRET = 'MsShouq51talk';
+            const inputPassword = prompt("Please enter administrative credentials:");
+            if (inputPassword !== ADMIN_SECRET) {
+                alert("Unauthorized vector adjustment access rejected.");
+                return;
+            }
             const idxVal = document.getElementById('form-edit-index').value;
             const payloadSteps = [];
             document.querySelectorAll('.step-text-payload').forEach(inp => { if(inp.value.trim() !== '') payloadSteps.push(inp.value.trim()); });
@@ -491,14 +491,12 @@
                 problem: document.getElementById('form-problem').value.trim(),
                 steps: payloadSteps
             };
-
             if (!database[currentPillarKey].scenarios) {
                 database[currentPillarKey].scenarios = [];
             }
 
             if(idxVal === "") database[currentPillarKey].scenarios.push(targetSchemaObject);
             else database[currentPillarKey].scenarios[parseInt(idxVal)] = targetSchemaObject;
-
             db.ref('/').set(database);
             closeFormModal();
             renderScenariosSidebarList();
@@ -506,6 +504,12 @@
         }
 
         function deleteScenarioEntry(index) {
+            const ADMIN_SECRET = 'MsShouq51talk';
+            const inputPassword = prompt("Please enter administrative credentials:");
+            if (inputPassword !== ADMIN_SECRET) {
+                alert("Unauthorized vector adjustment access rejected.");
+                return;
+            }
             if(confirm("Delete this case record?")) {
                 database[currentPillarKey].scenarios.splice(index, 1);
                 db.ref('/').set(database);
@@ -516,7 +520,7 @@
 
         function resetDisplayPanelToStandby() {
             document.getElementById('solution-content-block').className = "w-full flex flex-col justify-center items-center";
-            document.getElementById('solution-content-block').innerHTML = `<div class="text-center space-y-6 max-w-sm py-8 animate-fade"><div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md border border-slate-200/60 bg-slate-100"><div class="absolute inset-0 z-10 shadow-[inset_0_2px_6px_rgba(0,0,0,0.06)] pointer-events-none"></div><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80" alt="Modern virtual classroom workspace" class="w-full h-full object-cover"><span class="absolute top-3 left-3 z-20 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-600/90 backdrop-blur-xs text-[9px] font-bold tracking-wider text-white uppercase"><span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Active Portal</span></div><h4 class="font-extrabold text-slate-800 text-base tracking-tight pt-2">Awaiting Case Selection</h4></div>`;
+            document.getElementById('solution-content-block').innerHTML = `<div class='flex flex-col items-center justify-center p-12 bg-white rounded-3xl border-2 border-dashed border-blue-300 shadow-inner overflow-hidden relative'><div class='absolute inset-0 bg-blue-50 opacity-50 animate-ping'></div><div class='w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-6 animate-bounce shadow-lg'><svg class='w-10 h-10 text-[#0066CC]' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z'></path></svg></div><h3 class='text-2xl font-black text-[#0066CC] animate-pulse'>Portal Active!</h3><p class='text-slate-500 mt-2 font-medium'>Standing By For Your Input</p></div>`;
         }
 
         function showHome() {
@@ -525,5 +529,5 @@
             document.getElementById('view-home').classList.remove('hidden');
         }
     </script>
-</body>
+<img src='51talkmascot.png' alt='51Talk Mascot' style='display: block !important;' class='fixed bottom-6 right-6 w-20 h-20 z-[9999] animate-float'></body>
 </html>
