@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ms. Shouq 51talk | Operational Support Suite</title>
-   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -142,7 +143,6 @@
         <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-slideup">
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
                 <h3 id="modal-heading" class="text-sm font-black text-slate-900 uppercase tracking-wider">Configure Scenario Blueprint</h3>
-                syncToCloud(window.database);
                 <button onclick="closeFormModal()" class="text-slate-400 hover:text-slate-600 text-sm cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="scenario-form" onsubmit="saveScenarioData(event)" class="p-6 overflow-y-auto space-y-5 flex-1">
@@ -186,7 +186,17 @@
     </footer>
 
     <script>
-        // MASTER CENTRALIZED TEAM DATABASE MATRIX 
+        // --- SYNC ENGINE ---
+        firebase.initializeApp({
+            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
+        });
+        const db = firebase.database();
+
+        function syncToCloud(data) {
+            db.ref('/').set(data);
+        }
+
+        // --- MASTER CENTRALIZED TEAM DATABASE MATRIX ---
         const defaultDatabase = {
             "pillar-1": {
                 title: "Pillar 1: Technical Glitches",
@@ -194,11 +204,11 @@
                 styleClasses: "bg-red-50 text-red-600 border-red-200",
                 illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-red-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-red-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 relative z-10"></i></div>`,
                 scenarios: [
-                    { title: "App Crash / Screen Lag Loops", problem: "You experience unexpected client software crashes, severe interface freezing, or the classroom timer displays performance synchronization lag mid-class.", steps: ["<strong>Control Environment:</strong> Switch instantly to your designated <strong>backup mobile hotspot</strong> data line. Shut down all non-essential background windows draining bandwidth allocation.","<strong>Force Software Reset:</strong> Exit the platform frame immediately, execute a <strong>complete logout of AirClass (AC)</strong>, or trigger a swift system restart if hardware freezing persists.","<strong>The Leave-and-Re-enter Loophole:</strong> Pay no attention to <strong>automated system penalty warning banners</strong> during active troubleshooting runs; protection applies for verified technical loops.","<strong>Preserve Evidence:</strong> Capture immediate <strong>full-screen screenshots</strong> verifying runtime errors clearly showing your device's desktop clock.","<strong>File Incident Verification:</strong> Record the precise breakdown parameters and timing logs inside your <strong>post-class memo notes</strong> to secure your contract verification appeals."] },
-                    { title: "Microphone Malfunction / Audio Cutting Out", problem: "The student reports they cannot hear you, your hardware microphone input level bar isn't moving, or your sound turns off completely mid-class.", steps: ["<strong>Check App Permissions:</strong> Verify the class app's access to hardware devices. Re-select your external headset manually under <strong>Audio/Video Settings</strong>.","<strong>Hardware Re-plug Option:</strong> Physically unplug the USB or 3.5mm cable. Wait 3 seconds and firmly re-seat it to trigger system device recognition.","<strong>Change Audio Lines:</strong> Switch the live channel driver internally inside the software from <strong>Line A to Line B</strong> to manually sync data packets.","<strong>Hardware Bypass:</strong> If a dedicated headset remains completely unresponsive, quickly connect alternative <strong>wired earbuds</strong> to maintain instruction momentum."] },
-                    { title: "Student Side Audio/Video Failure", problem: "You can see the student but cannot hear them, or their webcam feed renders as a static black box while your local metrics are green.", steps: ["<strong>Use Elicitation Prompts:</strong> Type immediate interactive commands into the text chatbox (e.g., 'Please check your microphone setting' or 'Click the Refresh button').","<strong>Trigger Interface Reset:</strong> Use the teacher panel tools to click <strong>Refresh Lesson</strong> or toggle the student's personal media feed switches off and on.","<strong>Guide Device Selection:</strong> Direct the student (or their watching parent) to tap the native gear icon to verify their selected system input source.","<strong>Escalate to Tech Support:</strong> If the local freeze context is unresolved after 60 seconds, flag the room node immediately to platform support engineers."] },
-                    { title: "Sudden Power Dropouts / Local Blackouts", problem: "Local electrical grid power fails completely mid-session, shutting down your main monitor, desktop workstation, and home router router feeds.", steps: ["<strong>Deploy Standby Hardware:</strong> Immediately power on your pre-charged backup laptop or portable tablet device running the standalone mobile AC app.","<strong>Engage Local Hotspot:</strong> Wirelessly sync your mobile device data hotspot line within 45 seconds to re-establish a live platform connection.","<strong>Re-enter active classroom:</strong> Log back into the ongoing class module to minimize down-time metrics.","<strong>Document Force Majeure:</strong> Photograph the blackout area environment alongside a timestamped mobile device to build an official contract exception ticket."] },
-                    { title: "Interactive Lesson Tools Freezing", problem: "The interactive digital markers, digital drawing pens, rewards stamps, or slide selector components lock up completely, making student feedback impossible.", steps: ["<strong>Execute Slide Jumps:</strong> Input an explicit page step change into the index nav bar, then jump straight back to force an element redraw.","<strong>Clear Application Cache:</strong> Access the top menu settings tray and trigger a swift clear of temporary asset storage blocks.","<strong>Pivot to Oral Exercises:</strong> Avoid dead-air drops by shifting instantly to physical TPR movements, verbal drills, and structural conversation pacing.","<strong>Flag Slide Bugs:</strong> Drop a swift note into the operational system log identifying the exact page index numbers that triggered the tool crash."] }
+                    { title: "App Crash / Screen Lag Loops", problem: "You experience unexpected client software crashes, severe interface freezing, or the classroom timer displays performance synchronization lag mid-class.", steps: ["Control Environment: Switch instantly to your designated backup mobile hotspot data line. Shut down all non-essential background windows draining bandwidth allocation.","Force Software Reset: Exit the platform frame immediately, execute a complete logout of AirClass (AC), or trigger a swift system restart if hardware freezing persists.","The Leave-and-Re-enter Loophole: Pay no attention to automated system penalty warning banners during active troubleshooting runs; protection applies for verified technical loops.","Preserve Evidence: Capture immediate full-screen screenshots verifying runtime errors clearly showing your device's desktop clock.","File Incident Verification: Record the precise breakdown parameters and timing logs inside your post-class memo notes to secure your contract verification appeals."] },
+                    { title: "Microphone Malfunction / Audio Cutting Out", problem: "The student reports they cannot hear you, your hardware microphone input level bar isn't moving, or your sound turns off completely mid-class.", steps: ["Check App Permissions: Verify the class app's access to hardware devices. Re-select your external headset manually under Audio/Video Settings.","Hardware Re-plug Option: Physically unplug the USB or 3.5mm cable. Wait 3 seconds and firmly re-seat it to trigger system device recognition.","Change Audio Lines: Switch the live channel driver internally inside the software from Line A to Line B to manually sync data packets.","Hardware Bypass: If a dedicated headset remains completely unresponsive, quickly connect alternative wired earbuds to maintain instruction momentum."] },
+                    { title: "Student Side Audio/Video Failure", problem: "You can see the student but cannot hear them, or their webcam feed renders as a static black box while your local metrics are green.", steps: ["Use Elicitation Prompts: Type immediate interactive commands into the text chatbox (e.g., 'Please check your microphone setting' or 'Click the Refresh button').","Trigger Interface Reset: Use the teacher panel tools to click Refresh Lesson or toggle the student's personal media feed switches off and on.","Guide Device Selection: Direct the student (or their watching parent) to tap the native gear icon to verify their selected system input source.","Escalate to Tech Support: If the local freeze context is unresolved after 60 seconds, flag the room node immediately to platform support engineers."] },
+                    { title: "Sudden Power Dropouts / Local Blackouts", problem: "Local electrical grid power fails completely mid-session, shutting down your main monitor, desktop workstation, and home router router feeds.", steps: ["Deploy Standby Hardware: Immediately power on your pre-charged backup laptop or portable tablet device running the standalone mobile AC app.","Engage Local Hotspot: Wirelessly sync your mobile device data hotspot line within 45 seconds to re-establish a live platform connection.","Re-enter active classroom: Log back into the ongoing class module to minimize down-time metrics.","Document Force Majeure: Photograph the blackout area environment alongside a timestamped mobile device to build an official contract exception ticket."] },
+                    { title: "Interactive Lesson Tools Freezing", problem: "The interactive digital markers, digital drawing pens, rewards stamps, or slide selector components lock up completely, making student feedback impossible.", steps: ["Execute Slide Jumps: Input an explicit page step change into the index nav bar, then jump straight back to force an element redraw.","Clear Application Cache: Access the top menu settings tray and trigger a swift clear of temporary asset storage blocks.","Pivot to Oral Exercises: Avoid dead-air drops by shifting instantly to physical TPR movements, verbal drills, and structural conversation pacing.","Flag Slide Bugs: Drop a swift note into the operational system log identifying the exact page index numbers that triggered the tool crash."] }
                 ]
             },
             "pillar-2": {
@@ -207,11 +217,11 @@
                 styleClasses: "bg-amber-50 text-amber-600 border-amber-200",
                 illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-amber-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-amber-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-business-time text-4xl text-amber-500 relative z-10"></i></div>`,
                 scenarios: [
-                    { title: "Local Time Zone Mismatch Errors", problem: "Incurring accidental late-entry penalty indicators due to timezone confusion between local Egypt time and Beijing headquarters timelines.", steps: ["<strong>Crosscheck Interface Schedules:</strong> Systematically monitor parameters across both your <strong>local Egypt AC calendar application</strong> and the master Beijing scheduling metrics on the <strong>MyPage portal</strong>.","<strong>Calculate the Time Shift:</strong> Perform deliberate zone translations mentally before slots freeze to prevent accidental missing session entries.","<strong>The 4-Minute Absence Window:</strong> Remember that arriving exactly <strong>4 minutes late changes metrics</strong> to an unreviewable, system-enforced <strong>Teacher Absence mark</strong>."] },
-                    { title: "Student No-Show (Waiting Protocol)", problem: "The classroom remains entirely empty when the session timer starts, with no indication of whether the student will log in late.", steps: ["<strong>Maintain Camera Presence:</strong> Keep your camera toggled on, stay clearly in frame, and wear your professional headset for the entire duration.","<strong>Execute the 15-Min Check:</strong> For standard 25-minute slots, you must remain active in the room until the 15:00 mark clicks by before exiting.","<strong>Capture Milestone Proof:</strong> Take crisp full-screen verification screenshots at 01:00, 08:00, and 15:00 showing the empty student slot and clock.","<strong>Verify No-Show Tagging:</strong> Double check that the automated system records the session status as 'Student No-Show' to guarantee your base payout rate."] },
-                    { title: "Short-Notice Booking Cancellations", problem: "An emergency trial or regular slot is booked or canceled right before the start time, leading to missed room entries.", steps: ["<strong>Lock Notification Sound Filters:</strong> Ensure your system portal alerts are turned up max so you hear booking sounds instantly.","<strong>Enforce the 1-Hour Refresh Rule:</strong> Manually reload your daily timeline schedule page 60 minutes before your first morning block starts.","<strong>Review Booking Lock Cutoffs:</strong> Treat any open slot inside a active window as a live class until the system cutoff timer explicitly releases it.","<strong>Claim System Cancellation Fees:</strong> Verify that late cancellations within the penalty buffer zone are properly credited to your account ledger."] },
-                    { title: "Accidental 'Late Entry' Flags", problem: "Entering the room exactly at 00:01 or experiencing a 10-second internet lag during entry that triggers an automated platform 'Late' penalty mark.", steps: ["<strong>Target the 3-Minute Buffer:</strong> Make it a strict habit to enter every single assigned classroom space exactly 3 minutes before the official start time.","<strong>Run Pre-Class Audio Checks:</strong> Use the lobby test module to verify your hardware configuration is clear before hitting the enter room trigger.","<strong>Log Entry Lag Context:</strong> If network routing delays your connection, save a screenshot of the loading progress wheel immediately.","<strong>Submit Appeals with Speed:</strong> Send your log files to support channels within 24 hours to overturn automated late flags."] },
-                    { title: "Emergency Cancellation Protocol", problem: "A sudden illness or urgent personal issue arises, requiring you to drop scheduled slots without triggering severe penalties.", steps: ["<strong>Submit the 2-Hour Notice:</strong> File your formal cancellation request through the admin dashboard at least 2 full hours before class starts.","<strong>Gather Medical/Utility Proof:</strong> Collect clear documentation, such as medical notes or local utility outage statements, as support evidence.","<strong>File an Official Ticket:</strong> Upload your gathered evidence files into the administrative portal under the 'Involuntary Absence' category.","<strong>Monitor Payout Adjustments:</strong> Review your monthly billing dashboard to ensure the penalty points are waived once your documentation is approved."] }
+                    { title: "Local Time Zone Mismatch Errors", problem: "Incurring accidental late-entry penalty indicators due to timezone confusion between local Egypt time and Beijing headquarters timelines.", steps: ["Crosscheck Interface Schedules: Systematically monitor parameters across both your local Egypt AC calendar application and the master Beijing scheduling metrics on the MyPage portal.","Calculate the Time Shift: Perform deliberate zone translations mentally before slots freeze to prevent accidental missing session entries.","The 4-Minute Absence Window: Remember that arriving exactly 4 minutes late changes metrics to an unreviewable, system-enforced Teacher Absence mark."] },
+                    { title: "Student No-Show (Waiting Protocol)", problem: "The classroom remains entirely empty when the session timer starts, with no indication of whether the student will log in late.", steps: ["Maintain Camera Presence: Keep your camera toggled on, stay clearly in frame, and wear your professional headset for the entire duration.","Execute the 15-Min Check: For standard 25-minute slots, you must remain active in the room until the 15:00 mark clicks by before exiting.","Capture Milestone Proof: Take crisp full-screen verification screenshots at 01:00, 08:00, and 15:00 showing the empty student slot and clock.","Verify No-Show Tagging: Double check that the automated system records the session status as 'Student No-Show' to guarantee your base payout rate."] },
+                    { title: "Short-Notice Booking Cancellations", problem: "An emergency trial or regular slot is booked or canceled right before the start time, leading to missed room entries.", steps: ["Lock Notification Sound Filters: Ensure your system portal alerts are turned up max so you hear booking sounds instantly.","Enforce the 1-Hour Refresh Rule: Manually reload your daily timeline schedule page 60 minutes before your first morning block starts.","Review Booking Lock Cutoffs: Treat any open slot inside a active window as a live class until the system cutoff timer explicitly releases it.","Claim System Cancellation Fees: Verify that late cancellations within the penalty buffer zone are properly credited to your account ledger."] },
+                    { title: "Accidental 'Late Entry' Flags", problem: "Entering the room exactly at 00:01 or experiencing a 10-second internet lag during entry that triggers an automated platform 'Late' penalty mark.", steps: ["Target the 3-Minute Buffer: Make it a strict habit to enter every single assigned classroom space exactly 3 minutes before the official start time.","Run Pre-Class Audio Checks: Use the lobby test module to verify your hardware configuration is clear before hitting the enter room trigger.","Log Entry Lag Context: If network routing delays your connection, save a screenshot of the loading progress wheel immediately.","Submit Appeals with Speed: Send your log files to support channels within 24 hours to overturn automated late flags."] },
+                    { title: "Emergency Cancellation Protocol", problem: "A sudden illness or urgent personal issue arises, requiring you to drop scheduled slots without triggering severe penalties.", steps: ["Submit the 2-Hour Notice: File your formal cancellation request through the admin dashboard at least 2 full hours before class starts.","Gather Medical/Utility Proof: Collect clear documentation, such as medical notes or local utility outage statements, as support evidence.","File an Official Ticket: Upload your gathered evidence files into the administrative portal under the 'Involuntary Absence' category.","Monitor Payout Adjustments: Review your monthly billing dashboard to ensure the penalty points are waived once your documentation is approved."] }
                 ]
             },
             "pillar-3": {
@@ -220,11 +230,11 @@
                 styleClasses: "bg-blue-50 text-blue-600 border-blue-200",
                 illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-blue-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-file-invoice text-4xl text-blue-500 relative z-10"></i></div>`,
                 scenarios: [
-                    { title: "Memo Compliance & VIP Parents", problem: "Receiving low client ratings from generic feedback notes, or losing dispute cases due to a lack of sufficient structural audit records.", steps: ["<strong>Memos as Binding Legal Evidence:</strong> Log technical failures inside class notes to establish a clear <strong>audit trail for dispute pipelines</strong>.","<strong>Apply Goal + Evidence Framework:</strong> Replace repetitive boilerplate remarks with a <strong>two-sentence standard format</strong>:","<em>Sentence A (Target Objective):</em> State the precise target skill targeted (e.g., <strong>'Student successfully mastered conditional verb tenses.'</strong>).","<em>Sentence B (Live Evidence):</em> Insert measurable evidence of progress (e.g., <strong>'They correctly transformed three complex sentences during final drills.'</strong>)."] },
-                    { title: "Handling Negative Parent Reviews", problem: "A parent leaves an unexpected low rating or a complaint about class pacing, which threatens to lower your overall teacher performance metrics.", steps: ["<strong>Analyze Class Logs:</strong> Review the specific lesson recording to crosscheck the pacing metrics and student responses against the parent's feedback.","<strong>Draft a Professional Dispute:</strong> Write a calm, fact-based response outlining the exact activities and slide index targets met during the lesson.","<strong>Highlight Student Progress:</strong> Share specific examples of words the student read or rewards they earned to prove they were successfully engaged.","<strong>Submit Review Requests:</strong> Send your evidence to the evaluation team within 72 hours to request a removal of unfair ratings."] },
-                    { title: "Trial Lesson Conversion Optimization", problem: "New students in trial classes seem nervous or quiet, making it difficult to convert them into regular long-term bookings.", steps: ["<strong>Lead with Big Energy:</strong> Start the session with high-energy waves, a warm smile, and clear Total Physical Response (TPR) actions.","<strong>Simplify Prompt Patterns:</strong> Drop complex phrases for simple, actionable commands (e.g., replace 'Would you like to read?' with 'Look here, let's read!').","<strong>Give Constant Rewards:</strong> Hand out digital stars or use physical props every time the student tries to copy a sound or word.","<strong>Write Targeted Growth Path Notes:</strong> Use the lesson summary to tell parents exactly which advanced modules will help their child grow next."] },
-                    { title: "Reporting Classroom Behavioral Safety", problem: "A student shows completely inappropriate behavior or shares unsafe media during a live class stream, requiring immediate intervention.", steps: ["<strong>Turn Off Video and Audio:</strong> Instantly toggle off the student's media feeds using your teacher dashboard control buttons.","<strong>State Rules in Chat:</strong> Type a firm, professional reminder of classroom rules into the chat box for the student and parent to see.","<strong>Call Tech Support Live:</strong> Use the emergency room button to get an active admin moderator into the room right away.","<strong>Save Timestamped Proof:</strong> Take full screenshots of the incident and log a detailed safety report within the admin panel."] },
-                    { title: "Official Support Ticket Escalation", problem: "A pay error, student dispute, or tech issue is handled incorrectly by automated systems, requiring a manual human review.", steps: ["<strong>State Your Core Goal:</strong> Start your help ticket with a clear, direct subject line (e.g., 'Request to Overturn Absence Flag - Room #4920').","<strong>List Facts in Order:</strong> Write out what happened step-by-step using precise times, dates, and classroom ID numbers.","<strong>Attach Clean Evidence Files:</strong> Upload your matching screenshots, network logs, or video clip markers directly to the ticket.","<strong>Follow Up Regularly:</strong> Check the status of your ticket every 48 hours to add any new details requested by the review team."] }
+                    { title: "Memo Compliance & VIP Parents", problem: "Receiving low client ratings from generic feedback notes, or losing dispute cases due to a lack of sufficient structural audit records.", steps: ["Memos as Binding Legal Evidence: Log technical failures inside class notes to establish a clear audit trail for dispute pipelines.","Apply Goal + Evidence Framework: Replace repetitive boilerplate remarks with a two-sentence standard format:","Sentence A (Target Objective): State the precise target skill targeted (e.g., 'Student successfully mastered conditional verb tenses.').","Sentence B (Live Evidence): Insert measurable evidence of progress (e.g., 'They correctly transformed three complex sentences during final drills.')."] },
+                    { title: "Handling Negative Parent Reviews", problem: "A parent leaves an unexpected low rating or a complaint about class pacing, which threatens to lower your overall teacher performance metrics.", steps: ["Analyze Class Logs: Review the specific lesson recording to crosscheck the pacing metrics and student responses against the parent's feedback.","Draft a Professional Dispute: Write a calm, fact-based response outlining the exact activities and slide index targets met during the lesson.","Highlight Student Progress: Share specific examples of words the student read or rewards they earned to prove they were successfully engaged.","Submit Review Requests: Send your evidence to the evaluation team within 72 hours to request a removal of unfair ratings."] },
+                    { title: "Trial Lesson Conversion Optimization", problem: "New students in trial classes seem nervous or quiet, making it difficult to convert them into regular long-term bookings.", steps: ["Lead with Big Energy: Start the session with high-energy waves, a warm smile, and clear Total Physical Response (TPR) actions.","Simplify Prompt Patterns: Drop complex phrases for simple, actionable commands (e.g., replace 'Would you like to read?' with 'Look here, let's read!').","Give Constant Rewards: Hand out digital stars or use physical props every time the student tries to copy a sound or word.","Write Targeted Growth Path Notes: Use the lesson summary to tell parents exactly which advanced modules will help their child grow next."] },
+                    { title: "Reporting Classroom Behavioral Safety", problem: "A student shows completely inappropriate behavior or shares unsafe media during a live class stream, requiring immediate intervention.", steps: ["Turn Off Video and Audio: Instantly toggle off the student's media feeds using your teacher dashboard control buttons.","State Rules in Chat: Type a firm, professional reminder of classroom rules into the chat box for the student and parent to see.","Call Tech Support Live: Use the emergency room button to get an active admin moderator into the room right away.","Save Timestamped Proof: Take full screenshots of the incident and log a detailed safety report within the admin panel."] },
+                    { title: "Official Support Ticket Escalation", problem: "A pay error, student dispute, or tech issue is handled incorrectly by automated systems, requiring a manual human review.", steps: ["State Your Core Goal: Start your help ticket with a clear, direct subject line (e.g., 'Request to Overturn Absence Flag - Room #4920').","List Facts in Order: Write out what happened step-by-step using precise times, dates, and classroom ID numbers.","Attach Clean Evidence Files: Upload your matching screenshots, network logs, or video clip markers directly to the ticket.","Follow Up Regularly: Check the status of your ticket every 48 hours to add any new details requested by the review team."] }
                 ]
             },
             "pillar-4": {
@@ -233,22 +243,45 @@
                 styleClasses: "bg-purple-50 text-purple-600 border-purple-200",
                 illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-purple-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-purple-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-face-smile-beam text-4xl text-purple-500 relative z-10"></i></div>`,
                 scenarios: [
-                    { title: "Advanced Learners / Early Finish Gaps", problem: "An advanced student breezes through a 25-minute lesson blueprint inside of 15 minutes, leaving a 10-minute dead-air gap.", steps: ["<strong>Switch Course Selections:</strong> Alter active material pathways using <strong>classroom interface dropdown tools</strong> if accessible.","<strong>Phonics Distinction Drills:</strong> Introduce minimal phonetic sound pairings to highlight vocabulary nuance (e.g., bin/pin, bark/park).","<strong>Syllable Blending Challenges:</strong> Drill complex multisyllabic terms to analyze articulation boundaries (e.g., paper, pepper, publish)."] },
-                    { title: "Managing Quiet or Distracted Young Learners", problem: "A very young student (Level 1-2) refuses to look at the screen, cries, or is distracted by toys during the lesson.", steps: ["<strong>Use Eye-Catching Props:</strong> Hold colorful physical puppets or flashcards right up to your camera lens to grab their attention.","<strong>Use Dramatic Voices:</strong> Change your voice using high and low tones (acoustic variation) to make reading repetitive words fun.","<strong>Try Copycat Actions:</strong> Use big, playful arm movements (TPR) and ask the student to mirror your actions like a game.","<strong>Involve the Watching Parent:</strong> Politely ask the parent in the room to help guide the child's focus back to the current slide activity."] },
-                    { title: "Dealing with Level Mismatches", problem: "A student is placed in a class that is far too difficult for them, causing them to shut down because they cannot understand.", steps: ["<strong>Simplify Slide Content:</strong> Break down long sentences into single words or simple two-word phrases.","<strong>Provide Heavy Scaffolding:</strong> Read the words clearly first, then have the student repeat after you several times.","<strong>Use Visual Clues:</strong> Draw circles around picture elements on the slide to show the meaning of words without using complex rules.","<strong>Recommend a Level Change:</strong> Use the post-class feedback dashboard to officially suggest moving the student to a more comfortable level."] },
-                    { title: "Pacing Slow Learners Effectively", problem: "A student struggles with basic pronunciation, falling far behind the lesson pace and risking missing the last 10 slides.", steps: ["<strong>Pick Core Target Slides:</strong> Focus your energy on the main vocabulary and grammar pages, skipping repetitive review slides.","<strong>Set a 2-Minute Timer:</strong> Limit your time on any single tricky word to 120 seconds before moving forward to keep the lesson moving.","<strong>Use Shared Reading:</strong> Read the long parts yourself and have the student jump in just for the target vocabulary words.","<strong>Add Practice Reminders:</strong> Use the lesson notes to highlight the words they struggled with so they can practice them at home."] },
-                    { title: "Building Rapport with Quiet Adults", problem: "An adult conversation student gives short, one-word answers, causing discussions to stall out quickly.", steps: ["<strong>Ask Open-Ended Questions:</strong> Avoid simple 'yes/no' questions; instead, use prompts like 'Tell me about your favorite...' or 'What do you think about...'.","<strong>Share a Short Example:</strong> Share a quick, 15-second story from your own life first to break the ice and encourage them to share too.","<strong>Use Helpful Prompt Phrases:</strong> Keep conversations going by asking follow-up questions like 'Why do you feel that way?' or 'Can you tell me more?'.","<strong>Praise Their Input:</strong> Boost their speaking confidence by praising their vocabulary choices before correcting minor grammar errors."] }
+                    { title: "Advanced Learners / Early Finish Gaps", problem: "An advanced student breezes through a 25-minute lesson blueprint inside of 15 minutes, leaving a 10-minute dead-air gap.", steps: ["Switch Course Selections: Alter active material pathways using classroom interface dropdown tools if accessible.","Phonics Distinction Drills: Introduce minimal phonetic sound pairings to highlight vocabulary nuance (e.g., bin/pin, bark/park).","Syllable Blending Challenges: Drill complex multisyllabic terms to analyze articulation boundaries (e.g., paper, pepper, publish)."] },
+                    { title: "Managing Quiet or Distracted Young Learners", problem: "A very young student (Level 1-2) refuses to look at the screen, cries, or is distracted by toys during the lesson.", steps: ["Use Eye-Catching Props: Hold colorful physical puppets or flashcards right up to your camera lens to grab their attention.","Use Dramatic Voices: Change your voice using high and low tones (acoustic variation) to make reading repetitive words fun.","Try Copycat Actions: Use big, playful arm movements (TPR) and ask the student to mirror your actions like a game.","Involve the Watching Parent: Politely ask the parent in the room to help guide the child's focus back to the current slide activity."] },
+                    { title: "Dealing with Level Mismatches", problem: "A student is placed in a class that is far too difficult for them, causing them to shut down because they cannot understand.", steps: ["Simplify Slide Content: Break down long sentences into single words or simple two-word phrases.","Provide Heavy Scaffolding: Read the words clearly first, then have the student repeat after you several times.","Use Visual Clues: Draw circles around picture elements on the slide to show the meaning of words without using complex rules.","Recommend a Level Change: Use the post-class feedback dashboard to officially suggest moving the student to a more comfortable level."] },
+                    { title: "Pacing Slow Learners Effectively", problem: "A student struggles with basic pronunciation, falling far behind the lesson pace and risking missing the last 10 slides.", steps: ["Pick Core Target Slides: Focus your energy on the main vocabulary and grammar pages, skipping repetitive review slides.","Set a 2-Minute Timer: Limit your time on any single tricky word to 120 seconds before moving forward to keep the lesson moving.","Use Shared Reading: Read the long parts yourself and have the student jump in just for the target vocabulary words.","Add Practice Reminders: Use the lesson notes to highlight the words they struggled with so they can practice them at home."] },
+                    { title: "Building Rapport with Quiet Adults", problem: "An adult conversation student gives short, one-word answers, causing discussions to stall out quickly.", steps: ["Ask Open-Ended Questions: Avoid simple 'yes/no' questions; instead, use prompts like 'Tell me about your favorite...' or 'What do you think about...'.","Share a Short Example: Share a quick, 15-second story from your own life first to break the ice and encourage them to share too.","Use Helpful Prompt Phrases: Keep conversations going by asking follow-up questions like 'Why do you feel that way?' or 'Can you tell me more?'.","Praise Their Input: Boost their speaking confidence by praising their vocabulary choices before correcting minor grammar errors."] }
                 ]
             }
         };
 
-        let database = JSON.parse(localStorage.getItem('readiness_deck_db')) || defaultDatabase;
+        // Initialize from Cloud, fallback to LocalStorage
+        let database = defaultDatabase;
         let currentPillarKey = null;
         let selectedBtnElement = null;
 
-        window.onload = function() { updatePillarBadgeCounters(); };
-        function syncDatabaseToLocalStorage() { localStorage.setItem('readiness_deck_db', JSON.stringify(database)); updatePillarBadgeCounters(); }
-        function updatePillarBadgeCounters() { Object.keys(database).forEach(key => { const countBadge = document.getElementById(`count-${key}`); if (countBadge) { const total = database[key].scenarios.length; countBadge.innerHTML = `${total} Active Blueprints <i class="fa-solid fa-angle-right ml-1"></i>`; } }); }
+        window.onload = function() {
+            db.ref('/').on('value', (snapshot) => {
+                if (snapshot.val()) {
+                    database = snapshot.val();
+                    updatePillarBadgeCounters();
+                    if(currentPillarKey) renderScenariosSidebarList();
+                }
+            });
+        };
+
+        function syncDatabaseToLocalStorage() { 
+            localStorage.setItem('readiness_deck_db', JSON.stringify(database)); 
+            syncToCloud(database); // Syncs to Firebase
+            updatePillarBadgeCounters(); 
+        }
+
+        function updatePillarBadgeCounters() { 
+            Object.keys(database).forEach(key => { 
+                const countBadge = document.getElementById(`count-${key}`); 
+                if (countBadge) { 
+                    const total = database[key].scenarios.length; 
+                    countBadge.innerHTML = `${total} Active Blueprints <i class="fa-solid fa-angle-right ml-1"></i>`; 
+                } 
+            }); 
+        }
 
         function selectPillar(pillarKey) {
             currentPillarKey = pillarKey;
@@ -267,7 +300,6 @@
             iconContainer.innerHTML = `<i class="${data.iconClass}"></i>`;
             const listContainer = document.getElementById('scenarios-list-container');
             listContainer.innerHTML = '';
-            
             data.scenarios.forEach((scen, idx) => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = "w-full text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-xs text-slate-800 transition-all shadow-sm flex items-center justify-between group cursor-pointer animate-slideup select-none";
@@ -296,7 +328,6 @@
                     <span class="text-slate-600 font-medium">${step}</span>
                 </li>
             `).join('');
-
             const displayBlock = document.getElementById('solution-content-block');
             displayBlock.className = "w-full space-y-6 animate-slideup text-left";
             displayBlock.innerHTML = `
@@ -334,6 +365,7 @@
         }
 
         function closeFormModal() { document.getElementById('form-modal').classList.replace('flex', 'hidden'); }
+        
         function appendStepInputField(val = '') {
             const container = document.getElementById('steps-inputs-container');
             const wrap = document.createElement('div');
@@ -356,7 +388,6 @@
                 problem: document.getElementById('form-problem').value.trim(),
                 steps: payloadSteps
             };
-
             if(idxVal === "") database[currentPillarKey].scenarios.push(targetSchemaObject);
             else database[currentPillarKey].scenarios[parseInt(idxVal)] = targetSchemaObject;
 
@@ -391,93 +422,6 @@
             document.getElementById('back-home-btn').classList.replace('flex', 'hidden');
             document.getElementById('view-home').classList.remove('hidden');
         }
-<script>
-        // 1. Initialize Firebase with your project details
-        const firebaseConfig = {
-            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        // 2. The Sync Engine: Automatically updates the page when data changes
-        db.ref('/').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                window.database = data; // Update your app's global state
-                if (typeof renderApp === 'function') {
-                    renderApp(); // This function draws your cards
-                }
-            }
-        });
-
-        // 3. The Sync Function: Use this in your "Update" or "Save" button
-        function syncToCloud(newData) {
-            db.ref('/').set(newData);
-        }
-  <script>
-        // 1. Initialize Firebase with your project details
-        const firebaseConfig = {
-            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        // 2. The Sync Engine: Automatically updates the page when data changes
-        db.ref('/').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                window.database = data; // Update your app's global state
-                if (typeof renderApp === 'function') {
-                    renderApp(); // This function draws your cards
-                }
-            }
-        });
-
-        // 3. The Sync Function: Use this in your "Update" or "Save" button
-        function syncToCloud(newData) {
-            db.ref('/').set(newData);
-        }
-  <script>
-        // 1. Initialize Firebase with your project details
-        const firebaseConfig = {
-            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        // 2. The Sync Engine: Automatically updates the page when data changes
-        db.ref('/').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                window.database = data; // Update your app's global state
-                if (typeof renderApp === 'function') {
-                    renderApp(); // This function draws your cards
-                }
-            }
-        });
-
-        // 3. The Sync Function: Use this in your "Update" or "Save" button
-        function syncToCloud(newData) {
-            db.ref('/').set(newData);
-        }
     </script>
-<script>
-    firebase.initializeApp({
-        databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
-    });
-    const db = firebase.database();
-    
-    // This tells the app to use the cloud data instead of the internal one
-    db.ref('/').on('value', (snapshot) => {
-        if (snapshot.val()) {
-            window.database = snapshot.val();
-            renderPillarCounts(); 
-        }
-    });
-
-    function syncToCloud(data) {
-        db.ref('/').set(data);
-    }
-</script>
 </body>
 </html>
