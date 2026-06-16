@@ -148,7 +148,7 @@
                             <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full tracking-wide uppercase">Correct Protocol / Solution</span>
                         </div>
                         <div class="flex-1 flex flex-col justify-center items-center text-center px-4 my-4 max-h-[70%] overflow-y-auto">
-                            <p id="play-answer-text" class="text-sm sm:text-base font-medium text-slate-700 leading-relaxed whitespace-pre-line">Loading protocol details...</p>
+                            <p id="play-answer-text" class="text-xs sm:text-sm font-medium text-slate-700 leading-relaxed whitespace-pre-line text-left">Loading protocol details...</p>
                         </div>
                         <div class="text-center text-xs font-semibold tracking-wide text-slate-400 uppercase mt-auto">
                             <i class="fa-solid fa-rotate mr-1"></i> Click anywhere to view question again
@@ -199,9 +199,11 @@
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Final Accuracy</span>
                     </div>
                 </div>
-                <button onclick="resetQuiz()" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-blue-100">
-                    Retake Assessment
-                </button>
+                <div class="flex justify-center gap-4">
+                    <button onclick="resetQuiz()" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-blue-100 cursor-pointer">
+                        Retake Assessment
+                    </button>
+                </div>
             </div>
 
             <div id="quiz-active-panel" class="space-y-6">
@@ -333,6 +335,13 @@
                 answer: "Evaluation forms must be filed via your MYPAGE dashboard within a maximum of 2 hours post-lesson. Failing to log structural performance notes on time changes the status code and impacts your overall month-end platform performance score.",
                 hint: "Keep structural notes templates handy to fill out level achievements quickly.",
                 image: ""
+            },
+            {
+                id: "faq-5",
+                question: "What should I do if a student is bored and the core lesson material is visibly too easy for them during an FT session?",
+                answer: "1. Switch materials yourself if the platform allows it.\n2. If locked, introduce 'Phonics Distinction Expansion': Explain how a single letter sound completely alters a word's meaning. Use contrasting minimal pairs: bin vs. pin, bark vs. park, bond vs. pond, back vs. pack.\n3. If material is fully covered, transition to Syllable Blending: Blend sounds with advanced target words (paper, pepper, publish, public, five, fever, favorite).\n4. Build Contextual Sentences: Practice conversational flows like 'Have fun!', 'Five fish', 'I have a fever', 'I go to the park', or 'A big panda'.\n5. Final Tier Extension: If time remains, teach vocal variations like advanced vowels or complex digraph patterns (/th/, /sh/, /ch/).",
+                hint: "Extension prevents class dead-air while ensuring high pacing marks on user evaluation reviews.",
+                image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80"
             }
         ];
 
@@ -360,7 +369,7 @@
                 try {
                     flashcards = JSON.parse(data);
                 } catch(e) {
-                    showToast("Failed to parse local training deck archive storage registries.", "error");
+                    showToast("Failed to parse local training data stores.", "error");
                 }
             }
         }
@@ -460,7 +469,7 @@
                         </div>
                         <div class="space-y-1 pt-1 border-t border-slate-50">
                             <h4 class="text-xs font-bold uppercase tracking-wide text-emerald-600"><i class="fa-solid fa-shield-halved mr-1"></i>Official Protocol Solution</h4>
-                            <p class="text-sm text-slate-600 line-clamp-3 whitespace-pre-line">${escapeHtml(card.answer)}</p>
+                            <p class="text-xs text-slate-600 line-clamp-4 whitespace-pre-line">${escapeHtml(card.answer)}</p>
                         </div>
                     </div>
                 `;
@@ -692,9 +701,8 @@
             let choices = alternatives.slice(0, 2);
             choices.push(correctCard.answer);
             
-            // Generate a fake common mistake choice dynamically if options are tight
             if (choices.length < 3) {
-                choices.push("Immediately leave the class room system within 2 minutes and flag a systemic emergency report ticket via internal email.");
+                choices.push("Immediately cancel the class segment manually inside your teacher console and notify the emergency tech hotline.");
             }
             
             for (let i = choices.length - 1; i > 0; i--) {
@@ -706,7 +714,7 @@
                 const btn = document.createElement('button');
                 btn.type = "button";
                 btn.onclick = () => selectQuizOption(idx, optText);
-                btn.className = "quiz-opt-btn w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-medium text-xs transition-all flex items-center justify-between shadow-sm cursor-pointer";
+                btn.className = "quiz-opt-btn w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-medium text-[11px] transition-all flex items-center justify-between shadow-sm cursor-pointer";
                 btn.innerHTML = `
                     <span class="opt-text text-slate-700 leading-relaxed">${escapeHtml(optText)}</span>
                     <span class="opt-status-icon text-slate-300"><i class="fa-regular fa-circle"></i></span>
@@ -740,13 +748,13 @@
                 const iconContainer = btn.querySelector('.opt-status-icon');
                 
                 if (txt === correctSolution) {
-                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/60 font-bold text-xs flex items-center justify-between shadow-sm";
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/60 font-bold text-[11px] flex items-center justify-between shadow-sm";
                     iconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i>';
                 } else if (txt === quizSelectedAnswer && !targetIsCorrect) {
-                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50/60 font-medium text-xs flex items-center justify-between shadow-sm";
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50/60 font-medium text-[11px] flex items-center justify-between shadow-sm";
                     iconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600"></i>';
                 } else {
-                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-100 bg-slate-50/40 opacity-40 text-xs flex items-center justify-between cursor-not-allowed";
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-100 bg-slate-50/40 opacity-40 text-[11px] flex items-center justify-between cursor-not-allowed";
                 }
             });
             
