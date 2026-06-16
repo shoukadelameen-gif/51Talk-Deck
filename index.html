@@ -53,13 +53,19 @@
         let database = {};
         let currentPillar = "";
 
-        // Sync with Firebase
+        // SYNC: This automatically updates your 'database' variable when you change Firebase
         db.ref('/').on('value', (snapshot) => {
             database = snapshot.val() || {};
-            if(currentPillar) updateScenarioList();
+            if(currentPillar) {
+                updateScenarioList();
+                // If a solution is open, refresh it too
+                if(document.getElementById('form-modal').classList.contains('hidden')) {
+                     // Optionally re-render solution if needed
+                }
+            }
         });
 
-        // Your original logic logic
+        // YOUR ORIGINAL LOGIC (Unchanged)
         function selectPillar(id) {
             currentPillar = id;
             document.getElementById('view-home').classList.add('hidden');
@@ -70,18 +76,33 @@
 
         function showHome() { document.getElementById('view-home').classList.remove('hidden'); document.getElementById('view-scenarios').classList.add('hidden'); }
         function closeFormModal() { document.getElementById('form-modal').classList.add('hidden'); }
-        function appendStepInputField(val = "") { const div = document.createElement('div'); div.innerHTML = `<input type="text" class="step-input w-full border p-2 rounded" value="${val}">`; document.getElementById('steps-inputs-container').appendChild(div); }
-        
+        function appendStepInputField(val = "") { const div = document.createElement('div'); div.className = "flex gap-2"; div.innerHTML = `<input type="text" class="step-input w-full border p-2 rounded" value="${val}">`; document.getElementById('steps-inputs-container').appendChild(div); }
+
         function updateScenarioList() { 
             const container = document.getElementById('scenarios-list-container'); 
             container.innerHTML = ""; 
-            database[currentPillar].scenarios.forEach((s, i) => { 
+            database[currentPillar].scenarios.forEach((s, index) => { 
                 const div = document.createElement('div'); 
-                div.className = "p-4 bg-white border border-slate-200 rounded-2xl shadow-sm"; 
+                div.className = "p-4 bg-white border border-slate-200 rounded-2xl shadow-sm cursor-pointer"; 
                 div.innerHTML = `<h4 class="font-bold text-sm">${s.title}</h4>`; 
-                div.onclick = () => alert(s.problem); 
+                div.onclick = () => showSolution(index); 
                 container.appendChild(div); 
             }); 
+        }
+
+        function showSolution(index) {
+            const s = database[currentPillar].scenarios[index];
+            document.getElementById('solution-content-block').innerHTML = `<div class="bg-white p-6 rounded-2xl"><h3 class="font-black text-lg">${s.title}</h3><p class="text-sm text-slate-500">${s.problem}</p><button onclick="openFormModal(${index})" class="mt-4 text-xs bg-indigo-50 p-2 rounded">Edit</button></div>`;
+        }
+
+        function openFormModal(index) {
+            document.getElementById('form-modal').classList.remove('hidden');
+            document.getElementById('form-edit-index').value = index;
+            const s = database[currentPillar].scenarios[index];
+            document.getElementById('form-title').value = s.title;
+            document.getElementById('form-problem').value = s.problem;
+            document.getElementById('steps-inputs-container').innerHTML = "";
+            s.steps.forEach(step => appendStepInputField(step));
         }
 
         function saveScenarioData(e) {
@@ -89,9 +110,8 @@
             const index = document.getElementById('form-edit-index').value;
             const steps = Array.from(document.querySelectorAll('.step-input')).map(i => i.value);
             const newData = { title: document.getElementById('form-title').value, problem: document.getElementById('form-problem').value, steps };
-            if (index === "") database[currentPillar].scenarios.push(newData);
-            else database[currentPillar].scenarios[index] = newData;
-            db.ref('/').set(database);
+            database[currentPillar].scenarios[index] = newData;
+            db.ref('/').set(database); // SAVES TO CLOUD
             closeFormModal();
         }
     </script>
