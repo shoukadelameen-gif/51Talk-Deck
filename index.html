@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ms. Shouq 51talk | Operational Support Suite</title>
+   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -140,6 +142,7 @@
         <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-slideup">
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
                 <h3 id="modal-heading" class="text-sm font-black text-slate-900 uppercase tracking-wider">Configure Scenario Blueprint</h3>
+                syncToCloud(window.database);
                 <button onclick="closeFormModal()" class="text-slate-400 hover:text-slate-600 text-sm cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="scenario-form" onsubmit="saveScenarioData(event)" class="p-6 overflow-y-auto space-y-5 flex-1">
@@ -388,6 +391,93 @@
             document.getElementById('back-home-btn').classList.replace('flex', 'hidden');
             document.getElementById('view-home').classList.remove('hidden');
         }
+<script>
+        // 1. Initialize Firebase with your project details
+        const firebaseConfig = {
+            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // 2. The Sync Engine: Automatically updates the page when data changes
+        db.ref('/').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                window.database = data; // Update your app's global state
+                if (typeof renderApp === 'function') {
+                    renderApp(); // This function draws your cards
+                }
+            }
+        });
+
+        // 3. The Sync Function: Use this in your "Update" or "Save" button
+        function syncToCloud(newData) {
+            db.ref('/').set(newData);
+        }
+  <script>
+        // 1. Initialize Firebase with your project details
+        const firebaseConfig = {
+            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // 2. The Sync Engine: Automatically updates the page when data changes
+        db.ref('/').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                window.database = data; // Update your app's global state
+                if (typeof renderApp === 'function') {
+                    renderApp(); // This function draws your cards
+                }
+            }
+        });
+
+        // 3. The Sync Function: Use this in your "Update" or "Save" button
+        function syncToCloud(newData) {
+            db.ref('/').set(newData);
+        }
+  <script>
+        // 1. Initialize Firebase with your project details
+        const firebaseConfig = {
+            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // 2. The Sync Engine: Automatically updates the page when data changes
+        db.ref('/').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                window.database = data; // Update your app's global state
+                if (typeof renderApp === 'function') {
+                    renderApp(); // This function draws your cards
+                }
+            }
+        });
+
+        // 3. The Sync Function: Use this in your "Update" or "Save" button
+        function syncToCloud(newData) {
+            db.ref('/').set(newData);
+        }
     </script>
+<script>
+    firebase.initializeApp({
+        databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
+    });
+    const db = firebase.database();
+    
+    // This tells the app to use the cloud data instead of the internal one
+    db.ref('/').on('value', (snapshot) => {
+        if (snapshot.val()) {
+            window.database = snapshot.val();
+            renderPillarCounts(); 
+        }
+    });
+
+    function syncToCloud(data) {
+        db.ref('/').set(data);
+    }
+</script>
 </body>
 </html>
