@@ -6,65 +6,42 @@
     <title>Ms. Shouq 51talk | Operational Support Suite</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .animate-slideup { animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-fade { animation: fadeIn 0.3s ease-out forwards; }
-    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 p-4">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-black">Ms. Shouq | Teacher Readiness</h1>
-            <button onclick="showHome()" id="back-home-btn" class="hidden px-4 py-2 bg-slate-100 rounded-xl text-xs font-bold">Back to Pillars</button>
-        </div>
+<body class="bg-slate-50 text-slate-800 p-6">
+    <header class="max-w-4xl mx-auto mb-8 flex justify-between items-center">
+        <h1 class="text-xl font-black">Ms. Shouq | Teacher Readiness</h1>
+        <button onclick="showHome()" id="back-home-btn" class="hidden px-4 py-2 bg-slate-200 rounded-lg text-xs font-bold">Back to Pillars</button>
     </header>
 
-    <main class="max-w-6xl mx-auto px-6 py-10">
-        <section id="view-home" class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div onclick="selectPillar('pillar-1')" class="bg-white p-6 border rounded-2xl cursor-pointer hover:border-indigo-500">
-                <h3 class="font-bold">Pillar 1</h3>
-                <div id="count-pillar-1" class="text-xs text-slate-400">Loading...</div>
-            </div>
-            <div onclick="selectPillar('pillar-2')" class="bg-white p-6 border rounded-2xl cursor-pointer hover:border-indigo-500">
-                <h3 class="font-bold">Pillar 2</h3>
-                <div id="count-pillar-2" class="text-xs text-slate-400">Loading...</div>
-            </div>
-            <div onclick="selectPillar('pillar-3')" class="bg-white p-6 border rounded-2xl cursor-pointer hover:border-indigo-500">
-                <h3 class="font-bold">Pillar 3</h3>
-                <div id="count-pillar-3" class="text-xs text-slate-400">Loading...</div>
-            </div>
-            <div onclick="selectPillar('pillar-4')" class="bg-white p-6 border rounded-2xl cursor-pointer hover:border-indigo-500">
-                <h3 class="font-bold">Pillar 4</h3>
-                <div id="count-pillar-4" class="text-xs text-slate-400">Loading...</div>
-            </div>
+    <main class="max-w-4xl mx-auto">
+        <section id="view-home" class="grid grid-cols-2 gap-4">
+            <div onclick="selectPillar('pillar-1')" class="bg-white p-6 border rounded-xl cursor-pointer hover:bg-indigo-50"><h3>Pillar 1</h3><div id="count-pillar-1">...</div></div>
+            <div onclick="selectPillar('pillar-2')" class="bg-white p-6 border rounded-xl cursor-pointer hover:bg-indigo-50"><h3>Pillar 2</h3><div id="count-pillar-2">...</div></div>
+            <div onclick="selectPillar('pillar-3')" class="bg-white p-6 border rounded-xl cursor-pointer hover:bg-indigo-50"><h3>Pillar 3</h3><div id="count-pillar-3">...</div></div>
+            <div onclick="selectPillar('pillar-4')" class="bg-white p-6 border rounded-xl cursor-pointer hover:bg-indigo-50"><h3>Pillar 4</h3><div id="count-pillar-4">...</div></div>
         </section>
 
         <section id="view-scenarios" class="hidden">
-            <div class="grid grid-cols-12 gap-8">
-                <div class="col-span-4">
-                    <button onclick="openFormModal(null)" class="mb-4 bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold">+ Add Scenario</button>
-                    <div id="scenarios-list-container" class="space-y-3"></div>
-                </div>
-                <div id="solution-content-block" class="col-span-8 bg-white p-8 rounded-3xl border"></div>
+            <button onclick="openFormModal(null)" class="mb-4 bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold">+ Add Scenario</button>
+            <div class="grid grid-cols-3 gap-6">
+                <div id="scenarios-list-container" class="col-span-1 space-y-2"></div>
+                <div id="solution-content-block" class="col-span-2 bg-white p-6 border rounded-xl">Select a scenario to begin.</div>
             </div>
         </section>
     </main>
 
     <div id="form-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center">
-        <div class="bg-white p-6 rounded-3xl w-full max-w-lg">
+        <div class="bg-white p-6 rounded-xl w-full max-w-lg">
             <form id="scenario-form" onsubmit="saveScenarioData(event)">
                 <input type="hidden" id="form-edit-index">
-                <input type="text" id="form-title" placeholder="Title" class="w-full border p-2 mb-2 rounded">
-                <textarea id="form-problem" placeholder="Problem" class="w-full border p-2 mb-2 rounded"></textarea>
-                <div id="steps-inputs-container"></div>
-                <button type="button" onclick="appendStepInputField('')" class="text-xs text-indigo-600">+ Add Step</button>
+                <input type="text" id="form-title" placeholder="Title" class="w-full border p-2 mb-2 rounded" required>
+                <textarea id="form-problem" placeholder="Problem" class="w-full border p-2 mb-2 rounded" required></textarea>
+                <div id="steps-inputs-container" class="mb-2"></div>
+                <button type="button" onclick="appendStepInputField('')" class="text-xs text-indigo-600 font-bold">+ Add Step</button>
                 <div class="mt-4 flex gap-2">
-                    <button type="submit" class="bg-black text-white px-4 py-2 rounded">Save</button>
+                    <button type="submit" class="bg-black text-white px-4 py-2 rounded">Save to Cloud</button>
                     <button type="button" onclick="closeFormModal()" class="bg-slate-200 px-4 py-2 rounded">Cancel</button>
                 </div>
             </form>
@@ -72,15 +49,12 @@
     </div>
 
     <script>
-        // FIREBASE SETUP
-        firebase.initializeApp({
-            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
-        });
+        firebase.initializeApp({ databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app" });
         const db = firebase.database();
         let database = {};
         let currentPillarKey = null;
 
-        // LOAD DATA
+        // Auto-sync from cloud
         db.ref('/').on('value', (snapshot) => {
             if (snapshot.val()) {
                 database = snapshot.val();
@@ -89,14 +63,10 @@
             }
         });
 
-        function syncToCloud(data) { db.ref('/').set(data); }
-
         function renderPillarCounts() {
             for(let i=1; i<=4; i++) {
                 const el = document.getElementById(`count-pillar-${i}`);
-                if(el && database[`pillar-${i}`]) {
-                    el.innerHTML = `${database[`pillar-${i}`].scenarios.length} Scenarios`;
-                }
+                if(el && database[`pillar-${i}`]) el.innerText = database[`pillar-${i}`].scenarios.length + " Scenarios";
             }
         }
 
@@ -113,7 +83,7 @@
             container.innerHTML = '';
             database[currentPillarKey].scenarios.forEach((s, idx) => {
                 const div = document.createElement('div');
-                div.className = "p-4 border rounded-xl cursor-pointer hover:bg-slate-50";
+                div.className = "p-3 border rounded cursor-pointer hover:bg-slate-100";
                 div.innerHTML = `<h4 class="font-bold text-sm">${s.title}</h4>`;
                 div.onclick = () => renderScenario(idx);
                 container.appendChild(div);
@@ -123,10 +93,10 @@
         function renderScenario(idx) {
             const s = database[currentPillarKey].scenarios[idx];
             document.getElementById('solution-content-block').innerHTML = `
-                <h3 class="text-xl font-black mb-4">${s.title}</h3>
-                <p class="mb-4 text-slate-600">${s.problem}</p>
-                <ul class="list-disc pl-5">${s.steps.map(step => `<li>${step}</li>`).join('')}</ul>
-                <button onclick="openFormModal(${idx})" class="mt-6 text-indigo-600 font-bold">Edit Scenario</button>
+                <h3 class="text-lg font-bold mb-2">${s.title}</h3>
+                <p class="text-sm text-slate-600 mb-4">${s.problem}</p>
+                <ul class="list-disc pl-5 mb-4 text-sm">${s.steps.map(step => `<li>${step}</li>`).join('')}</ul>
+                <button onclick="openFormModal(${idx})" class="text-xs bg-slate-200 px-2 py-1 rounded">Edit</button>
             `;
         }
 
@@ -151,7 +121,7 @@
 
         function appendStepInputField(val) {
             const div = document.createElement('div');
-            div.innerHTML = `<input type="text" value="${val}" class="step-input w-full border p-2 mb-1 rounded">`;
+            div.innerHTML = `<input type="text" value="${val}" class="step-input w-full border p-1 mb-1 rounded text-sm">`;
             document.getElementById('steps-inputs-container').appendChild(div);
         }
 
@@ -159,14 +129,12 @@
             e.preventDefault();
             const editIdx = document.getElementById('form-edit-index').value;
             const steps = Array.from(document.getElementsByClassName('step-input')).map(i => i.value);
-            const newData = {
-                title: document.getElementById('form-title').value,
-                problem: document.getElementById('form-problem').value,
-                steps: steps
-            };
+            const newData = { title: document.getElementById('form-title').value, problem: document.getElementById('form-problem').value, steps: steps };
+            
             if (editIdx === 'new') database[currentPillarKey].scenarios.push(newData);
             else database[currentPillarKey].scenarios[editIdx] = newData;
-            syncToCloud(database);
+            
+            db.ref('/').set(database); // Saves to Cloud
             closeFormModal();
         }
 
