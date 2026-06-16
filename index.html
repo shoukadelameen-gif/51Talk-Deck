@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>51Talk & AirClass Onboarding Suite</title>
+    <title>Flashcard Study App</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -27,7 +27,7 @@
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Custom scrollbar */
+        /* Custom scrollbar for clean aesthetics */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -47,42 +47,43 @@
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
 
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
-<header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-        <div class="flex items-center gap-3">
-                <div class="bg-[#0066CC] text-white font-black px-4 py-2 rounded-lg text-lg tracking-tighter shadow-md">
-                    51Talk
+                <div class="bg-[#0066CC] text-white p-2.5 rounded-xl shadow-md shadow-blue-200">
+                    <i class="fa-solid flex-center fa-layer-group text-xl w-6 h-6 flex items-center justify-center"></i>
                 </div>
-                <div class="w-12 h-12 rounded-full bg-[#FFD700] flex items-center justify-center font-bold text-[#0066CC] border-2 border-[#0066CC] shadow-sm">
-                    M
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-slate-900">StudySphere</h1>
+                    <p class="text-xs text-slate-500 font-medium">Interactive Flashcard Suite</p>
+                </div>
+            </div>
             
             <nav class="bg-slate-100 p-1 rounded-xl flex shadow-inner border border-slate-200/60">
                 <button onclick="switchMode('edit')" id="btn-mode-edit" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900">
-                    <i class="fa-solid fa-list-check text-xs"></i> Policy Repository
+                    <i class="fa-solid fa-pen-to-square text-xs"></i> Edit Mode
                 </button>
                 <button onclick="switchMode('play')" id="btn-mode-play" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900">
-                    <i class="fa-solid fa-bolt text-xs"></i> Active Review
+                    <i class="fa-solid fa-play text-xs"></i> Play Mode
                 </button>
                 <button onclick="switchMode('quiz')" id="btn-mode-quiz" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900">
-                    <i class="fa-solid fa-trophy text-xs"></i> Compliance Quiz
+                    <i class="fa-solid fa-graduation-cap text-xs"></i> Quiz Mode
                 </button>
             </nav>
         </div>
     </header>
-    
-  
 
     <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-8">
         
         <section id="view-edit" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">FAQ & Policy Database</h2>
-                    <p class="text-sm text-slate-500">Review, add, or update critical policy cards and standard operating procedures.</p>
+                    <h2 class="text-xl font-bold text-slate-900">Flashcard Workspace</h2>
+                    <p class="text-sm text-slate-500">Create, modify, and curate your custom learning sets.</p>
                 </div>
                 <button onclick="openCardModal()" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-sm cursor-pointer transform active:scale-95">
-                    <i class="fa-solid fa-plus"></i> Add New FAQ/Policy
+                    <i class="fa-solid fa-plus"></i> Create New Card
                 </button>
             </div>
 
@@ -90,8 +91,8 @@
                 <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-400">
                     <i class="fa-solid fa-folder-open text-2xl"></i>
                 </div>
-                <h3 class="text-lg font-bold text-slate-800 mb-1">No FAQs Available</h3>
-                <p class="text-sm text-slate-500 mb-6">Create reference cards to help new teachers navigate problems.</p>
+                <h3 class="text-lg font-bold text-slate-800 mb-1">Your deck is completely empty</h3>
+                <p class="text-sm text-slate-500 mb-6">Get started by creating your very first reference flashcard.</p>
                 <button onclick="openCardModal()" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all">
                     Add First Card
                 </button>
@@ -104,18 +105,18 @@
         <section id="view-play" class="hidden space-y-6 max-w-2xl mx-auto">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">FAQ & Scenario Flashcards</h2>
-                    <p class="text-sm text-slate-500">Click a card to reveal critical steps, MyPage protocol actions, or solutions.</p>
+                    <h2 class="text-xl font-bold text-slate-900">Active Review</h2>
+                    <p class="text-sm text-slate-500">Flip cards to test memory recall. Click to flip.</p>
                 </div>
                 <button onclick="shufflePlayDeck()" class="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm px-4 py-2 rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer">
-                    <i class="fa-solid fa-shuffle text-slate-400"></i> Shuffle Scenarios
+                    <i class="fa-solid fa-shuffle text-slate-400"></i> Shuffle
                 </button>
             </div>
 
             <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 space-y-2">
                 <div class="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400">
-                    <span>Card Progress</span>
-                    <span id="play-progress-text">0 / 0 Decks</span>
+                    <span>Progress Tracker</span>
+                    <span id="play-progress-text">0 / 0 Cards</span>
                 </div>
                 <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
                     <div id="play-progress-bar" class="bg-[#0066CC] h-full rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -126,31 +127,31 @@
                 <div id="play-card" class="w-full h-full preserve-3d card-flip-transition relative" onclick="toggleCardFlip()">
                     <div class="absolute inset-0 bg-white border border-slate-200 rounded-3xl p-8 flex flex-col justify-between shadow-md backface-hidden">
                         <div class="flex justify-between items-start w-full">
-                            <span class="px-3 py-1 bg-blue-50 text-[#0066CC] text-xs font-bold rounded-full tracking-wide uppercase">Problem Scenario / FAQ</span>
-                            <button id="play-hint-btn" onclick="togglePlayHint(event)" class="text-slate-400 hover:text-[#0066CC] p-1.5 rounded-lg hover:bg-slate-50 transition-colors hidden" title="Reveal Official Policy Hint">
+                            <span class="px-3 py-1 bg-blue-50 text-[#0066CC] text-xs font-bold rounded-full tracking-wide uppercase">Question View</span>
+                            <button id="play-hint-btn" onclick="togglePlayHint(event)" class="text-slate-400 hover:text-[#0066CC] p-1.5 rounded-lg hover:bg-slate-50 transition-colors hidden" title="Reveal Hint">
                                 <i class="fa-solid fa-lightbulb text-lg"></i>
                             </button>
                         </div>
                         <div class="flex-1 flex flex-col justify-center items-center text-center px-4 my-4 max-h-[60%] overflow-y-auto">
-                            <h3 id="play-question-text" class="text-lg sm:text-xl font-bold text-slate-800 leading-snug">Loading scenario...</h3>
-                            <p id="play-hint-text" class="text-xs font-medium text-amber-600 bg-amber-50 border border-amber-100 px-3 py-1.5 rounded-lg mt-3 hidden animate-fadeIn"><i class="fa-solid fa-circle-info mr-1"></i> Policy Note: <span id="hint-content"></span></p>
+                            <h3 id="play-question-text" class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug">Question strings live here...</h3>
+                            <p id="play-hint-text" class="text-sm font-medium text-amber-600 bg-amber-50 border border-amber-100 px-3 py-1.5 rounded-lg mt-3 hidden animate-fadeIn"><i class="fa-solid fa-circle-info mr-1"></i> Hint: <span id="hint-content"></span></p>
                         </div>
                         <div id="play-front-image-container" class="hidden w-full max-h-32 mb-2 justify-center items-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50" onclick="stopPropagation(event)">
-                            <img id="play-front-img" src="" alt="System Graphic" class="max-h-32 object-contain w-full cursor-zoom-in" onclick="openImagePreview(this.src)">
+                            <img id="play-front-img" src="" alt="Card Graphic" class="max-h-32 object-contain w-full cursor-zoom-in" onclick="openImagePreview(this.src)">
                         </div>
                         <div class="text-center text-xs font-semibold tracking-wide text-slate-400 uppercase mt-auto">
-                            <i class="fa-solid fa-rotate mr-1"></i> Click anywhere to flip & read solution
+                            <i class="fa-solid fa-rotate mr-1"></i> Click anywhere to flip & reveal
                         </div>
                     </div>
                     <div class="absolute inset-0 bg-white border border-slate-200 rounded-3xl p-8 flex flex-col justify-between shadow-md backface-hidden rotate-y-180">
                         <div class="flex justify-between items-start w-full">
-                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full tracking-wide uppercase">Correct Protocol / Solution</span>
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-xs font-bold rounded-full tracking-wide uppercase">Answer Key</span>
                         </div>
                         <div class="flex-1 flex flex-col justify-center items-center text-center px-4 my-4 max-h-[70%] overflow-y-auto">
-                            <p id="play-answer-text" class="text-xs sm:text-sm font-medium text-slate-700 leading-relaxed whitespace-pre-line text-left">Loading protocol details...</p>
+                            <p id="play-answer-text" class="text-lg sm:text-xl font-medium text-slate-700 leading-relaxed">Answer content string renders right here.</p>
                         </div>
                         <div class="text-center text-xs font-semibold tracking-wide text-slate-400 uppercase mt-auto">
-                            <i class="fa-solid fa-rotate mr-1"></i> Click anywhere to view question again
+                            <i class="fa-solid fa-rotate mr-1"></i> Click anywhere to flip back
                         </div>
                     </div>
                 </div>
@@ -160,8 +161,8 @@
                 <button onclick="navigatePlay(-1)" id="btn-play-prev" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold p-3 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
-                <div class="text-xs font-semibold text-slate-500">
-                    Navigate using buttons or click the card to flip
+                <div class="text-sm font-semibold text-slate-500">
+                    Use arrows or click card to traverse deck
                 </div>
                 <button onclick="navigatePlay(1)" id="btn-play-next" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold p-3 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed">
                     <i class="fa-solid fa-chevron-right"></i>
@@ -172,8 +173,8 @@
         <section id="view-quiz" class="hidden space-y-6 max-w-2xl mx-auto">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">Platform Compliance Evaluation</h2>
-                    <p class="text-sm text-slate-500">Test your crisis management, system navigation, and MYPAGE logging accuracy.</p>
+                    <h2 class="text-xl font-bold text-slate-900">Knowledge Assessment</h2>
+                    <p class="text-sm text-slate-500">Multiple-choice evaluation engine with live data scoring.</p>
                 </div>
                 <button onclick="resetQuiz()" class="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm px-4 py-2 rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer">
                     <i class="fa-solid fa-arrow-rotate-left text-slate-400"></i> Restart Quiz
@@ -185,31 +186,29 @@
                     <i class="fa-solid fa-trophy"></i>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-bold text-slate-800">Review Finished!</h3>
-                    <p class="text-slate-500 mt-1">Check your current understanding score metrics for platform policies</p>
+                    <h3 class="text-2xl font-bold text-slate-800">Quiz Complete!</h3>
+                    <p class="text-slate-500 mt-1">Review your comprehensive evaluation score metrics below</p>
                 </div>
                 <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto bg-slate-50 p-4 rounded-2xl border border-slate-100">
                     <div class="text-center p-2">
                         <span class="block text-2xl font-black text-slate-800" id="summary-score-ratio">0/0</span>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Correct Actions</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Accuracy</span>
                     </div>
                     <div class="text-center p-2">
                         <span class="block text-2xl font-black text-[#0066CC]" id="summary-score-pct">0%</span>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Final Accuracy</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Final Grade</span>
                     </div>
                 </div>
-                <div class="flex justify-center gap-4">
-                    <button onclick="resetQuiz()" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-blue-100 cursor-pointer">
-                        Retake Assessment
-                    </button>
-                </div>
+                <button onclick="resetQuiz()" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all shadow-md shadow-blue-100">
+                    Run Evaluation Again
+                </button>
             </div>
 
             <div id="quiz-active-panel" class="space-y-6">
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 space-y-2">
                     <div class="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400">
                         <span>Assessment Progress</span>
-                        <span id="quiz-progress-text">0 / 0 Scenarios</span>
+                        <span id="quiz-progress-text">0 / 0 Questions</span>
                     </div>
                     <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
                         <div id="quiz-progress-bar" class="bg-[#0066CC] h-full rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -218,12 +217,12 @@
 
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md flex flex-col space-y-6">
                     <div class="flex justify-between items-start">
-                        <span class="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-full uppercase tracking-wider">Scenario Test</span>
+                        <span class="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-full uppercase tracking-wider">Evaluation Interface</span>
                         <span id="quiz-live-score" class="text-sm font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-lg"><i class="fa-solid fa-square-check mr-1"></i> Score: 0</span>
                     </div>
 
                     <div class="space-y-4">
-                        <h3 id="quiz-question-text" class="text-base sm:text-lg font-bold text-slate-800 leading-snug">Quiz Question Loading...</h3>
+                        <h3 id="quiz-question-text" class="text-lg sm:text-xl font-bold text-slate-800 leading-snug">Quiz Question Loading...</h3>
                         <div id="quiz-image-container" class="hidden w-full max-h-40 justify-start items-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
                             <img id="quiz-img" src="" alt="Quiz Auxiliary Asset" class="max-h-40 object-contain cursor-zoom-in" onclick="openImagePreview(this.src)">
                         </div>
@@ -234,7 +233,7 @@
 
                     <div class="flex justify-end pt-2 border-t border-slate-100">
                         <button id="btn-quiz-next" onclick="advanceQuiz()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed" disabled>
-                            Next Problem <i class="fa-solid fa-arrow-right text-xs"></i>
+                            Next Question <i class="fa-solid fa-arrow-right text-xs"></i>
                         </button>
                     </div>
                 </div>
@@ -243,15 +242,15 @@
     </main>
 
     <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs font-medium text-slate-400 tracking-wide">
-        Teacher Readiness Hub &copy; 2026. Custom Internal Platform.
+        StudySphere Web Experience Engine &copy; 2026. All rights preserved.
     </footer>
 
-    <div id="modal-card" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4">
+    <div id="modal-card" class="fixed inset-0 z-50 overflow-y-auto hidden animate-fadeIn flex items-center justify-center p-4">
         <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="closeCardModal()"></div>
         
         <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl border border-slate-100 relative z-10 overflow-hidden transform transition-all duration-300 scale-95 opacity-0" id="modal-card-box">
             <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                <h3 id="modal-title" class="text-base font-bold text-slate-800">Add Training Scenario</h3>
+                <h3 id="modal-title" class="text-base font-bold text-slate-800">Create New Flashcard</h3>
                 <button onclick="closeCardModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-200/50 transition-all cursor-pointer">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
@@ -261,34 +260,34 @@
                 <input type="hidden" id="form-card-id">
                 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Teacher Problem / FAQ Prompt <span class="text-red-500">*</span></label>
-                    <textarea id="form-question" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all resize-none" placeholder="What is the problem or question? (e.g., Student has not showed up for 15 minutes...)"></textarea>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Question Prompt <span class="text-red-500">*</span></label>
+                    <textarea id="form-question" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all resize-none" placeholder="Enter explicit study evaluation question text..."></textarea>
                 </div>
                 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Official Platform Solution Protocol <span class="text-red-500">*</span></label>
-                    <textarea id="form-answer" required rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all resize-none" placeholder="What is the explicit step-by-step resolution or system rule?"></textarea>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Answer Solution Key <span class="text-red-500">*</span></label>
+                    <textarea id="form-answer" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all resize-none" placeholder="Enter corresponding clear resolution solution text..."></textarea>
                 </div>
                 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Platform Reference Clue / Hint</label>
-                    <input type="text" id="form-hint" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all" placeholder="e.g., Check MYPAGE criteria or AirClass toolbar guidelines...">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Optional Prompt Hint</label>
+                    <input type="text" id="form-hint" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all" placeholder="Strategic prompt clue helper...">
                 </div>
                 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">System Reference Screenshot URL (Optional)</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Optional Illustration Asset URL</label>
                     <div class="flex gap-2">
-                        <input type="url" id="form-image-url" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all" placeholder="https://example.com/airclass-ui-help...">
+                        <input type="url" id="form-image-url" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:border-[#0066CC] focus:bg-white transition-all" placeholder="https://images.unsplash.com/photo-example...">
                         <button type="button" onclick="testFormImage()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs px-3 rounded-xl transition-all border border-slate-200 cursor-pointer">Verify</button>
                     </div>
                     <div id="form-image-preview-container" class="hidden mt-3 p-2 bg-slate-50 border border-slate-100 rounded-xl max-h-24 justify-center items-center overflow-hidden">
-                        <img id="form-image-preview" src="" alt="Thumbnail Asset View" class="max-h-20 object-contain">
+                        <img id="form-image-preview" src="" alt="Thumbnail Resource View" class="max-h-20 object-contain">
                     </div>
                 </div>
                 
                 <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">
                     <button type="button" onclick="closeCardModal()" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-sm px-4 py-2 rounded-xl transition-all cursor-pointer">Cancel</button>
-                    <button type="submit" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-5 py-2 rounded-xl transition-all shadow-sm cursor-pointer">Save Item</button>
+                    <button type="submit" class="bg-[#0066CC] hover:bg-[#0052a3] text-white font-semibold text-sm px-5 py-2 rounded-xl transition-all shadow-sm cursor-pointer">Save Flashcard</button>
                 </div>
             </form>
         </div>
@@ -305,42 +304,28 @@
     </div>
 
     <script>
-        // --- PRE-POPULATED REALISTIC 51TALK / AIRCLASS PROBLEMS & FAQS ---
+        // --- SEED SELECTION DATA STORES ---
         let flashcards = [
             {
-                id: "faq-1",
-                question: "What is the correct procedure if a student does not show up at all during the first 15 minutes of an AC classroom session?",
-                answer: "1. Wait a full 15 minutes inside the AirClass classroom.\n2. Take a timestamped screenshot showing the total wait time.\n3. Open your MYPAGE profile and mark the student absent.\n4. Log the explicit reason: 'Student was not available and did not join for 15 minutes whatsoever'.\n5. Exit the class and dismiss the system's late leave warning.",
-                hint: "Ensure your screenshot clearly includes your computer desktop clock for timestamp validation.",
-                image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80"
+                id: "seed-1",
+                question: "What is the primary architectural goal of the REST design pattern?",
+                answer: "To establish a stateless, scalable, component-decoupled client-server architectural standard leveraging native HTTP protocols.",
+                hint: "Focuses on stateless operations and standardized HTTP resource matching.",
+                image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80"
             },
             {
-                id: "faq-2",
-                question: "How do I dismiss or clear the system's 'late leave warning' on AirClass when exiting an empty room?",
-                answer: "As long as you have logged a verified student absence on your MYPAGE portal and have passed the required 15-minute wait milestone with screenshot proof, you can manually dismiss the room warning when you hit the exit button without risking salary point penalties.",
-                hint: "Do not leave before minute 15, or the system log triggers a Teacher Absence instead.",
+                id: "seed-2",
+                question: "Explain the spatial computational Big O complexity of standard Binary Search.",
+                answer: "Iterative approaches hold O(1) auxiliary constant spatial scale complexity; recursive variations track O(log n) stack memory frame mapping requirements.",
+                hint: "Differentiate explicit tracking variables from standard execution runtime system call stacks.",
                 image: ""
             },
             {
-                id: "faq-3",
-                question: "What should a new teacher do if an AirClass lesson encounters an unexpected audio/video lag mid-class?",
-                answer: "1. Immediately click the 'Line Switch' optimization option on the top control ribbon.\n2. Switch between available servers (Line 1, Line 2, or Line 3).\n3. If it persists, use the internal Chat tool to verify if the student can hear you, and report a platform ticket if it is a local AC node failure.",
-                hint: "Line switching refreshes your WebRTC connection stream without force-rebooting the client.",
-                image: "https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                id: "faq-4",
-                question: "What is the critical rule for completing MYPAGE class evaluation summaries after a finished 51Talk lesson?",
-                answer: "Evaluation forms must be filed via your MYPAGE dashboard within a maximum of 2 hours post-lesson. Failing to log structural performance notes on time changes the status code and impacts your overall month-end platform performance score.",
-                hint: "Keep structural notes templates handy to fill out level achievements quickly.",
-                image: ""
-            },
-            {
-                id: "faq-5",
-                question: "What should I do if a student is bored and the core lesson material is visibly too easy for them during an FT session?",
-                answer: "1. Switch materials yourself if the platform allows it.\n2. If locked, introduce 'Phonics Distinction Expansion': Explain how a single letter sound completely alters a word's meaning. Use contrasting minimal pairs: bin vs. pin, bark vs. park, bond vs. pond, back vs. pack.\n3. If material is fully covered, transition to Syllable Blending: Blend sounds with advanced target words (paper, pepper, publish, public, five, fever, favorite).\n4. Build Contextual Sentences: Practice conversational flows like 'Have fun!', 'Five fish', 'I have a fever', 'I go to the park', or 'A big panda'.\n5. Final Tier Extension: If time remains, teach vocal variations like advanced vowels or complex digraph patterns (/th/, /sh/, /ch/).",
-                hint: "Extension prevents class dead-air while ensuring high pacing marks on user evaluation reviews.",
-                image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80"
+                id: "seed-3",
+                question: "What specific operational issue does Acid Compliance isolation protect databases against?",
+                answer: "Concurrently running state transactions colliding or cross-contaminating, avoiding phantom data reads and computational overwrite conflicts.",
+                hint: "Think about multiple users modifying the exact same balance field at the exact same millisecond.",
+                image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=600&q=80"
             }
         ];
 
@@ -363,24 +348,25 @@
         });
 
         function loadPersistedData() {
-            const data = localStorage.getItem("teacher_hub_decks");
+            const data = localStorage.getItem("studysphere_decks");
             if (data) {
                 try {
                     flashcards = JSON.parse(data);
                 } catch(e) {
-                    showToast("Failed to parse local training data stores.", "error");
+                    showToast("Failed to parse local deck archive repository data stores.", "error");
                 }
             }
         }
 
         function persistData() {
-            localStorage.setItem("teacher_hub_decks", JSON.stringify(flashcards));
+            localStorage.setItem("studysphere_decks", JSON.stringify(flashcards));
         }
 
-        // --- SYSTEM VIEW CORE ROUTER ---
+        // --- CORE APPLICATION VIEW STATE ENGINE ROUTER ---
         function switchMode(targetMode) {
             currentMode = targetMode;
             
+            // UI Toggle Control Selection CSS Switch
             ['edit', 'play', 'quiz'].forEach(mode => {
                 const btn = document.getElementById(`btn-mode-${mode}`);
                 const view = document.getElementById(`view-${mode}`);
@@ -394,12 +380,13 @@
                 }
             });
 
+            // Initialize views with proper scoped operational sub-states
             if (targetMode === 'edit') renderEditWorkspace();
             if (targetMode === 'play') initPlaySession();
             if (targetMode === 'quiz') initQuizSession();
         }
 
-        // --- TOAST NOTIFICATIONS DISPATCH ---
+        // --- TOAST NOTIFICATION LAYER DISPATCH ENGINE ---
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -423,17 +410,19 @@
             
             container.appendChild(toast);
             
+            // Smooth entrance framing transition timeout handles
             setTimeout(() => {
                 toast.classList.remove('translate-x-20', 'opacity-0');
             }, 10);
             
+            // Automatic exit self cleanup sequences
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-x-10');
                 setTimeout(() => toast.remove(), 300);
             }, 3500);
         }
 
-        // --- REPOSITORY LIST LOGIC ---
+        // --- EDIT MODE BUSINESS CONTROL LAYER LOGIC ---
         function renderEditWorkspace() {
             const grid = document.getElementById('card-grid');
             const emptyState = document.getElementById('edit-empty-state');
@@ -452,24 +441,29 @@
                 item.innerHTML = `
                     <div class="space-y-3">
                         <div class="flex justify-between items-start gap-2">
-                            <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase bg-slate-100 px-2 py-0.5 rounded-md">Topic Ref: ${card.id.toString()}</span>
+                            <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase bg-slate-100 px-2 py-0.5 rounded-md">Card ID: ${card.id.toString().substring(0,6)}</span>
                             <div class="opacity-80 sm:opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity duration-150">
-                                <button onclick="openCardModal('${card.id}')" class="p-1.5 text-slate-500 hover:text-[#0066CC] rounded-md hover:bg-slate-50 transition-colors cursor-pointer" title="Edit Content">
+                                <button onclick="openCardModal('${card.id}')" class="p-1.5 text-slate-500 hover:text-[#0066CC] rounded-md hover:bg-slate-50 transition-colors cursor-pointer" title="Edit Card Parameters">
                                     <i class="fa-solid fa-pen text-xs"></i>
                                 </button>
-                                <button onclick="deleteCard('${card.id}')" class="p-1.5 text-slate-500 hover:text-rose-600 rounded-md hover:bg-slate-50 transition-colors cursor-pointer" title="Remove Entry">
+                                <button onclick="deleteCard('${card.id}')" class="p-1.5 text-slate-500 hover:text-rose-600 rounded-md hover:bg-slate-50 transition-colors cursor-pointer" title="Delete Card Permanently">
                                     <i class="fa-solid fa-trash-can text-xs"></i>
                                 </button>
                             </div>
                         </div>
                         <div class="space-y-1">
-                            <h4 class="text-xs font-bold uppercase tracking-wide text-amber-600"><i class="fa-solid fa-circle-question mr-1"></i>Problem Scenario / FAQ</h4>
+                            <h4 class="text-xs font-bold uppercase tracking-wide text-slate-400">Question Context</h4>
                             <p class="text-sm font-semibold text-slate-800 line-clamp-3">${escapeHtml(card.question)}</p>
                         </div>
                         <div class="space-y-1 pt-1 border-t border-slate-50">
-                            <h4 class="text-xs font-bold uppercase tracking-wide text-emerald-600"><i class="fa-solid fa-shield-halved mr-1"></i>Official Protocol Solution</h4>
-                            <p class="text-xs text-slate-600 line-clamp-4 whitespace-pre-line">${escapeHtml(card.answer)}</p>
+                            <h4 class="text-xs font-bold uppercase tracking-wide text-slate-400">Answer Key Solution</h4>
+                            <p class="text-sm text-slate-600 line-clamp-3">${escapeHtml(card.answer)}</p>
                         </div>
+                        ${card.image ? `
+                            <div class="mt-2 h-20 w-full overflow-hidden rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center">
+                                <img src="${card.image}" alt="Card context visual thumbnail asset" class="h-full object-contain w-full">
+                            </div>
+                        ` : ''}
                     </div>
                 `;
                 grid.appendChild(item);
@@ -477,15 +471,15 @@
         }
 
         function deleteCard(id) {
-            if(confirm("Confirm removing this entry? This actions updates your localized study data model.")) {
+            if(confirm("Confirm removal parameters? This continuous operation drops the card data array record permanently.")) {
                 flashcards = flashcards.filter(c => c.id !== id);
                 persistData();
                 renderEditWorkspace();
-                showToast("Training scenario discarded cleanly.", "success");
+                showToast("Target flashcard deleted efficiently.", "success");
             }
         }
 
-        // --- FORM ACTION HANDLERS ---
+        // --- FORM DATA PROCESSING MODAL CONTROL INTERFACES ---
         function openCardModal(id = null) {
             const modal = document.getElementById('modal-card');
             const box = document.getElementById('modal-card-box');
@@ -495,7 +489,7 @@
             if (id) {
                 const card = flashcards.find(c => c.id === id);
                 if (card) {
-                    document.getElementById('modal-title').innerText = "Edit Training Entry Parameters";
+                    document.getElementById('modal-title').innerText = "Modify Flashcard Metrics";
                     document.getElementById('form-card-id').value = card.id;
                     document.getElementById('form-question').value = card.question;
                     document.getElementById('form-answer').value = card.answer;
@@ -508,19 +502,23 @@
                     }
                 }
             } else {
-                document.getElementById('modal-title').innerText = "Add New Support FAQ Card";
+                document.getElementById('modal-title').innerText = "Create New Flashcard Reference Entry";
                 document.getElementById('form-card-id').value = '';
             }
             
             modal.classList.remove('hidden');
-            setTimeout(() => { box.classList.remove('scale-95', 'opacity-0'); }, 50);
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+            }, 50);
         }
 
         function closeCardModal() {
             const modal = document.getElementById('modal-card');
             const box = document.getElementById('modal-card-box');
             box.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => { modal.classList.add('hidden'); }, 250);
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
         }
 
         function testFormImage() {
@@ -529,41 +527,63 @@
             const preview = document.getElementById('form-image-preview');
             
             if (!url) {
-                showToast("Please supply a functional image asset reference link.", "error");
+                showToast("Please provide a valid URL endpoint value first.", "error");
+                container.classList.add('hidden');
                 return;
             }
+            
             preview.src = url;
             container.classList.remove('hidden');
+            showToast("Asset URL loaded to local buffer framework testing pipeline.", "info");
         }
 
         function saveCardForm(event) {
             event.preventDefault();
+            
             const id = document.getElementById('form-card-id').value;
             const question = document.getElementById('form-question').value.trim();
             const answer = document.getElementById('form-answer').value.trim();
             const hint = document.getElementById('form-hint').value.trim();
             const image = document.getElementById('form-image-url').value.trim();
             
+            if (!question || !answer) {
+                showToast("Please fully resolve mandatory explicit schema values context fields.", "error");
+                return;
+            }
+            
             if (id) {
-                const idx = flashcards.findIndex(c => c.id === id);
-                if (idx !== -1) flashcards[idx] = { id, question, answer, hint, image };
+                // Update configuration path matching matching
+                const cardIndex = flashcards.findIndex(c => c.id === id);
+                if (cardIndex !== -1) {
+                    flashcards[cardIndex] = { id, question, answer, hint, image };
+                    showToast("Flashcard updated successfully.", "success");
+                }
             } else {
-                flashcards.push({ id: "faq-" + Date.now(), question, answer, hint, image });
+                // Instantiation execution parsing pathways
+                const newCard = {
+                    id: "card-" + Date.now(),
+                    question,
+                    answer,
+                    hint,
+                    image
+                };
+                flashcards.push(newCard);
+                showToast("New dynamic flashcard item successfully structured.", "success");
             }
             
             persistData();
             closeCardModal();
             renderEditWorkspace();
-            showToast("System knowledge registry updated cleanly.", "success");
         }
 
-        // --- PLAY MODE MODULE ENGINE ---
+        // --- PLAY MODE RUNTIME SUBSYSTEM ENGINE ---
         function initPlaySession() {
             if (flashcards.length === 0) {
                 switchMode('edit');
-                showToast("Populate operational decks prior to executing training tasks.", "error");
+                showToast("Populate operational decks prior to executing Play sessions.", "error");
                 return;
             }
+            
             activePlayDeck = [...flashcards];
             playIndex = 0;
             resetCardFlipState();
@@ -571,6 +591,7 @@
         }
 
         function shufflePlayDeck() {
+            // Fisher-Yates array shuffling sorting implementation pattern
             for (let i = activePlayDeck.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [activePlayDeck[i], activePlayDeck[j]] = [activePlayDeck[j], activePlayDeck[i]];
@@ -578,38 +599,47 @@
             playIndex = 0;
             resetCardFlipState();
             syncPlayCardState();
-            showToast("Review scenario array mixed.", "success");
+            showToast("Play Session deck values shuffled cleanly.", "success");
         }
 
         function resetCardFlipState() {
             isCardFlipped = false;
-            document.getElementById('play-card').classList.remove('rotate-y-180');
+            const el = document.getElementById('play-card');
+            if(el) el.classList.remove('rotate-y-180');
         }
 
         function toggleCardFlip() {
             isCardFlipped = !isCardFlipped;
             const el = document.getElementById('play-card');
-            if (isCardFlipped) el.classList.add('rotate-y-180');
-            else el.classList.remove('rotate-y-180');
+            if (isCardFlipped) {
+                el.classList.add('rotate-y-180');
+            } else {
+                el.classList.remove('rotate-y-180');
+            }
         }
 
         function togglePlayHint(event) {
-            event.stopPropagation();
-            document.getElementById('play-hint-text').classList.toggle('hidden');
+            event.stopPropagation(); // Block parent execution block flip interactions triggering concurrently
+            const hintBox = document.getElementById('play-hint-text');
+            hintBox.classList.toggle('hidden');
         }
 
         function syncPlayCardState() {
             const total = activePlayDeck.length;
             const currentCard = activePlayDeck[playIndex];
             
-            document.getElementById('play-progress-text').innerText = `${playIndex + 1} / ${total} Scenarios`;
+            // Progress Bar computation pipelines
+            document.getElementById('play-progress-text').innerText = `${playIndex + 1} / ${total} Cards`;
             document.getElementById('play-progress-bar').style.width = `${((playIndex + 1) / total) * 100}%`;
             
+            // Context injection processing elements maps
             document.getElementById('play-question-text').innerText = currentCard.question;
             document.getElementById('play-answer-text').innerText = currentCard.answer;
             
+            // Hint availability management state configurations
             const hintBtn = document.getElementById('play-hint-btn');
-            document.getElementById('play-hint-text').classList.add('hidden');
+            const hintBox = document.getElementById('play-hint-text');
+            hintBox.classList.add('hidden'); // Close open hints upon card changes
             
             if (currentCard.hint) {
                 hintBtn.classList.remove('hidden');
@@ -618,15 +648,20 @@
                 hintBtn.classList.add('hidden');
             }
             
+            // Graphics pipeline configurations handling
             const imgContainer = document.getElementById('play-front-image-container');
             const img = document.getElementById('play-front-img');
             if (currentCard.image) {
                 img.src = currentCard.image;
-                imgContainer.className = "w-full max-h-32 mb-2 flex justify-center items-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50";
+                imgContainer.classList.remove('hidden');
+                imgContainer.classList.add('flex');
             } else {
-                imgContainer.className = "hidden";
+                imgContainer.classList.add('hidden');
+                imgContainer.classList.remove('flex');
+                img.src = '';
             }
             
+            // Controls states enabling configurations
             document.getElementById('btn-play-prev').disabled = (playIndex === 0);
             document.getElementById('btn-play-next').disabled = (playIndex === total - 1);
         }
@@ -635,6 +670,7 @@
             const newIndex = playIndex + direction;
             if (newIndex >= 0 && newIndex < activePlayDeck.length) {
                 resetCardFlipState();
+                // Allow completion buffer room execution frame intervals prior tracking content adjustments
                 setTimeout(() => {
                     playIndex = newIndex;
                     syncPlayCardState();
@@ -642,14 +678,17 @@
             }
         }
 
-        // --- QUIZ COMPETENCY SCORING SUBSYSTEM ---
+        // --- QUIZ EVALUATION ASSESSMENT SUBSYSTEM ENGINE ---
         function initQuizSession() {
             if (flashcards.length === 0) {
                 switchMode('edit');
+                showToast("Ensure active elements population array limits before operating interactive testing systems.", "error");
                 return;
             }
             
+            // Set configuration array structures tracking clone maps
             quizDeck = [...flashcards];
+            // Enforce shuffle upon active configuration instance creations
             for (let i = quizDeck.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [quizDeck[i], quizDeck[j]] = [quizDeck[j], quizDeck[i]];
@@ -657,36 +696,47 @@
             
             quizIndex = 0;
             quizScore = 0;
+            
             document.getElementById('quiz-summary-panel').classList.add('hidden');
             document.getElementById('quiz-active-panel').classList.remove('hidden');
+            
             renderQuizQuestion();
         }
 
         function resetQuiz() {
             initQuizSession();
+            showToast("Quiz evaluation matrix cleanly reinitialized.", "info");
         }
 
         function renderQuizQuestion() {
             isQuizAnswerEvaluated = false;
             quizSelectedAnswer = null;
+            
             document.getElementById('btn-quiz-next').disabled = true;
             
             const total = quizDeck.length;
             const card = quizDeck[quizIndex];
             
-            document.getElementById('quiz-progress-text').innerText = `${quizIndex + 1} / ${total} Scenarios`;
+            // UI tracking markers updates mapping
+            document.getElementById('quiz-progress-text').innerText = `${quizIndex + 1} / ${total} Questions`;
             document.getElementById('quiz-progress-bar').style.width = `${((quizIndex + 1) / total) * 100}%`;
-            document.getElementById('quiz-live-score').innerHTML = `<i class="fa-solid fa-square-check mr-1"></i> Correct: ${quizScore}`;
+            document.getElementById('quiz-live-score').innerHTML = `<i class="fa-solid fa-square-check mr-1"></i> Score: ${quizScore}`;
+            
             document.getElementById('quiz-question-text').innerText = card.question;
             
+            // Image evaluation processing parameters mapping
             const imgContainer = document.getElementById('quiz-image-container');
+            const img = document.getElementById('quiz-img');
             if (card.image) {
-                document.getElementById('quiz-img').src = card.image;
+                img.src = card.image;
                 imgContainer.classList.remove('hidden');
+                imgContainer.classList.add('flex');
             } else {
                 imgContainer.classList.add('hidden');
+                imgContainer.classList.remove('flex');
             }
             
+            // Dynamic multiple choice option generator maps pipelines
             generateQuizOptions(card);
         }
 
@@ -694,39 +744,60 @@
             const container = document.getElementById('quiz-options-container');
             container.innerHTML = '';
             
-            let alternatives = flashcards.filter(c => c.id !== correctCard.id).map(c => c.answer);
-            alternatives = [...new Set(alternatives)];
-            
-            let choices = alternatives.slice(0, 2);
-            choices.push(correctCard.answer);
-            
-            if (choices.length < 3) {
-                choices.push("Immediately cancel the class segment manually inside your teacher console and notify the emergency tech hotline.");
-            }
-            
-            for (let i = choices.length - 1; i > 0; i--) {
+            // Seed processing pools pulling alternatives matching values
+            let alternatives = flashcards
+                .filter(c => c.id !== correctCard.id)
+                .map(c => c.answer);
+                
+            // Shuffle and pull distinct wrong matching options configuration values instances limits
+            alternatives = [...new Set(alternatives)]; // Deduplicate validation items values array metrics
+            for (let i = alternatives.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [choices[i], choices[j]] = [choices[j], choices[i]];
+                [alternatives[i], alternatives[j]] = [alternatives[j], alternatives[i]];
             }
             
-            choices.forEach((optText, idx) => {
+            // Extract distinct wrong answers (up to 3)
+            let selectedOptions = alternatives.slice(0, 3);
+            selectedOptions.push(correctCard.answer);
+            
+            // Final reshuffling block execution mapping arrays mix sorting passes
+            for (let i = selectedOptions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [selectedOptions[i], selectedOptions[j]] = [selectedOptions[j], selectedOptions[i]];
+            }
+            
+            // Materialize HTML options buttons
+            selectedOptions.forEach((optionText, idx) => {
                 const btn = document.createElement('button');
                 btn.type = "button";
-                btn.onclick = () => selectQuizOption(idx, optText);
-                btn.className = "quiz-opt-btn w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-medium text-[11px] transition-all flex items-center justify-between shadow-sm cursor-pointer";
+                btn.onclick = () => selectQuizOption(idx, optionText);
+                btn.className = "quiz-opt-btn w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 font-medium text-sm transition-all duration-150 flex items-center justify-between group cursor-pointer shadow-sm";
                 btn.innerHTML = `
-                    <span class="opt-text text-slate-700 leading-relaxed">${escapeHtml(optText)}</span>
-                    <span class="opt-status-icon text-slate-300"><i class="fa-regular fa-circle"></i></span>
+                    <span class="opt-text text-slate-700">${escapeHtml(optionText)}</span>
+                    <span class="opt-status-icon text-slate-300 group-hover:text-slate-400"><i class="fa-regular fa-circle text-xs"></i></span>
                 `;
                 container.appendChild(btn);
             });
         }
 
         function selectQuizOption(selectedIndex, optionText) {
-            if (isQuizAnswerEvaluated) return;
+            if (isQuizAnswerEvaluated) return; // Freeze user changes following evaluation
+            
             quizSelectedAnswer = optionText;
             
             const buttons = document.querySelectorAll('.quiz-opt-btn');
+            buttons.forEach((btn, idx) => {
+                const iconContainer = btn.querySelector('.opt-status-icon');
+                if (idx === selectedIndex) {
+                    btn.className = "quiz-opt-btn w-full text-left p-4 rounded-xl border-2 border-[#0066CC] bg-blue-50/40 font-semibold text-sm transition-all flex items-center justify-between shadow-sm";
+                    iconContainer.innerHTML = '<i class="fa-solid fa-circle-dot text-[#0066CC]"></i>';
+                } else {
+                    btn.className = "quiz-opt-btn w-full text-left p-4 rounded-xl border border-slate-200 bg-white opacity-60 font-medium text-sm transition-all flex items-center justify-between shadow-sm";
+                    iconContainer.innerHTML = '<i class="fa-regular fa-circle text-slate-300 text-xs"></i>';
+                }
+            });
+            
+            // Execute automated processing pipeline steps immediately following configuration selection adjustments
             evaluateQuizAnswer(buttons);
         }
 
@@ -737,58 +808,90 @@
             
             if (targetIsCorrect) {
                 quizScore++;
-                showToast("Correct operational decision mapped!", "success");
+                showToast("Splendid response selection! That matching resolution parameter is correct.", "success");
             } else {
-                showToast("Warning: Misunderstanding system policies can lead to structural score reductions.", "error");
+                showToast("Incorrect answer matching resolution configuration alignment state.", "error");
             }
             
+            // Repaint layouts colors metrics matching response configurations properties
             buttons.forEach(btn => {
                 const txt = btn.querySelector('.opt-text').innerText;
                 const iconContainer = btn.querySelector('.opt-status-icon');
                 
                 if (txt === correctSolution) {
-                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/60 font-bold text-[11px] flex items-center justify-between shadow-sm";
-                    iconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i>';
+                    // Always paint accuracy target metrics clear green matching boundaries maps
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/60 font-bold text-sm transition-all flex items-center justify-between shadow-sm";
+                    iconContainer.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>';
                 } else if (txt === quizSelectedAnswer && !targetIsCorrect) {
-                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50/60 font-medium text-[11px] flex items-center justify-between shadow-sm";
-                    iconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600"></i>';
+                    // Paint wrong selected configuration states deep red
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50/60 font-medium text-sm transition-all flex items-center justify-between shadow-sm";
+                    iconContainer.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600 text-base"></i>';
                 } else {
-                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-100 bg-slate-50/40 opacity-40 text-[11px] flex items-center justify-between cursor-not-allowed";
+                    // Fade standard unselected matching parameter structures
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-100 bg-slate-50/40 opacity-40 text-sm flex items-center justify-between cursor-not-allowed";
+                    iconContainer.innerHTML = '<i class="fa-regular fa-circle text-slate-200 text-xs"></i>';
                 }
             });
             
+            document.getElementById('quiz-live-score').innerHTML = `<i class="fa-solid fa-square-check mr-1"></i> Score: ${quizScore}`;
             document.getElementById('btn-quiz-next').disabled = false;
         }
 
         function advanceQuiz() {
-            if (quizIndex < quizDeck.length - 1) {
+            const total = quizDeck.length;
+            if (quizIndex < total - 1) {
                 quizIndex++;
                 renderQuizQuestion();
             } else {
+                // Terminate deployment evaluation pipeline processing parameters showing evaluation matrix charts
                 document.getElementById('quiz-active-panel').classList.add('hidden');
-                document.getElementById('summary-score-ratio').innerText = `${quizScore} / ${quizDeck.length}`;
-                document.getElementById('summary-score-pct').innerText = `${Math.round((quizScore / quizDeck.length) * 100)}%`;
+                
+                const ratio = `${quizScore} / ${total}`;
+                const pct = `${Math.round((quizScore / total) * 100)}%`;
+                
+                document.getElementById('summary-score-ratio').innerText = ratio;
+                document.getElementById('summary-score-pct').innerText = pct;
+                
                 document.getElementById('quiz-summary-panel').classList.remove('hidden');
+                showToast("Comprehensive score tracking data compiled successfully.", "success");
             }
         }
 
-        // --- EXTRA MODAL UTILS ---
+        // --- GLOBAL AUXILIARY LIGHTBOX INTERACTION OVERLAYS ---
         function openImagePreview(src) {
             const modal = document.getElementById('modal-image');
-            document.getElementById('lightbox-img').src = src;
+            const box = document.getElementById('modal-image-box');
+            const img = document.getElementById('lightbox-img');
+            
+            img.src = src;
             modal.classList.remove('hidden');
-            setTimeout(() => { document.getElementById('modal-image-box').classList.remove('scale-95', 'opacity-0'); }, 50);
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+            }, 50);
         }
 
         function closeImagePreview() {
-            document.getElementById('modal-image-box').classList.add('scale-95', 'opacity-0');
-            setTimeout(() => { document.getElementById('modal-image').classList.add('hidden'); }, 250);
+            const modal = document.getElementById('modal-image');
+            const box = document.getElementById('modal-image-box');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
         }
 
-        function stopPropagation(e) { e.stopPropagation(); }
+        // --- CORE PROTECTION UTILITY UTILS SANITIZERS ---
+        function stopPropagation(e) {
+            e.stopPropagation();
+        }
+
         function escapeHtml(str) {
             if (!str) return '';
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
     </script>
 </body>
