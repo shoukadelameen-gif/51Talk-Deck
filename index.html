@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <button onclick="generateSyncUrl()" id="sync-share-btn" class="hidden px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
+                <button onclick="generateSyncUrl()" id="sync-share-btn" class="flex px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 transition-all items-center gap-1.5 cursor-pointer shadow-sm">
                     <i class="fa-solid fa-link"></i> 🔗 Copy Team Sync Link
                 </button>
                 <button onclick="showHome()" id="back-home-btn" class="hidden px-4 py-2 bg-slate-100 hover:bg-[#0066CC] hover:text-white text-slate-700 text-xs font-bold rounded-xl border border-slate-200/60 transition-all duration-200 items-center gap-2 shadow-sm cursor-pointer transform active:scale-95">
@@ -229,7 +229,6 @@
                     const decodedData = JSON.parse(decodeURIComponent(atob(incomingData)));
                     database = decodedData;
                     localStorage.setItem('readiness_deck_db', JSON.stringify(database));
-                    // Remove the ugly URL query parameters clutter
                     window.history.replaceState({}, document.title, window.location.pathname);
                     alert("✨ Team sync successful! New scenarios loaded and saved perfectly.");
                 } catch (e) {
@@ -241,7 +240,6 @@
         function syncDatabaseToLocalStorage() {
             localStorage.setItem('readiness_deck_db', JSON.stringify(database));
             updatePillarBadgeCounters();
-            document.getElementById('sync-share-btn').classList.replace('hidden', 'flex');
         }
 
         function generateSyncUrl() {
@@ -250,12 +248,12 @@
             
             navigator.clipboard.writeText(syncUrl).then(() => {
                 const btn = document.getElementById('sync-share-btn');
-                btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Link Copied! Send it now`;
-                btn.className = "px-3 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-md";
+                btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Link Copied!`;
+                btn.className = "flex px-3 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl transition-all items-center gap-1.5 cursor-pointer shadow-md";
                 setTimeout(() => {
                     btn.innerHTML = `<i class="fa-solid fa-link"></i> Copy Team Sync Link`;
-                    btn.className = "px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm";
-                }, 4000);
+                    btn.className = "flex px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200 transition-all items-center gap-1.5 cursor-pointer shadow-sm";
+                }, 3000);
             });
         }
 
