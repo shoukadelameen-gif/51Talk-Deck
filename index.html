@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms. Shouq 51talk | Operational Support Suite</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0px); } }
+        @keyframes pulseSoft { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.03); opacity: 0.9; } }
+        .animate-slideup { animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade { animation: fadeIn 0.3s ease-out forwards; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .illustration-pulse { animation: pulseSoft 4s ease-in-out infinite; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
+
+    <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40 backdrop-blur-md bg-white/90">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3.5 group">
+                <div class="bg-[#FFCC00] text-slate-900 font-black text-lg px-3 py-1.5 rounded-xl shadow-md shadow-amber-400/20 tracking-tighter transition-transform group-hover:scale-105 flex items-center justify-center gap-1 border border-amber-300">
+                    <span class="text-xl">51</span><span class="text-sm bg-slate-900 text-[#FFCC00] px-1 rounded">Talk</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight text-slate-900">Ms. Shouq | Teacher Readiness Deck</h1>
+                    <p class="text-xs text-slate-500 font-semibold tracking-wide">Interactive Troubleshooting Creator Suite</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="exportDatabaseJSON()" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-200 transition-all flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-download"></i> Get Code Data
+                </button>
+                <button onclick="showHome()" id="back-home-btn" class="hidden px-4 py-2 bg-slate-100 hover:bg-[#0066CC] hover:text-white text-slate-700 text-xs font-bold rounded-xl border border-slate-200/60 transition-all duration-200 items-center gap-2 shadow-sm cursor-pointer transform active:scale-95">
+                    <i class="fa-solid fa-house-chimney"></i> Back to Pillars
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-6xl w-full mx-auto px-6 py-10 flex flex-col justify-center">
+        
+        <section id="view-home" class="space-y-10 animate-fade">
+            <div class="text-center max-w-2xl mx-auto space-y-4">
+                <div class="inline-flex items-center gap-2.5 px-4 py-2 bg-amber-50 border border-amber-200 rounded-full text-slate-800 text-xs font-bold tracking-wide shadow-sm mb-2">
+                    <div class="bg-[#FFCC00] text-slate-900 font-black px-2 py-0.5 rounded text-[11px] tracking-tighter">LIVE</div>
+                    <span>Team Synchronized Portal</span>
+                </div>
+                <h2 class="text-3xl font-black text-slate-900 tracking-tight sm:text-4xl">Select an Operational Pillar</h2>
+                <p class="text-sm sm:text-base text-slate-500 leading-relaxed">Choose a functional category below to interact with case blueprints, update workflows, or insert personalized teaching rules.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto pt-4">
+                <div onclick="selectPillar('pillar-1')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-red-50/20 border border-slate-200/80 hover:border-red-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner"><i class="fa-solid fa-display text-xl"></i></div>
+                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 1</h3>
+                        <p class="text-xs text-red-600 font-bold uppercase tracking-wider mb-2">Technical Issues</p>
+                        <p class="text-xs text-slate-400 font-medium leading-relaxed">App exceptions, hardware failures, lagging systems, and critical refresh protocols.</p>
+                    </div>
+                    <div id="count-pillar-1" class="text-[11px] font-bold text-slate-400 group-hover:text-red-600 transition-colors flex items-center gap-1 mt-4">Scenarios <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <div onclick="selectPillar('pillar-2')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-amber-50/20 border border-slate-200/80 hover:border-amber-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner"><i class="fa-solid fa-business-time text-xl"></i></div>
+                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 2</h3>
+                        <p class="text-xs text-amber-600 font-bold uppercase tracking-wider mb-2">Attendance Traps</p>
+                        <p class="text-xs text-slate-400 font-medium leading-relaxed">Time-zone matrices, scheduling limits, missing markers, and short-notice rules.</p>
+                    </div>
+                    <div id="count-pillar-2" class="text-[11px] font-bold text-slate-400 group-hover:text-amber-600 transition-colors flex items-center gap-1 mt-4">Scenarios <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <div onclick="selectPillar('pillar-3')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-blue-50/20 border border-slate-200/80 hover:border-blue-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner"><i class="fa-solid fa-file-signature text-xl"></i></div>
+                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 3</h3>
+                        <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">Communication</p>
+                        <p class="text-xs text-slate-400 font-medium leading-relaxed">Lesson metrics, parent evaluations, formal legal evidence, and escalation tickets.</p>
+                    </div>
+                    <div id="count-pillar-3" class="text-[11px] font-bold text-slate-400 group-hover:text-blue-600 transition-colors flex items-center gap-1 mt-4">Scenarios <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <div onclick="selectPillar('pillar-4')" class="bg-white hover:bg-gradient-to-b hover:from-white hover:to-purple-50/20 border border-slate-200/80 hover:border-purple-300 rounded-2xl p-6 text-left transition-all duration-300 shadow-sm hover:shadow-md group cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between min-h-[220px]">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-inner"><i class="fa-solid fa-face-smile-beam text-xl"></i></div>
+                        <h3 class="font-extrabold text-slate-900 text-base tracking-tight mb-1">Pillar 4</h3>
+                        <p class="text-xs text-purple-600 font-bold uppercase tracking-wider mb-2">Teacher Rapport</p>
+                        <p class="text-xs text-slate-400 font-medium leading-relaxed">Student leveling mismatches, tracking time-outs, pacing gaps, and behavior tasks.</p>
+                    </div>
+                    <div id="count-pillar-4" class="text-[11px] font-bold text-slate-400 group-hover:text-purple-600 transition-colors flex items-center gap-1 mt-4">Scenarios <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-scenarios" class="hidden space-y-8 animate-slideup">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+                <div class="flex items-center gap-4">
+                    <div id="category-icon-container" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-sm"></div>
+                    <div>
+                        <span id="category-subtitle" class="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Ms. Shouq's Workspace</span>
+                        <h2 id="category-title" class="text-2xl font-black text-slate-900 tracking-tight">Pillar Title</h2>
+                    </div>
+                </div>
+                <button onclick="openFormModal(null)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer transform active:scale-95">
+                    <i class="fa-solid fa-circle-plus"></i> Add New Scenario
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="space-y-4 lg:col-span-4">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 px-1"><i class="fa-solid fa-folder-open text-slate-300"></i> High-Frequency Case List</span>
+                    <div id="scenarios-list-container" class="space-y-3 max-h-[580px] overflow-y-auto pr-2"></div>
+                </div>
+                <div class="lg:col-span-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm p-6 sm:p-8 min-h-[520px] flex flex-col justify-center relative overflow-hidden bg-gradient-to-br from-white to-slate-50/50">
+                    <div id="solution-content-block" class="w-full flex flex-col justify-center items-center">
+                        <div class="text-center space-y-6 max-w-sm py-12 my-auto animate-fade">
+                            <div class="relative w-40 h-40 mx-auto flex items-center justify-center">
+                                <div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div>
+                                <div class="absolute inset-4 bg-blue-50 rounded-full illustration-pulse"></div>
+                                <i class="fa-solid fa-hand-pointer text-5xl text-[#0066CC] relative z-10 animate-bounce"></i>
+                            </div>
+                            <h4 class="font-extrabold text-slate-800 text-base tracking-tight">Awaiting Case Selection</h4>
+                            <p class="text-xs text-slate-400 font-medium px-2">Click any problem case scenario from the left panel to immediately look up vector steps and instructions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="form-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm items-center justify-center p-4 animate-fade">
+        <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-slideup">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 id="modal-heading" class="text-sm font-black text-slate-900 uppercase tracking-wider">Configure Scenario Blueprint</h3>
+                <button onclick="closeFormModal()" class="text-slate-400 hover:text-slate-600 text-sm cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="scenario-form" onsubmit="saveScenarioData(event)" class="p-6 overflow-y-auto space-y-5 flex-1">
+                <input type="hidden" id="form-edit-index">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Scenario Display Title</label>
+                    <input type="text" id="form-title" required class="w-full border border-slate-200 p-3 rounded-xl text-xs focus:outline-none focus:border-indigo-500 bg-slate-50/50 font-medium">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Problem Definition Summary</label>
+                    <textarea id="form-problem" required rows="3" class="w-full border border-slate-200 p-3 rounded-xl text-xs focus:outline-none focus:border-indigo-500 bg-slate-50/50 font-medium leading-relaxed"></textarea>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Protocol Action Resolution Steps</label>
+                        <button type="button" onclick="appendStepInputField('')" class="text-[11px] font-black text-indigo-600 hover:text-indigo-800 flex items-center gap-0.5 cursor-pointer"><i class="fa-solid fa-plus-circle"></i> Add Step</button>
+                    </div>
+                    <div id="steps-inputs-container" class="space-y-2.5"></div>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="closeFormModal()" class="px-4 py-2 bg-slate-100 text-slate-600 text-xs font-bold rounded-xl cursor-pointer">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl cursor-pointer">Update Locally</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="export-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm items-center justify-center p-4 animate-fade">
+        <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-lg shadow-2xl p-6 space-y-4 animate-slideup">
+            <h3 class="text-base font-black text-slate-900 tracking-tight">Sync Changes to your Live Link</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Because this app runs live on GitHub, you can add or edit items dynamically below, copy the new database matrix configuration code, and replace the script dataset in GitHub to sync it globally for all your users.</p>
+            <textarea id="export-textarea" readonly class="w-full h-48 border border-slate-200 p-3 rounded-xl font-mono text-[11px] bg-slate-50 text-slate-700 select-all"></textarea>
+            <div class="flex justify-end gap-2">
+                <button onclick="document.getElementById('export-modal').classList.add('hidden')" class="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl cursor-pointer">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200/80 py-6 text-center text-xs font-semibold text-slate-400 tracking-wide">
+        Ms. Shouq's Onboarding Training Suite &copy; 2026. Actionable Platform Readiness Operations.
+    </footer>
+
+    <script>
+        // MASTER CENTRALIZED TEAM DATABASE MATRIX 
+        const defaultDatabase = {
+            "pillar-1": {
+                title: "Pillar 1: Technical Glitches",
+                iconClass: "fa-solid fa-display",
+                styleClasses: "bg-red-50 text-red-600 border-red-200",
+                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-red-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-red-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 relative z-10"></i></div>`,
+                scenarios: [
+                    { title: "App Crash / Screen Lag Loops", problem: "You experience unexpected client software crashes, severe interface freezing, or the classroom timer displays performance synchronization lag mid-class.", steps: ["<strong>Control Environment:</strong> Switch instantly to your designated <strong>backup mobile hotspot</strong> data line. Shut down all non-essential background windows draining bandwidth allocation.","<strong>Force Software Reset:</strong> Exit the platform frame immediately, execute a <strong>complete logout of AirClass (AC)</strong>, or trigger a swift system restart if hardware freezing persists.","<strong>The Leave-and-Re-enter Loophole:</strong> Pay no attention to <strong>automated system penalty warning banners</strong> during active troubleshooting runs; protection applies for verified technical loops.","<strong>Preserve Evidence:</strong> Capture immediate <strong>full-screen screenshots</strong> verifying runtime errors clearly showing your device's desktop clock.","<strong>File Incident Verification:</strong> Record the precise breakdown parameters and timing logs inside your <strong>post-class memo notes</strong> to secure your contract verification appeals."] },
+                    { title: "Microphone Malfunction / Audio Cutting Out", problem: "The student reports they cannot hear you, your hardware microphone input level bar isn't moving, or your sound turns off completely mid-class.", steps: ["<strong>Check App Permissions:</strong> Verify the class app's access to hardware devices. Re-select your external headset manually under <strong>Audio/Video Settings</strong>.","<strong>Hardware Re-plug Option:</strong> Physically unplug the USB or 3.5mm cable. Wait 3 seconds and firmly re-seat it to trigger system device recognition.","<strong>Change Audio Lines:</strong> Switch the live channel driver internally inside the software from <strong>Line A to Line B</strong> to manually sync data packets.","<strong>Hardware Bypass:</strong> If a dedicated headset remains completely unresponsive, quickly connect alternative <strong>wired earbuds</strong> to maintain instruction momentum."] },
+                    { title: "Student Side Audio/Video Failure", problem: "You can see the student but cannot hear them, or their webcam feed renders as a static black box while your local metrics are green.", steps: ["<strong>Use Elicitation Prompts:</strong> Type immediate interactive commands into the text chatbox (e.g., 'Please check your microphone setting' or 'Click the Refresh button').","<strong>Trigger Interface Reset:</strong> Use the teacher panel tools to click <strong>Refresh Lesson</strong> or toggle the student's personal media feed switches off and on.","<strong>Guide Device Selection:</strong> Direct the student (or their watching parent) to tap the native gear icon to verify their selected system input source.","<strong>Escalate to Tech Support:</strong> If the local freeze context is unresolved after 60 seconds, flag the room node immediately to platform support engineers."] },
+                    { title: "Sudden Power Dropouts / Local Blackouts", problem: "Local electrical grid power fails completely mid-session, shutting down your main monitor, desktop workstation, and home router router feeds.", steps: ["<strong>Deploy Standby Hardware:</strong> Immediately power on your pre-charged backup laptop or portable tablet device running the standalone mobile AC app.","<strong>Engage Local Hotspot:</strong> Wirelessly sync your mobile device data hotspot line within 45 seconds to re-establish a live platform connection.","<strong>Re-enter active classroom:</strong> Log back into the ongoing class module to minimize down-time metrics.","<strong>Document Force Majeure:</strong> Photograph the blackout area environment alongside a timestamped mobile device to build an official contract exception ticket."] },
+                    { title: "Interactive Lesson Tools Freezing", problem: "The interactive digital markers, digital drawing pens, rewards stamps, or slide selector components lock up completely, making student feedback impossible.", steps: ["<strong>Execute Slide Jumps:</strong> Input an explicit page step change into the index nav bar, then jump straight back to force an element redraw.","<strong>Clear Application Cache:</strong> Access the top menu settings tray and trigger a swift clear of temporary asset storage blocks.","<strong>Pivot to Oral Exercises:</strong> Avoid dead-air drops by shifting instantly to physical TPR movements, verbal drills, and structural conversation pacing.","<strong>Flag Slide Bugs:</strong> Drop a swift note into the operational system log identifying the exact page index numbers that triggered the tool crash."] }
+                ]
+            },
+            "pillar-2": {
+                title: "Pillar 2: Attendance Traps",
+                iconClass: "fa-solid fa-business-time",
+                styleClasses: "bg-amber-50 text-amber-600 border-amber-200",
+                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-amber-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-amber-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-business-time text-4xl text-amber-500 relative z-10"></i></div>`,
+                scenarios: [
+                    { title: "Local Time Zone Mismatch Errors", problem: "Incurring accidental late-entry penalty indicators due to timezone confusion between local Egypt time and Beijing headquarters timelines.", steps: ["<strong>Crosscheck Interface Schedules:</strong> Systematically monitor parameters across both your <strong>local Egypt AC calendar application</strong> and the master Beijing scheduling metrics on the <strong>MyPage portal</strong>.","<strong>Calculate the Time Shift:</strong> Perform deliberate zone translations mentally before slots freeze to prevent accidental missing session entries.","<strong>The 4-Minute Absence Window:</strong> Remember that arriving exactly <strong>4 minutes late changes metrics</strong> to an unreviewable, system-enforced <strong>Teacher Absence mark</strong>."] },
+                    { title: "Student No-Show (Waiting Protocol)", problem: "The classroom remains entirely empty when the session timer starts, with no indication of whether the student will log in late.", steps: ["<strong>Maintain Camera Presence:</strong> Keep your camera toggled on, stay clearly in frame, and wear your professional headset for the entire duration.","<strong>Execute the 15-Min Check:</strong> For standard 25-minute slots, you must remain active in the room until the 15:00 mark clicks by before exiting.","<strong>Capture Milestone Proof:</strong> Take crisp full-screen verification screenshots at 01:00, 08:00, and 15:00 showing the empty student slot and clock.","<strong>Verify No-Show Tagging:</strong> Double check that the automated system records the session status as 'Student No-Show' to guarantee your base payout rate."] },
+                    { title: "Short-Notice Booking Cancellations", problem: "An emergency trial or regular slot is booked or canceled right before the start time, leading to missed room entries.", steps: ["<strong>Lock Notification Sound Filters:</strong> Ensure your system portal alerts are turned up max so you hear booking sounds instantly.","<strong>Enforce the 1-Hour Refresh Rule:</strong> Manually reload your daily timeline schedule page 60 minutes before your first morning block starts.","<strong>Review Booking Lock Cutoffs:</strong> Treat any open slot inside a active window as a live class until the system cutoff timer explicitly releases it.","<strong>Claim System Cancellation Fees:</strong> Verify that late cancellations within the penalty buffer zone are properly credited to your account ledger."] },
+                    { title: "Accidental 'Late Entry' Flags", problem: "Entering the room exactly at 00:01 or experiencing a 10-second internet lag during entry that triggers an automated platform 'Late' penalty mark.", steps: ["<strong>Target the 3-Minute Buffer:</strong> Make it a strict habit to enter every single assigned classroom space exactly 3 minutes before the official start time.","<strong>Run Pre-Class Audio Checks:</strong> Use the lobby test module to verify your hardware configuration is clear before hitting the enter room trigger.","<strong>Log Entry Lag Context:</strong> If network routing delays your connection, save a screenshot of the loading progress wheel immediately.","<strong>Submit Appeals with Speed:</strong> Send your log files to support channels within 24 hours to overturn automated late flags."] },
+                    { title: "Emergency Cancellation Protocol", problem: "A sudden illness or urgent personal issue arises, requiring you to drop scheduled slots without triggering severe penalties.", steps: ["<strong>Submit the 2-Hour Notice:</strong> File your formal cancellation request through the admin dashboard at least 2 full hours before class starts.","<strong>Gather Medical/Utility Proof:</strong> Collect clear documentation, such as medical notes or local utility outage statements, as support evidence.","<strong>File an Official Ticket:</strong> Upload your gathered evidence files into the administrative portal under the 'Involuntary Absence' category.","<strong>Monitor Payout Adjustments:</strong> Review your monthly billing dashboard to ensure the penalty points are waived once your documentation is approved."] }
+                ]
+            },
+            "pillar-3": {
+                title: "Pillar 3: Communication Rules",
+                iconClass: "fa-solid fa-file-signature",
+                styleClasses: "bg-blue-50 text-blue-600 border-blue-200",
+                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-blue-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-file-invoice text-4xl text-blue-500 relative z-10"></i></div>`,
+                scenarios: [
+                    { title: "Memo Compliance & VIP Parents", problem: "Receiving low client ratings from generic feedback notes, or losing dispute cases due to a lack of sufficient structural audit records.", steps: ["<strong>Memos as Binding Legal Evidence:</strong> Log technical failures inside class notes to establish a clear <strong>audit trail for dispute pipelines</strong>.","<strong>Apply Goal + Evidence Framework:</strong> Replace repetitive boilerplate remarks with a <strong>two-sentence standard format</strong>:","<em>Sentence A (Target Objective):</em> State the precise target skill targeted (e.g., <strong>'Student successfully mastered conditional verb tenses.'</strong>).","<em>Sentence B (Live Evidence):</em> Insert measurable evidence of progress (e.g., <strong>'They correctly transformed three complex sentences during final drills.'</strong>)."] },
+                    { title: "Handling Negative Parent Reviews", problem: "A parent leaves an unexpected low rating or a complaint about class pacing, which threatens to lower your overall teacher performance metrics.", steps: ["<strong>Analyze Class Logs:</strong> Review the specific lesson recording to crosscheck the pacing metrics and student responses against the parent's feedback.","<strong>Draft a Professional Dispute:</strong> Write a calm, fact-based response outlining the exact activities and slide index targets met during the lesson.","<strong>Highlight Student Progress:</strong> Share specific examples of words the student read or rewards they earned to prove they were successfully engaged.","<strong>Submit Review Requests:</strong> Send your evidence to the evaluation team within 72 hours to request a removal of unfair ratings."] },
+                    { title: "Trial Lesson Conversion Optimization", problem: "New students in trial classes seem nervous or quiet, making it difficult to convert them into regular long-term bookings.", steps: ["<strong>Lead with Big Energy:</strong> Start the session with high-energy waves, a warm smile, and clear Total Physical Response (TPR) actions.","<strong>Simplify Prompt Patterns:</strong> Drop complex phrases for simple, actionable commands (e.g., replace 'Would you like to read?' with 'Look here, let's read!').","<strong>Give Constant Rewards:</strong> Hand out digital stars or use physical props every time the student tries to copy a sound or word.","<strong>Write Targeted Growth Path Notes:</strong> Use the lesson summary to tell parents exactly which advanced modules will help their child grow next."] },
+                    { title: "Reporting Classroom Behavioral Safety", problem: "A student shows completely inappropriate behavior or shares unsafe media during a live class stream, requiring immediate intervention.", steps: ["<strong>Turn Off Video and Audio:</strong> Instantly toggle off the student's media feeds using your teacher dashboard control buttons.","<strong>State Rules in Chat:</strong> Type a firm, professional reminder of classroom rules into the chat box for the student and parent to see.","<strong>Call Tech Support Live:</strong> Use the emergency room button to get an active admin moderator into the room right away.","<strong>Save Timestamped Proof:</strong> Take full screenshots of the incident and log a detailed safety report within the admin panel."] },
+                    { title: "Official Support Ticket Escalation", problem: "A pay error, student dispute, or tech issue is handled incorrectly by automated systems, requiring a manual human review.", steps: ["<strong>State Your Core Goal:</strong> Start your help ticket with a clear, direct subject line (e.g., 'Request to Overturn Absence Flag - Room #4920').","<strong>List Facts in Order:</strong> Write out what happened step-by-step using precise times, dates, and classroom ID numbers.","<strong>Attach Clean Evidence Files:</strong> Upload your matching screenshots, network logs, or video clip markers directly to the ticket.","<strong>Follow Up Regularly:</strong> Check the status of your ticket every 48 hours to add any new details requested by the review team."] }
+                ]
+            },
+            "pillar-4": {
+                title: "Pillar 4: Teacher Rapport",
+                iconClass: "fa-solid fa-face-smile-beam",
+                styleClasses: "bg-purple-50 text-purple-600 border-purple-200",
+                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-purple-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-purple-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-face-smile-beam text-4xl text-purple-500 relative z-10"></i></div>`,
+                scenarios: [
+                    { title: "Advanced Learners / Early Finish Gaps", problem: "An advanced student breezes through a 25-minute lesson blueprint inside of 15 minutes, leaving a 10-minute dead-air gap.", steps: ["<strong>Switch Course Selections:</strong> Alter active material pathways using <strong>classroom interface dropdown tools</strong> if accessible.","<strong>Phonics Distinction Drills:</strong> Introduce minimal phonetic sound pairings to highlight vocabulary nuance (e.g., bin/pin, bark/park).","<strong>Syllable Blending Challenges:</strong> Drill complex multisyllabic terms to analyze articulation boundaries (e.g., paper, pepper, publish)."] },
+                    { title: "Managing Quiet or Distracted Young Learners", problem: "A very young student (Level 1-2) refuses to look at the screen, cries, or is distracted by toys during the lesson.", steps: ["<strong>Use Eye-Catching Props:</strong> Hold colorful physical puppets or flashcards right up to your camera lens to grab their attention.","<strong>Use Dramatic Voices:</strong> Change your voice using high and low tones (acoustic variation) to make reading repetitive words fun.","<strong>Try Copycat Actions:</strong> Use big, playful arm movements (TPR) and ask the student to mirror your actions like a game.","<strong>Involve the Watching Parent:</strong> Politely ask the parent in the room to help guide the child's focus back to the current slide activity."] },
+                    { title: "Dealing with Level Mismatches", problem: "A student is placed in a class that is far too difficult for them, causing them to shut down because they cannot understand.", steps: ["<strong>Simplify Slide Content:</strong> Break down long sentences into single words or simple two-word phrases.","<strong>Provide Heavy Scaffolding:</strong> Read the words clearly first, then have the student repeat after you several times.","<strong>Use Visual Clues:</strong> Draw circles around picture elements on the slide to show the meaning of words without using complex rules.","<strong>Recommend a Level Change:</strong> Use the post-class feedback dashboard to officially suggest moving the student to a more comfortable level."] },
+                    { title: "Pacing Slow Learners Effectively", problem: "A student struggles with basic pronunciation, falling far behind the lesson pace and risking missing the last 10 slides.", steps: ["<strong>Pick Core Target Slides:</strong> Focus your energy on the main vocabulary and grammar pages, skipping repetitive review slides.","<strong>Set a 2-Minute Timer:</strong> Limit your time on any single tricky word to 120 seconds before moving forward to keep the lesson moving.","<strong>Use Shared Reading:</strong> Read the long parts yourself and have the student jump in just for the target vocabulary words.","<strong>Add Practice Reminders:</strong> Use the lesson notes to highlight the words they struggled with so they can practice them at home."] },
+                    { title: "Building Rapport with Quiet Adults", problem: "An adult conversation student gives short, one-word answers, causing discussions to stall out quickly.", steps: ["<strong>Ask Open-Ended Questions:</strong> Avoid simple 'yes/no' questions; instead, use prompts like 'Tell me about your favorite...' or 'What do you think about...'.","<strong>Share a Short Example:</strong> Share a quick, 15-second story from your own life first to break the ice and encourage them to share too.","<strong>Use Helpful Prompt Phrases:</strong> Keep conversations going by asking follow-up questions like 'Why do you feel that way?' or 'Can you tell me more?'.","<strong>Praise Their Input:</strong> Boost their speaking confidence by praising their vocabulary choices before correcting minor grammar errors."] }
+                ]
+            }
+        };
+
+        let database = JSON.parse(localStorage.getItem('readiness_deck_db')) || defaultDatabase;
+        let currentPillarKey = null;
+        let selectedBtnElement = null;
+
+        window.onload = function() { updatePillarBadgeCounters(); };
+        function syncDatabaseToLocalStorage() { localStorage.setItem('readiness_deck_db', JSON.stringify(database)); updatePillarBadgeCounters(); }
+        function updatePillarBadgeCounters() { Object.keys(database).forEach(key => { const countBadge = document.getElementById(`count-${key}`); if (countBadge) { const total = database[key].scenarios.length; countBadge.innerHTML = `${total} Active Blueprints <i class="fa-solid fa-angle-right ml-1"></i>`; } }); }
+
+        function selectPillar(pillarKey) {
+            currentPillarKey = pillarKey;
+            renderScenariosSidebarList();
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('back-home-btn').classList.replace('hidden', 'flex');
+            document.getElementById('view-scenarios').classList.remove('hidden');
+            resetDisplayPanelToStandby();
+        }
+
+        function renderScenariosSidebarList() {
+            const data = database[currentPillarKey];
+            document.getElementById('category-title').innerText = data.title;
+            const iconContainer = document.getElementById('category-icon-container');
+            iconContainer.className = `w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-inner ${data.styleClasses}`;
+            iconContainer.innerHTML = `<i class="${data.iconClass}"></i>`;
+            const listContainer = document.getElementById('scenarios-list-container');
+            listContainer.innerHTML = '';
+            
+            data.scenarios.forEach((scen, idx) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "w-full text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-xs text-slate-800 transition-all shadow-sm flex items-center justify-between group cursor-pointer animate-slideup select-none";
+                itemDiv.onclick = (e) => { if (!e.target.closest('.utility-trigger')) selectScenario(idx, itemDiv); };
+                itemDiv.innerHTML = `
+                    <span class="leading-snug pr-3 group-hover:text-indigo-600 transition-colors">${scen.title}</span>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="openFormModal(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-amber-100 text-slate-400 hover:text-amber-700 flex items-center justify-center text-[11px]" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteScenarioEntry(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-red-100 text-slate-400 hover:text-red-600 flex items-center justify-center text-[11px]" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+                listContainer.appendChild(itemDiv);
+            });
+        }
+
+        function selectScenario(index, element) {
+            if (selectedBtnElement) selectedBtnElement.classList.replace('border-indigo-600', 'border-slate-200');
+            element.classList.replace('border-slate-200', 'border-indigo-600');
+            selectedBtnElement = element;
+            
+            const data = database[currentPillarKey];
+            const scenario = data.scenarios[index];
+            let bulletsHtml = scenario.steps.map(step => `
+                <li class="flex items-start gap-4 text-xs sm:text-sm text-slate-600 leading-relaxed bg-white border border-slate-100 p-4 rounded-2xl shadow-sm w-full">
+                    <span class="text-emerald-600 mt-0.5 bg-emerald-50 w-5 h-5 rounded-full flex items-center justify-center text-[10px] shrink-0 border border-emerald-100"><i class="fa-solid fa-check"></i></span>
+                    <span class="text-slate-600 font-medium">${step}</span>
+                </li>
+            `).join('');
+
+            const displayBlock = document.getElementById('solution-content-block');
+            displayBlock.className = "w-full space-y-6 animate-slideup text-left";
+            displayBlock.innerHTML = `
+                <div class="flex flex-col sm:flex-row items-center gap-6 bg-white border border-slate-200/60 p-6 rounded-3xl shadow-sm w-full">
+                    <div class="shrink-0">${data.illustration}</div>
+                    <div class="space-y-2 text-center sm:text-left w-full">
+                        <h3 class="text-lg font-black text-slate-900 tracking-tight leading-snug">${scenario.title}</h3>
+                        <p class="text-xs text-slate-500 font-semibold leading-relaxed">${scenario.problem}</p>
+                    </div>
+                </div>
+                <div class="space-y-4 w-full">
+                    <ul class="space-y-3.5 w-full">${bulletsHtml}</ul>
+                </div>
+            `;
+        }
+
+        function openFormModal(index = null) {
+            const container = document.getElementById('steps-inputs-container');
+            container.innerHTML = '';
+            if (index === null) {
+                document.getElementById('modal-heading').innerText = "Create Custom Case Profile";
+                document.getElementById('form-edit-index').value = "";
+                document.getElementById('form-title').value = "";
+                document.getElementById('form-problem').value = "";
+                appendStepInputField('');
+            } else {
+                document.getElementById('modal-heading').innerText = "Modify Operational Schema Parameters";
+                const targetData = database[currentPillarKey].scenarios[index];
+                document.getElementById('form-edit-index').value = index;
+                document.getElementById('form-title').value = targetData.title;
+                document.getElementById('form-problem').value = targetData.problem;
+                targetData.steps.forEach(stepText => appendStepInputField(stepText));
+            }
+            document.getElementById('form-modal').classList.replace('hidden', 'flex');
+        }
+
+        function closeFormModal() { document.getElementById('form-modal').classList.replace('flex', 'hidden'); }
+        function appendStepInputField(val = '') {
+            const container = document.getElementById('steps-inputs-container');
+            const wrap = document.createElement('div');
+            wrap.className = "flex items-center gap-2 animate-fade";
+            wrap.innerHTML = `
+                <input type="text" required value="${val.replace(/"/g, '&quot;')}" class="step-text-payload w-full border border-slate-200 p-2.5 rounded-xl text-xs bg-slate-50/30 font-medium">
+                <button type="button" onclick="this.parentElement.remove()" class="text-slate-300 hover:text-red-500 text-xs p-2 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+            `;
+            container.appendChild(wrap);
+        }
+
+        function saveScenarioData(e) {
+            e.preventDefault();
+            const idxVal = document.getElementById('form-edit-index').value;
+            const payloadSteps = [];
+            document.querySelectorAll('.step-text-payload').forEach(inp => { if(inp.value.trim() !== '') payloadSteps.push(inp.value.trim()); });
+
+            const targetSchemaObject = {
+                title: document.getElementById('form-title').value.trim(),
+                problem: document.getElementById('form-problem').value.trim(),
+                steps: payloadSteps
+            };
+
+            if(idxVal === "") database[currentPillarKey].scenarios.push(targetSchemaObject);
+            else database[currentPillarKey].scenarios[parseInt(idxVal)] = targetSchemaObject;
+
+            syncDatabaseToLocalStorage();
+            closeFormModal();
+            renderScenariosSidebarList();
+            resetDisplayPanelToStandby();
+        }
+
+        function deleteScenarioEntry(index) {
+            if(confirm("Delete this case record?")) {
+                database[currentPillarKey].scenarios.splice(index, 1);
+                syncDatabaseToLocalStorage();
+                renderScenariosSidebarList();
+                resetDisplayPanelToStandby();
+            }
+        }
+
+        function exportDatabaseJSON() {
+            const exportText = JSON.stringify(database, null, 4);
+            document.getElementById('export-textarea').value = exportText;
+            document.getElementById('export-modal').classList.remove('hidden');
+        }
+
+        function resetDisplayPanelToStandby() {
+            document.getElementById('solution-content-block').className = "w-full flex flex-col justify-center items-center";
+            document.getElementById('solution-content-block').innerHTML = `<div class="text-center space-y-6 max-w-sm py-12 animate-fade"><div class="relative w-40 h-40 mx-auto flex items-center justify-center"><div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div><i class="fa-solid fa-hand-pointer text-5xl text-[#0066CC] relative z-10 animate-bounce"></i></div><h4 class="font-extrabold text-slate-800 text-base tracking-tight">Awaiting Case Selection</h4></div>`;
+        }
+
+        function showHome() {
+            document.getElementById('view-scenarios').classList.add('hidden');
+            document.getElementById('back-home-btn').classList.replace('flex', 'hidden');
+            document.getElementById('view-home').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
