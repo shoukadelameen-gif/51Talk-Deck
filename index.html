@@ -6,6 +6,8 @@
     <title>51talk |Teacher's First Aid Kit</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <style>
         @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -172,75 +174,27 @@
     </footer>
 
     <script>
-        const defaultDatabase = {
-            "pillar-1": {
-                title: "Pillar 1: Technical Glitches",
-                iconClass: "fa-solid fa-display",
-                styleClasses: "bg-red-50 text-red-600 border-red-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-red-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-red-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 relative z-10"></i></div>`,
-                scenarios: [
-                    { title: "App Crash / Screen Lag Loops", problem: "You experience unexpected client software crashes, severe interface freezing, or the classroom timer displays performance synchronization lag mid-class.", steps: ["<strong>Control Environment:</strong> Switch instantly to your designated <strong>backup mobile hotspot</strong> data line. Shut down all non-essential background windows draining bandwidth allocation.","<strong>Force Software Reset:</strong> Exit the platform frame immediately, execute a <strong>complete logout of AirClass (AC)</strong>, or trigger a swift system restart if hardware freezing persists.","<strong>The Leave-and-Re-enter Loophole:</strong> Pay no attention to <strong>automated system penalty warning banners</strong> during active troubleshooting runs; protection applies for verified technical loops.","<strong>Preserve Evidence:</strong> Capture immediate <strong>full-screen screenshots</strong> verifying runtime errors clearly showing your device's desktop clock.","<strong>File Incident Verification:</strong> Record the precise breakdown parameters and timing logs inside your <strong>post-class memo notes</strong> to secure your contract verification appeals."] },
-                    { title: "Microphone Malfunction / Audio Cutting Out", problem: "The student reports they cannot hear you, your hardware microphone input level bar isn't moving, or your sound turns off completely mid-class.", steps: ["<strong>Check App Permissions:</strong> Verify the class app's access to hardware devices. Re-select your external headset manually under <strong>Audio/Video Settings</strong>.","<strong>Hardware Re-plug Option:</strong> Physically unplug the USB or 3.5mm cable. Wait 3 seconds and firmly re-seat it to trigger system device recognition.","<strong>Change Audio Lines:</strong> Switch the live channel driver internally inside the software from <strong>Line A to Line B</strong> to manually sync data packets.","<strong>Hardware Bypass:</strong> If a dedicated headset remains completely unresponsive, quickly connect alternative <strong>wired earbuds</strong> to maintain instruction momentum."] }
-                ]
-            },
-            "pillar-2": {
-                title: "Pillar 2: Attendance Traps",
-                iconClass: "fa-solid fa-business-time",
-                styleClasses: "bg-amber-50 text-amber-600 border-amber-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-amber-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-amber-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-business-time text-4xl text-amber-500 relative z-10"></i></div>`,
-                scenarios: [
-                    { title: "Local Time Zone Mismatch Errors", problem: "Incurring accidental late-entry penalty indicators due to timezone confusion between local Egypt time and Beijing headquarters timelines.", steps: ["<strong>Crosscheck Interface Schedules:</strong> Systematically monitor parameters across both your <strong>local Egypt AC calendar application</strong> and the master Beijing scheduling metrics on the <strong>MyPage portal</strong>.","<strong>Calculate the Time Shift:</strong> Perform deliberate zone translations mentally before slots freeze to prevent accidental missing session entries.","<strong>The 4-Minute Absence Window:</strong> Remember that arriving exactly <strong>4 minutes late changes metrics</strong> to an unreviewable, system-enforced <strong>Teacher Absence mark</strong>."] }
-                ]
-            },
-            "pillar-3": {
-                title: "Pillar 3: Communication Rules",
-                iconClass: "fa-solid fa-file-signature",
-                styleClasses: "bg-blue-50 text-blue-600 border-blue-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-blue-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-file-invoice text-4xl text-blue-500 relative z-10"></i></div>`,
-                scenarios: [
-                    { title: "Memo Compliance & VIP Parents", problem: "Receiving low client ratings from generic feedback notes, or losing dispute cases due to a lack of sufficient structural audit records.", steps: ["<strong>Memos as Binding Legal Evidence:</strong> Log technical failures inside class notes to establish a clear <strong>audit trail for dispute pipelines</strong>.","<strong>Apply Goal + Evidence Framework:</strong> Replace repetitive boilerplate remarks with a <strong>two-sentence standard format</strong>:","<em>Sentence A (Target Objective):</em> State the precise target skill targeted (e.g., <strong>'Student successfully mastered conditional verb tenses.'</strong>).","<em>Sentence B (Live Evidence):</em> Insert measurable evidence of progress (e.g., <strong>'They correctly transformed three complex sentences during final drills.'</strong>)."] }
-                ]
-            },
-            "pillar-4": {
-                title: "Pillar 4: Teacher Rapport",
-                iconClass: "fa-solid fa-face-smile-beam",
-                styleClasses: "bg-purple-50 text-purple-600 border-purple-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-purple-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-purple-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-face-smile-beam text-4xl text-purple-500 relative z-10"></i></div>`,
-                scenarios: [
-                    { title: "Advanced Learners / Early Finish Gaps", problem: "An advanced student breezes through a 25-minute lesson blueprint inside of 15 minutes, leaving a 10-minute dead-air gap.", steps: ["<strong>Switch Course Selections:</strong> Alter active material pathways using <strong>classroom interface dropdown tools</strong> if accessible.","<strong>Phonics Distinction Drills:</strong> Introduce minimal phonetic sound pairings to highlight vocabulary nuance (e.g., bin/pin, bark/park).","<strong>Syllable Blending Challenges:</strong> Drill complex multisyllabic terms to analyze articulation boundaries (e.g., paper, pepper, publish)."] }
-                ]
-            }
-        };
+        // Initialize Firebase
+        firebase.initializeApp({
+            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
+        });
+        const db = firebase.database();
 
-        let database = JSON.parse(localStorage.getItem('readiness_deck_db')) || defaultDatabase;
+        let database = {};
         let currentPillarKey = null;
         let selectedBtnElement = null;
 
-        window.onload = function() {
-            checkUrlParamsForUpdates();
-            updatePillarBadgeCounters();
-        };
-
-        function checkUrlParamsForUpdates() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const incomingData = urlParams.get('sync');
-            if (incomingData) {
-                try {
-                    const decodedData = JSON.parse(decodeURIComponent(atob(incomingData)));
-                    database = decodedData;
-                    localStorage.setItem('readiness_deck_db', JSON.stringify(database));
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                    alert("✨ Team sync successful! New scenarios loaded and saved perfectly.");
-                } catch (e) {
-                    console.error("Sync link parse failed", e);
+        // Firebase Cloud Listener (Sync data in real-time)
+        db.ref('/').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                database = data;
+                updatePillarBadgeCounters();
+                if (currentPillarKey) {
+                    renderScenariosSidebarList();
                 }
             }
-        }
-
-        function syncDatabaseToLocalStorage() {
-            localStorage.setItem('readiness_deck_db', JSON.stringify(database));
-            updatePillarBadgeCounters();
-        }
+        });
 
         function generateSyncUrl() {
             const cleanDataString = btoa(encodeURIComponent(JSON.stringify(database)));
@@ -261,7 +215,7 @@
             Object.keys(database).forEach(key => {
                 const countBadge = document.getElementById(`count-${key}`);
                 if (countBadge) {
-                    const total = database[key].scenarios.length;
+                    const total = database[key].scenarios ? database[key].scenarios.length : 0;
                     countBadge.innerHTML = `${total} Active Blueprints <i class="fa-solid fa-angle-right ml-1"></i>`;
                 }
             });
@@ -278,6 +232,7 @@
 
         function renderScenariosSidebarList() {
             const data = database[currentPillarKey];
+            if (!data) return;
             document.getElementById('category-title').innerText = data.title;
             const iconContainer = document.getElementById('category-icon-container');
             iconContainer.className = `w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-inner ${data.styleClasses}`;
@@ -285,19 +240,22 @@
             const listContainer = document.getElementById('scenarios-list-container');
             listContainer.innerHTML = '';
             
-            data.scenarios.forEach((scen, idx) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = "w-full text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-xs text-slate-800 transition-all shadow-sm flex items-center justify-between group cursor-pointer animate-slideup select-none";
-                itemDiv.onclick = (e) => { if (!e.target.closest('.utility-trigger')) selectScenario(idx, itemDiv); };
-                itemDiv.innerHTML = `
-                    <span class="leading-snug pr-3 group-hover:text-indigo-600 transition-colors">${scen.title}</span>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="openFormModal(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-amber-100 text-slate-400 hover:text-amber-700 flex items-center justify-center text-[11px]" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteScenarioEntry(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-red-100 text-slate-400 hover:text-red-600 flex items-center justify-center text-[11px]" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>
-                `;
-                listContainer.appendChild(itemDiv);
-            });
+            if (data.scenarios) {
+                data.scenarios.forEach((scen, idx) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = "w-full text-left p-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-xs text-slate-800 transition-all shadow-sm flex items-center justify-between group cursor-pointer animate-slideup select-none";
+                    itemDiv.onclick = (e) => { if (!e.target.closest('.utility-trigger')) selectScenario(idx, itemDiv); };
+                    
+                    itemDiv.innerHTML = `
+                        <span class="leading-snug pr-3 group-hover:text-indigo-600 transition-colors">${scen.title}</span>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button onclick="openFormModal(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-amber-100 text-slate-400 hover:text-amber-700 flex items-center justify-center text-[11px]" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteScenarioEntry(${idx})" class="utility-trigger w-6 h-6 rounded-lg bg-slate-50 hover:bg-red-100 text-slate-400 hover:text-red-600 flex items-center justify-center text-[11px]" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    `;
+                    listContainer.appendChild(itemDiv);
+                });
+            }
         }
 
         function selectScenario(index, element) {
@@ -313,7 +271,6 @@
                     <span class="text-slate-600 font-medium">${step}</span>
                 </li>
             `).join('');
-
             const displayBlock = document.getElementById('solution-content-block');
             displayBlock.className = "w-full space-y-6 animate-slideup text-left";
             displayBlock.innerHTML = `
@@ -350,7 +307,10 @@
             document.getElementById('form-modal').classList.replace('hidden', 'flex');
         }
 
-        function closeFormModal() { document.getElementById('form-modal').classList.replace('flex', 'hidden'); }
+        function closeFormModal() { 
+            document.getElementById('form-modal').classList.replace('flex', 'hidden');
+        }
+        
         function appendStepInputField(val = '') {
             const container = document.getElementById('steps-inputs-container');
             const wrap = document.createElement('div');
@@ -374,10 +334,14 @@
                 steps: payloadSteps
             };
 
+            if (!database[currentPillarKey].scenarios) {
+                database[currentPillarKey].scenarios = [];
+            }
+
             if(idxVal === "") database[currentPillarKey].scenarios.push(targetSchemaObject);
             else database[currentPillarKey].scenarios[parseInt(idxVal)] = targetSchemaObject;
 
-            syncDatabaseToLocalStorage();
+            db.ref('/').set(database);
             closeFormModal();
             renderScenariosSidebarList();
             resetDisplayPanelToStandby();
@@ -386,7 +350,7 @@
         function deleteScenarioEntry(index) {
             if(confirm("Delete this case record?")) {
                 database[currentPillarKey].scenarios.splice(index, 1);
-                syncDatabaseToLocalStorage();
+                db.ref('/').set(database);
                 renderScenariosSidebarList();
                 resetDisplayPanelToStandby();
             }
