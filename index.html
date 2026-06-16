@@ -1,135 +1,67 @@
-// MASTER CENTRALIZED TEAM DATABASE MATRIX 
-        const database = {
-            "pillar-1": {
-                title: "Pillar 1: Technical Glitches",
-                iconClass: "fa-solid fa-display",
-                styleClasses: "bg-red-50 text-red-600 border-red-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-red-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-red-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 relative z-10"></i></div>`,
-                scenarios: [
-                    { title: "App Crash / Screen Lag Loops", problem: "You experience unexpected client software crashes or classroom timer lag.", steps: ["Switch to your backup mobile hotspot.", "Force close and restart the AirClass software.", "Take a full-screen screenshot showing your desktop clock as evidence.", "Record the issue in your post-class memo."] },
-                    { title: "Microphone Malfunction", problem: "The student cannot hear you or your audio level bar is flat.", steps: ["Re-select your headset in Audio/Video settings.", "Unplug and firmly re-seat your headset cable.", "Switch audio channels (Line A to Line B) in settings."] }
-                ]
-            },
-            "pillar-2": {
-                title: "Pillar 2: Attendance Traps",
-                iconClass: "fa-solid fa-business-time",
-                styleClasses: "bg-amber-50 text-amber-600 border-amber-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-amber-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-amber-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-business-time text-4xl text-amber-500 relative z-10"></i></div>`,
-                scenarios: [
-                    { title: "Time Zone Mismatch", problem: "Accidental late-entry penalties due to Egypt/Beijing time shifts.", steps: ["Cross-check the local AC calendar vs MyPage portal.", "Perform mental zone translations before the slot start time.", "Avoid arriving within the 4-minute late window."] }
-                ]
-            },
-            "pillar-3": {
-                title: "Pillar 3: Communication Rules",
-                iconClass: "fa-solid fa-file-signature",
-                styleClasses: "bg-blue-50 text-blue-600 border-blue-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-blue-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-blue-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-file-invoice text-4xl text-blue-500 relative z-10"></i></div>`,
-                scenarios: [
-                    { title: "Memo Compliance", problem: "Low ratings due to generic feedback.", steps: ["Use the two-sentence audit format.", "Sentence 1: State the mastered target skill.", "Sentence 2: Insert specific, measurable evidence from the lesson."] }
-                ]
-            },
-            "pillar-4": {
-                title: "Pillar 4: Teacher Rapport",
-                iconClass: "fa-solid fa-face-smile-beam",
-                styleClasses: "bg-purple-50 text-purple-600 border-purple-200",
-                illustration: `<div class="w-28 h-28 mx-auto relative flex items-center justify-center mb-4"><div class="absolute inset-0 bg-purple-100/60 rounded-full animate-float"></div><div class="absolute inset-3 bg-purple-50 rounded-full illustration-pulse"></div><i class="fa-solid fa-face-smile-beam text-4xl text-purple-500 relative z-10"></i></div>`,
-                scenarios: [
-                    { title: "Advanced Learner Gaps", problem: "Lesson finished in 15 mins instead of 25.", steps: ["Utilize classroom dropdowns to switch course materials.", "Introduce phonetic sound pairings (e.g., bin/pin).", "Drill multisyllabic blending for articulation."] }
-                ]
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Support Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+</head>
+<body class="bg-slate-100 p-4">
+    <div id="app" class="max-w-md mx-auto">
+        <div id="view-home">
+            <h1 class="text-2xl font-black text-slate-800 mb-6">Support Matrix</h1>
+            <div id="pillars-container" class="grid grid-cols-1 gap-4">
+                <button onclick="selectPillar('pillar-1')" class="p-4 bg-white rounded-2xl border border-red-200 text-left">Pillar 1: Technical</button>
+                <button onclick="selectPillar('pillar-2')" class="p-4 bg-white rounded-2xl border border-amber-200 text-left">Pillar 2: Attendance</button>
+                <button onclick="selectPillar('pillar-3')" class="p-4 bg-white rounded-2xl border border-blue-200 text-left">Pillar 3: Communication</button>
+                <button onclick="selectPillar('pillar-4')" class="p-4 bg-white rounded-2xl border border-purple-200 text-left">Pillar 4: Rapport</button>
+            </div>
+        </div>
+
+        <div id="view-scenarios" class="hidden">
+            <button onclick="showHome()" id="back-home-btn" class="mb-4 text-xs font-bold text-slate-500">← Back</button>
+            <div id="category-title" class="text-xl font-bold mb-4"></div>
+            <div id="scenarios-list-container" class="space-y-3"></div>
+            <div id="solution-content-block" class="mt-6"></div>
+        </div>
+    </div>
+
+    <div id="form-modal" class="hidden fixed inset-0 bg-slate-900/50 p-4 flex items-center">
+        <form onsubmit="saveScenarioData(event)" class="bg-white p-6 rounded-2xl w-full">
+            <input type="hidden" id="form-edit-index">
+            <input type="text" id="form-title" placeholder="Title" class="w-full mb-2 p-2 border rounded">
+            <textarea id="form-problem" placeholder="Problem" class="w-full mb-2 p-2 border rounded"></textarea>
+            <div id="steps-inputs-container" class="space-y-2 mb-4"></div>
+            <button type="button" onclick="appendStepInputField()" class="text-xs text-indigo-600">+ Add Step</button>
+            <div class="mt-4 flex gap-2">
+                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-xl">Save</button>
+                <button type="button" onclick="closeFormModal()" class="px-4 py-2">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Firebase Connection
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmyhSSolQQi-JV7o7Y1cXuYDGrB3oJPLg",
+            databaseURL: "https://operational-support-suite-default-rtdb.asia-southeast1.firebasedatabase.app"
         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        // --- CORE APPLICATION LOGIC ---
+        let database = {};
         let currentPillar = "";
-        
-        function renderPillars() {
-            Object.keys(database).forEach(id => {
-                const count = database[id].scenarios.length;
-                document.getElementById(`count-${id}`).innerHTML = `${count} Scenarios <i class="fa-solid fa-arrow-right"></i>`;
-            });
-        }
 
-        function selectPillar(id) {
-            currentPillar = id;
-            const data = database[id];
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('view-scenarios').classList.remove('hidden');
-            document.getElementById('back-home-btn').classList.remove('hidden');
-            document.getElementById('back-home-btn').classList.add('flex');
-            
-            document.getElementById('category-title').innerText = data.title;
-            document.getElementById('category-icon-container').className = `w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-sm ${data.styleClasses}`;
-            document.getElementById('category-icon-container').innerHTML = `<i class="${data.iconClass}"></i>`;
-            
-            updateScenarioList();
-        }
+        // Sync data from Firebase
+        db.ref('/').on('value', (snapshot) => {
+            database = snapshot.val() || {};
+            if(currentPillar) updateScenarioList();
+        });
 
-        function showHome() {
-            document.getElementById('view-home').classList.remove('hidden');
-            document.getElementById('view-scenarios').classList.add('hidden');
-            document.getElementById('back-home-btn').classList.add('hidden');
-            document.getElementById('back-home-btn').classList.remove('flex');
-        }
-
-        function updateScenarioList() {
-            const container = document.getElementById('scenarios-list-container');
-            container.innerHTML = "";
-            database[currentPillar].scenarios.forEach((s, index) => {
-                const div = document.createElement('div');
-                div.className = "p-4 bg-white border border-slate-200 rounded-2xl hover:border-indigo-300 cursor-pointer transition-all shadow-sm";
-                div.innerHTML = `<h4 class="font-bold text-slate-800 text-sm mb-1">${s.title}</h4><p class="text-[11px] text-slate-500 line-clamp-2">${s.problem}</p>`;
-                div.onclick = () => showSolution(index);
-                container.appendChild(div);
-            });
-        }
-
-        function showSolution(index) {
-            const s = database[currentPillar].scenarios[index];
-            document.getElementById('solution-content-block').innerHTML = `
-                <div class="w-full text-left space-y-6 animate-fade">
-                    ${database[currentPillar].illustration}
-                    <h3 class="text-xl font-black text-slate-900">${s.title}</h3>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p class="text-xs font-bold text-slate-400 uppercase mb-2">Problem Definition</p>
-                        <p class="text-sm text-slate-600 leading-relaxed">${s.problem}</p>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-slate-400 uppercase mb-3">Action Resolution Steps</p>
-                        <ul class="space-y-3">
-                            ${s.steps.map(step => `<li class="flex gap-3 text-sm text-slate-700 items-start"><i class="fa-solid fa-check-circle text-emerald-500 mt-1"></i> ${step}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div class="pt-6 flex gap-2">
-                        <button onclick="openFormModal(${index})" class="px-4 py-2 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-xl">Edit Scenario</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function openFormModal(index) {
-            document.getElementById('form-modal').classList.remove('hidden');
-            document.getElementById('form-edit-index').value = index !== null ? index : "";
-            if (index !== null) {
-                const s = database[currentPillar].scenarios[index];
-                document.getElementById('form-title').value = s.title;
-                document.getElementById('form-problem').value = s.problem;
-                document.getElementById('steps-inputs-container').innerHTML = "";
-                s.steps.forEach(step => appendStepInputField(step));
-            } else {
-                document.getElementById('scenario-form').reset();
-                document.getElementById('steps-inputs-container').innerHTML = "";
-            }
-        }
-
-        function closeFormModal() { document.getElementById('form-modal').classList.add('hidden'); }
-
-        function appendStepInputField(val = "") {
-            const div = document.createElement('div');
-            div.className = "flex gap-2";
-            div.innerHTML = `<input type="text" class="step-input w-full border border-slate-200 p-2.5 rounded-xl text-xs" value="${val}" placeholder="Enter step..."> <button type="button" onclick="this.parentElement.remove()" class="text-red-400 px-2"><i class="fa-solid fa-trash"></i></button>`;
-            document.getElementById('steps-inputs-container').appendChild(div);
-        }
-
+        // Save data to Firebase
         function saveScenarioData(e) {
             e.preventDefault();
             const index = document.getElementById('form-edit-index').value;
@@ -139,15 +71,16 @@
             if (index === "") database[currentPillar].scenarios.push(newData);
             else database[currentPillar].scenarios[index] = newData;
             
+            db.ref('/').set(database);
             closeFormModal();
-            updateScenarioList();
-            renderPillars();
         }
 
-        function exportDatabaseJSON() {
-            document.getElementById('export-modal').classList.remove('hidden');
-            document.getElementById('export-textarea').value = JSON.stringify(database, null, 4);
-        }
-
-        renderPillars();
+        // --- Helper Functions ---
+        function selectPillar(id) { currentPillar = id; document.getElementById('view-home').classList.add('hidden'); document.getElementById('view-scenarios').classList.remove('hidden'); updateScenarioList(); }
+        function showHome() { document.getElementById('view-home').classList.remove('hidden'); document.getElementById('view-scenarios').classList.add('hidden'); }
+        function closeFormModal() { document.getElementById('form-modal').classList.add('hidden'); }
+        function appendStepInputField(val = "") { const div = document.createElement('div'); div.innerHTML = `<input type="text" class="step-input w-full border p-2 rounded" value="${val}">`; document.getElementById('steps-inputs-container').appendChild(div); }
+        function updateScenarioList() { const container = document.getElementById('scenarios-list-container'); container.innerHTML = ""; database[currentPillar].scenarios.forEach((s, i) => { const div = document.createElement('div'); div.className = "p-4 bg-white rounded-xl shadow-sm"; div.innerHTML = s.title; div.onclick = () => alert(s.problem); container.appendChild(div); }); }
     </script>
+</body>
+</html>
