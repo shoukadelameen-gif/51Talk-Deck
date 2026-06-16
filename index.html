@@ -283,8 +283,7 @@
         let database = {};
         let currentPillarKey = null;
         let selectedBtnElement = null;
-        const ADMIN_SECRET = 'MsShouq51talk';
-        
+
         // Firebase Cloud Listener (Sync data in real-time)
         db.ref('/').on('value', (snapshot) => {
             const data = snapshot.val();
@@ -306,8 +305,10 @@
                 const source = audioContext.createMediaStreamSource(stream);
                 source.connect(analyzer);
                 analyzer.fftSize = 32;
+                
                 const dataArray = new Uint8Array(analyzer.frequencyBinCount);
                 alert("🎤 Access Granted! Speak into your microphone now to test data stream values...");
+                
                 setTimeout(() => {
                     analyzer.getByteFrequencyData(dataArray);
                     const averageVolume = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
@@ -320,6 +321,7 @@
                     stream.getTracks().forEach(track => track.stop());
                     audioContext.close();
                 }, 2500);
+
             } catch (err) {
                 alert("❌ Input Device Error: Microphone permission was denied or hardware line is completely disconnected.");
             }
@@ -329,6 +331,7 @@
         function copyPingTemplateToClipboard() {
             const localTimestamp = new Date().toLocaleString();
             const templateText = `[51TALK THREE POINT PING REPORT]\n-------------------------------------\nDate & Time: ${localTimestamp}\nTeacher Name: _________________\nIssue Vector: Technical Exception / Dropout\n\n[PING METRICS LOG]\n1. Local Client Device Connection: Stable\n2. AirClass Gateway Signal Status: Retrying\n3. Regional Server Response Node: Checked\n\nNotes / Resolution Attempted:\n- Performed hardware interface clear.\n- Standing by for student refresh response.`;
+            
             navigator.clipboard.writeText(templateText).then(() => {
                 alert("📋 Three Point Ping Template copied to clipboard! Teammates can fill in their name manually.");
             }).catch(() => {
@@ -478,11 +481,6 @@
         }
 
         function saveScenarioData(e) {
-            const userSecret = prompt('Enter Admin Key to Save Changes:');
-            if (userSecret !== ADMIN_SECRET) {
-                alert('Access Denied!');
-                return;
-            }
             e.preventDefault();
             const idxVal = document.getElementById('form-edit-index').value;
             const payloadSteps = [];
@@ -493,12 +491,14 @@
                 problem: document.getElementById('form-problem').value.trim(),
                 steps: payloadSteps
             };
+
             if (!database[currentPillarKey].scenarios) {
                 database[currentPillarKey].scenarios = [];
             }
 
             if(idxVal === "") database[currentPillarKey].scenarios.push(targetSchemaObject);
             else database[currentPillarKey].scenarios[parseInt(idxVal)] = targetSchemaObject;
+
             db.ref('/').set(database);
             closeFormModal();
             renderScenariosSidebarList();
@@ -506,11 +506,6 @@
         }
 
         function deleteScenarioEntry(index) {
-            const userSecret = prompt('Enter Admin Key to Save Changes:');
-            if (userSecret !== ADMIN_SECRET) {
-                alert('Access Denied!');
-                return;
-            }
             if(confirm("Delete this case record?")) {
                 database[currentPillarKey].scenarios.splice(index, 1);
                 db.ref('/').set(database);
